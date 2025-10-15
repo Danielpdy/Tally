@@ -1,0 +1,350 @@
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+.gradient {
+  position: relative;   /* must be positioned for the pseudo-layer */
+  width: 100%;
+  overflow: visible;
+  /* keep any padding-top you used (top spacing) */
+  padding-top: 80px;
+}
+
+/* visual layer — preserves blur & opacity but sits behind content */
+.gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;                /* top:0; right:0; bottom:0; left:0 */
+  z-index: 0;              /* behind content */
+  pointer-events: none;
+
+  /* your original stops (kept) plus an extra bright center to increase highlight */
+  background-image:
+    /* extra bright center wash — makes everything read brighter */
+    radial-gradient(900px 600px at 50% 45%, rgba(255,255,255,0.70) 0%, rgba(255,255,255,0.15) 28%, transparent 55%),
+
+    /* your original color blobs (same stops but we reduce the 'transparent' cutoffs so they show more) */
+    radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 1) 0px, rgba(33,33,33,0) 20%),
+    radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 1) 0px, rgba(0,0,0,0) 30%),
+    radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, rgba(0,0,0,0) 30%),
+    radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 1) 0px, rgba(0,0,0,0) 40%),
+    radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 1) 0px, rgba(0,0,0,0) 40%),
+    radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 1) 0px, rgba(0,0,0,0) 40%),
+    radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 1) 0px, rgba(0,0,0,0) 40%);
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-blend-mode: screen;
+
+  /* tuned: slightly less blur, preserve saturation but increase opacity to strengthen */
+  filter: blur(72px) saturate(170%);
+  opacity: 0.24;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.homeSection-main{
+  display: flex;
+  justify-content: center;
+  padding: 40px 0px;
+}
+
+.homePageimg {
+  width: 800px;
+}
+.homeContent{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  gap: 20px;
+}
+.bigTitles{
+  font-family: "GT America", "Satoshi", "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  max-width: 600px;
+  color: rgb(19, 47, 39)
+}
+
+.regularText{
+  font-family: "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  max-width: 500px;
+  color: rgb(107, 131, 123);
+}
+
+.darkButton{
+  font-family: "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  background-color: rgb(11, 99, 74);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+
+  transform: translateZ(0) translateY(0) scale(1);
+  transition: transform var(--btn-transition), box-shadow var(--btn-transition), background var(--btn-transition);
+  font-weight: 600;
+}
+
+/* hover / focus */
+.darkButton:hover,
+.darkButton:focus-visible {
+  transform: translateY(var(--btn-pop-translate)) scale(var(--btn-pop-scale));
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  background-color: rgb(17, 145, 108);
+  outline: none;
+}
+
+/* pressed */
+.darkButton:active {
+  transform: translateY(calc(var(--btn-pop-translate) * 0.35)) scale(calc(var(--btn-pop-scale) - 0.02));
+  box-shadow: 0 10px 28px rgba(0,0,0,0.44);
+}
+
+/* keyboard focus ring (visible for keyboard users) */
+.darkButton:focus-visible {
+  box-shadow: 0 18px 44px rgba(0,0,0,0.5), 0 0 0 5px var(--focus-glow);
+}
+
+.smallText{
+  font-family: "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px;
+  max-width: 400px;
+  color: rgb(107, 131, 123);
+}
+
+.navbar {
+  margin: 0%;
+  padding: 20px 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: rgb(19, 47, 39);
+  gap: 10px;
+  font-family: "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+}
+.navButtons{
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: gray;
+  font-family: "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+
+  --pop-scale: 1.03;
+  --pop-translate: -6px;
+  --pop-shadow: 0 8px 20px rgba(0,0,0,0.28);
+  --pop-shadow-hover: 0 18px 40px rgba(0,0,0,0.36);
+  transform: translateZ(0) translateY(0) scale(1);
+  transition: transform 180ms cubic-bezier(.2,.9,.2,1), box-shadow 180ms cubic-bezier(.2,.9,.2,1);
+  will-change: transform, box-shadow;
+  /* keep pointer cursor for clickable items */
+  cursor: pointer;
+}
+
+/* hover + keyboard focus (visible for keyboard users) */
+.navButtons:hover,
+.navButtons:focus-visible {
+  transform: translateY(var(--pop-translate)) scale(var(--pop-scale));
+  box-shadow: var(--pop-shadow-hover);
+  outline: none;
+}
+
+/* pressed / active feel */
+.navButtons:active {
+  transform: translateY(calc(var(--pop-translate) * 0.35)) scale(calc(var(--pop-scale) - 0.02));
+  box-shadow: var(--pop-shadow);
+}
+
+/* accessible focus ring (nice for keyboard users) */
+.navButtons:focus-visible {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.28), 0 0 0 4px rgba(0,195,137,0.08);
+}
+
+.navPages{
+  display: flex;
+  gap: 40px;
+}
+
+.tallyMainTitle {
+  font-family: "GT America", "Satoshi", "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: rgb(19, 47, 39);
+}
+
+/* Equivalent of: "flex gap-3 md:gap-5" using .navbarContent */
+.navbarContent {
+  display: flex;
+  gap: 20px; /* gap-3 -> 12px */
+}
+
+/* md breakpoint (min-width: 768px) */
+@media (min-width: 768px) {
+  .navbarContent {
+    gap: 1.25rem; /* gap-5 -> 20px */
+  }
+}
+
+.darkBlackButton{
+  font-family: "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  background-color: rgb(33, 33, 33);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+
+  cursor: pointer;
+  transform: translateZ(0) translateY(0) scale(1);
+  transition: transform var(--btn-transition), box-shadow var(--btn-transition), background var(--btn-transition);
+} 
+
+
+/* stronger hover pop + subtle teal rim */
+.darkBlackButton:hover,
+.darkBlackButton:focus-visible {
+  transform: translateY(calc(var(--btn-pop-translate) - 2px)) scale(calc(var(--btn-pop-scale) + 0.02));
+  box-shadow: 0 30px 90px rgba(0,0,0,0.66), 0 8px 26px rgba(0,0,0,0.46);
+  outline: none;
+  /* optional subtle teal glow */
+  border-color: rgba(0,195,137,0.12);
+}
+
+/* pressed state */
+.darkBlackButton:active {
+  transform: translateY(calc(var(--btn-pop-translate) * 0.25)) scale(calc(var(--btn-pop-scale) - 0.05));
+  box-shadow: 0 12px 30px rgba(0,0,0,0.55);
+}
+
+/* visible focus ring for keyboard users */
+.darkBlackButton:focus-visible {
+  box-shadow: 0 26px 72px rgba(0,0,0,0.6), 0 0 0 6px rgba(0,195,137,0.10);
+}
+
+.homeSection-services {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 100px 0px;
+  background-color: rgb(7, 68, 51);
+}
+
+.subTitles{
+  font-family: "GT America", "Satoshi", "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgb(19, 47, 39)
+}
+
+.boxServices{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 300px;
+  text-align: center;
+  gap: 10px;
+  background-color: white;
+  padding: 40px 20px;
+  border-radius: 12px;
+    box-shadow:
+    0 30px 80px rgba(0,0,0,0.75),      /* deep soft shadow */
+    0 6px 18px rgba(0,0,0,0.6),        /* mid-range depth */
+    0 1px 0 rgba(255,255,255,0.03) inset; 
+
+}
+
+.homeSection-howItWorks {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 60px 0px;
+}
+
+
+.howItWorksBox{
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.howItWorks{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 300px;
+  text-align: center;
+  gap: 10px;
+}
+
+.howItWorksNumbers{
+  font-family: "GT America", "Satoshi", "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: white;
+  background-color: rgb(11, 99, 74);
+  padding: 30px 40px;
+  border-radius: 50%;
+}
+
+.footerBox{
+  width: 100%;
+  display: flex;
+  padding: 60px 100px;
+  justify-content: space-between;
+  background-color: rgb(7, 68, 51);
+}
+
+.footerLabels{
+  display: flex;
+  gap: 40px;
+}
+
+.footerText{
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.alignItems{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.googleAndGithub{
+  display: flex;
+  gap: 10px;
+}
