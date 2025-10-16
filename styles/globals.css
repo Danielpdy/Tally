@@ -185,8 +185,7 @@
 }
 
 .navPages{
-  display: flex;
-  gap: 40px;
+  display: none;
 }
 
 .tallyMainTitle {
@@ -347,4 +346,78 @@
 .googleAndGithub{
   display: flex;
   gap: 10px;
+}
+
+/* Show the menu button by default (mobile) */
+.menuButton {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* --- Mobile menu panel --- */
+.menuPanel {
+  display: none;              /* Hidden by default */
+  position: absolute;
+  top: 60px;  
+  left: 0;                /* adjust to your navbar height */
+  right: auto;
+  width: 220px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem;
+  z-index: 100;
+  top: calc(100% + 8px); 
+}
+
+/* Only shows when React adds the .open class */
+.menuPanel.open {
+  display: block;
+}
+
+/* Links inside dropdown */
+.menuPanel a {
+  display: block;
+  color: #111;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+}
+
+.menuPanel a:hover {
+  background: #f3f4f6;
+}
+
+.signInbutton{
+  display: none;
+}
+
+/* --- Desktop breakpoint --- */
+@media (min-width: 768px) {
+  /* hide the mobile menu and button on desktop */
+  .menuPanel {
+    display: none !important;
+  }
+  .menuButton {
+    display: none;
+  }
+
+  /* show your desktop links */
+  .navPages {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .signInbutton{
+    display: flex;
+  }
+}
+
+.menuWidth{
+  position: relative;
+  display: inline-block;
 }

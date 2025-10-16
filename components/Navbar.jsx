@@ -11,10 +11,14 @@ const Navbar = () => {
 
 const { data: session, status } = useSession();
 const [providers, setProviders] = useState(null);
+const [toggler, setToggler] = useState(false);
 
 
   return (
+
+    
     <nav className="navbar">
+        {/* desktop Navigation */}
         <Link href="/" className="navLink">
             <Image 
             src="/assets/icons/mainIcon.png" 
@@ -24,13 +28,14 @@ const [providers, setProviders] = useState(null);
             />
             <p className="tallyMainTitle">Tally</p>
         </Link>
+
+        {/* desktop Navigation */}
         <div className="navPages">
             <Link href="/dashboard" className="navButtons">Dashboard</Link>
             <Link href="/transactions" className="navButtons">Transactions</Link>
             <Link href="/insights" className="navButtons">Insights</Link>
         </div>
 
-        {/* desktop Navigation */}
         <div>
             {session ? (
                 <div className="navbarContent">
@@ -52,12 +57,43 @@ const [providers, setProviders] = useState(null);
             ) : (
                 <> 
                     <button type="button"
-                    className="darkButton">
+                    className="darkButton signInbutton">
                         Sign in
                     </button>
                 </>
             )}
         </div>
+
+
+        {/*smaller devices Navigation*/}
+        <div className="menuWidth">
+            <button className="menuButton"
+                onClick={() => setToggler(v => !v)}>
+                <img src="/assets/icons/menuIcon.png"
+                    width={24}
+                    height={24}/>
+            </button>
+            
+            <div className={`menuPanel ${open ? "open" : ""}`}>
+                {session ? (
+                    <>
+                    <p>Welcome back {session.user.name}</p>
+                    <Link href="/dashboard">Dashboard</Link>
+                    <Link href="/transactions">Transactions</Link>
+                    <Link href="/transactions">Insights</Link>
+                    <button>Sign out</button>
+                    </>
+                ) : (
+                    <>
+                    <Link href="/transactions">Dashboard</Link>
+                    <Link href="/transactions">Transactions</Link>
+                    <Link href="/transactions">Insights</Link>
+                    <button>Sign in</button>
+                    </>
+                )}
+            </div>
+         </div>
+        
 
 
     </nav>
