@@ -130,8 +130,8 @@
 .navbar {
   margin: 0%;
   padding: 20px 100px;
+  width: 100%;
   display: flex;
-  align-items: center;
   justify-content: space-between;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -146,6 +146,7 @@
   font-weight: 600;
   font-size: 18px;
 }
+
 .navButtons{
   display: flex;
   align-items: center;
@@ -171,6 +172,8 @@
   transform: translateY(var(--pop-translate)) scale(var(--pop-scale));
   box-shadow: var(--pop-shadow-hover);
   outline: none;
+  padding: 0px 8px;
+  border-radius: 6px;
 }
 
 /* pressed / active feel */
@@ -201,11 +204,9 @@
   gap: 20px; /* gap-3 -> 12px */
 }
 
-/* md breakpoint (min-width: 768px) */
-@media (min-width: 768px) {
-  .navbarContent {
-    gap: 1.25rem; /* gap-5 -> 20px */
-  }
+.flex-align{
+  display: flex;
+  align-items: center;
 }
 
 .darkBlackButton{
@@ -266,7 +267,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 300px;
   text-align: center;
   gap: 10px;
   background-color: white;
@@ -358,12 +358,11 @@
 }
 
 /* --- Mobile menu panel --- */
-.menuPanel {
-  display: none;              /* Hidden by default */
+.menuPanel {              /* Hidden by default */
   position: absolute;
   top: 60px;  
-  left: 0;                /* adjust to your navbar height */
-  right: auto;
+  left: auto;                /* adjust to your navbar height */
+  right: 0;
   width: 220px;
   background: #fff;
   border: 1px solid #ddd;
@@ -372,11 +371,19 @@
   padding: 0.75rem;
   z-index: 100;
   top: calc(100% + 8px); 
+
+  /* animation-related */
+  opacity: 0;
+  transform: translateY(-10px);     /* start slightly above */
+  pointer-events: none;             /* disables clicking when hidden */
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 /* Only shows when React adds the .open class */
 .menuPanel.open {
-  display: block;
+  opacity: 1;
+  transform: translateY(0);         /* slide down into place */
+  pointer-events: auto; 
 }
 
 /* Links inside dropdown */
@@ -396,6 +403,15 @@
   display: none;
 }
 
+.disNone{
+  display: none;
+}
+
+.menuWidth{
+  position: relative;
+  display: inline-block;
+}
+
 /* --- Desktop breakpoint --- */
 @media (min-width: 768px) {
   /* hide the mobile menu and button on desktop */
@@ -409,15 +425,57 @@
   /* show your desktop links */
   .navPages {
     display: flex;
-    gap: 1.5rem;
+    gap: 40px;
   }
 
   .signInbutton{
     display: flex;
   }
+
+  .disNone{
+    display: flex;
+  }
+
 }
 
-.menuWidth{
-  position: relative;
-  display: inline-block;
+@media (max-width: 768px) {
+  .bigTitles{
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .homePageimg{
+    display: none;
+  }
+
+  .regularText{
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .homeContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .subTitles{
+    font-size: 1rem;
+  }
+
+  .boxServices{
+    width: 400px;
+  }
+
+  .homeSection-services{
+    padding: 60px 20px;
+    flex-wrap: wrap;
+    row-gap: 40px;
+  }
 }
+
+
+
+
+
