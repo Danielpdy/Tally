@@ -49,7 +49,7 @@ useEffect(() => {
         <nav className="navbar">
             <Link href="/" className="navLink">
                 <Image 
-                src="/assets/icons/mainIcon.png" 
+                src="/assets/icons/tallyappIcon.svg" 
                 alt="Logo" 
                 width={46} 
                 height={46} 
@@ -68,7 +68,7 @@ useEffect(() => {
                 <div className="navbarContent">
                     {session ? (
                     <>
-                        <Link className="darkBlackButton disNone" href="/create-prompt">Get Started</Link>
+                        
                             <button type="button" onClick={() => signOut()}
                                 className="darkButton disNone">
                                 Sign Out
@@ -90,6 +90,7 @@ useEffect(() => {
                         className="darkButton signInbutton">
                             Sign in
                         </button>
+                        <Link className="whiteButton getStartedBtn" href="/create-prompt">Get Started</Link>
                     </>
                     )}
                 </div>
@@ -105,9 +106,12 @@ useEffect(() => {
                         aria-controls="mainMenu"
                         aria-haspopup="menu"
                         >
-                        <img src="/assets/icons/menuIcon.png"
-                            width={24}
-                            height={24}/>
+                        <svg src="/assets/icons/menuIcon.svg"
+                            width={20}
+                            height={20}
+                            viewBox="0 0 24 24" fill="none">
+                            <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
                     </button>
                     
                     <div className={`menuPanel ${toggler ? "open" : ""}`}
@@ -118,17 +122,41 @@ useEffect(() => {
                         {session ? (
                             <>
                             <p>Welcome back {session.user.name}</p>
-                            <Link href="/dashboard">Dashboard</Link>
+                            
+                            <Link href="/dashboard">
+                                <Image src="/assets/icons/dashboardIcon.svg"
+                                width={18}
+                                height={18}/>
+                                <p>Dashboard</p>
+                            </Link>
+                            
+
                             <Link href="/transactions">Transactions</Link>
                             <Link href="/transactions">Insights</Link>
-                            <button>Sign out</button>
+                            <button onClick={() => signOut()}>Sign out</button>
                             </>
                         ) : (
                             <>
-                            <Link href="/transactions">Dashboard</Link>
-                            <Link href="/transactions">Transactions</Link>
+                            <Link href="/dashboard">
+                                <div className="flex">
+                                    <Image src="/assets/icons/dashboardIcon.svg"
+                                    width={18}
+                                    height={18}
+                                    alt="Dashboard"/>
+                                    <span>Dashboard</span>
+                                </div>
+                            </Link>
+                            <Link href="/transactions">
+                                <div className="flex">
+                                    <Image src="/assets/icons/transactionsIcon.svg"
+                                    width={18}
+                                    height={18}
+                                    alt="Transactions"/>
+                                    <span>Transactions</span>
+                                </div>
+                            </Link>
                             <Link href="/transactions">Insights</Link>
-                            <button>Sign in</button>
+                            <button className="darkButton">Sign in</button>
                             </>
                         )}
                     </div>

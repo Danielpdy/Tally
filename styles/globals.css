@@ -31,7 +31,6 @@
 
     /* your original color blobs (same stops but we reduce the 'transparent' cutoffs so they show more) */
     radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 1) 0px, rgba(33,33,33,0) 20%),
-    radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 1) 0px, rgba(0,0,0,0) 30%),
     radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, rgba(0,0,0,0) 30%),
     radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 1) 0px, rgba(0,0,0,0) 40%),
     radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 1) 0px, rgba(0,0,0,0) 40%),
@@ -57,7 +56,9 @@
 .homeSection-main{
   display: flex;
   justify-content: center;
-  padding: 40px 0px;
+  align-items: center;
+  gap: 60px;
+  padding: 60px 0px;
 }
 
 .homePageimg {
@@ -68,14 +69,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: start;
-  gap: 20px;
+  gap: 40px;
 }
 .bigTitles{
   font-family: "GT America", "Satoshi", "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
   font-size: 3rem;
   font-weight: 800;
-  max-width: 600px;
-  color: rgb(19, 47, 39)
+  max-width: 400px;
+  color: #1a0b2e;
 }
 
 .regularText{
@@ -87,7 +88,7 @@
 
 .darkButton{
   font-family: "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
-  background-color: rgb(11, 99, 74);
+  background-color: #EE6F4D;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -100,12 +101,36 @@
   font-weight: 600;
 }
 
+.whiteButton{
+  font-family: "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  background-color: white;
+  color: black;
+  border: 2px solid #e9dded;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+
+  transform: translateZ(0) translateY(0) scale(1);
+  transition: transform var(--btn-transition), box-shadow var(--btn-transition), background var(--btn-transition);
+  font-weight: 600;
+}
+
 /* hover / focus */
 .darkButton:hover,
 .darkButton:focus-visible {
   transform: translateY(var(--btn-pop-translate)) scale(var(--btn-pop-scale));
-  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-  background-color: rgb(17, 145, 108);
+  box-shadow: 0 20px 50px rgba(226, 225, 225, 0.6);
+  background-color: #F27D5C;
+  outline: none;
+}
+
+.whiteButton:hover,
+.whiteButton:focus-visible {
+  transform: translateY(var(--btn-pop-translate)) scale(var(--btn-pop-scale));
+  background-color: white;
+  border: 2px solid #b89fc3;
   outline: none;
 }
 
@@ -193,9 +218,19 @@
 
 .tallyMainTitle {
   font-family: "GT America", "Satoshi", "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
-  font-size: 20px;
-  font-weight: 800;
-  color: rgb(19, 47, 39);
+  font-size: 24px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #5B45F5 0%, #7B65FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tallyGradient{
+  background: linear-gradient(135deg, #5B45F5 0%, #7B65FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text; 
 }
 
 /* Equivalent of: "flex gap-3 md:gap-5" using .navbarContent */
@@ -355,6 +390,23 @@
   background: none;
   border: none;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.menuButton:hover{
+  background-color: rgb(218, 243, 252);
+  padding: 6px 6px;
+  border-radius: 8px;
+  transform: translateY(-2px);
+}
+
+.menuButton svg {
+  transition: transform 0.3s ease;
+  color: #666;
+}
+
+.menuButton:hover svg {
+  color: rgb(74, 231, 245);
 }
 
 /* --- Mobile menu panel --- */
@@ -377,6 +429,10 @@
   transform: translateY(-10px);     /* start slightly above */
   pointer-events: none;             /* disables clicking when hidden */
   transition: opacity 0.25s ease, transform 0.25s ease;
+
+  font-family: "GT America", "Satoshi", "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 /* Only shows when React adds the .open class */
@@ -432,6 +488,7 @@
     display: flex;
   }
 
+
   .disNone{
     display: flex;
   }
@@ -440,14 +497,12 @@
 
 @media (max-width: 768px) {
   .bigTitles{
-    font-size: 2rem;
-    text-align: center;
+    font-size: 2.5rem;
+    
   }
-
-  .homePageimg{
+  .getStartedBtn{
     display: none;
   }
-
   .regularText{
     font-size: 14px;
     text-align: center;
@@ -457,7 +512,17 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: start;
+    gap: 30px;
+  }
+
+  .homeSection-main{
+    flex-wrap: wrap;
+    row-gap: 40px;
+  }
+
+  .homePageimg{
+    width: 600px;
   }
 
   .subTitles{
@@ -473,9 +538,255 @@
     flex-wrap: wrap;
     row-gap: 40px;
   }
+
+  .darkButton{
+    padding: 8px 18px;
+    font-size: 12px;
+  }
+
+  .whiteButton{
+    padding: 8px 18px;
+    font-size: 12px;
+  }
+
+  .howItWorksBox{
+    flex-wrap: wrap;
+    padding: 0px 100px;
+    row-gap: 30px;
+  }
+}
+
+.flex{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cashflowSpan{
+  border: 1px solid #8a00c2;
+  padding: 8px 12px;
+  border-radius: 50px;
+  color: #8a00c2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #efdef7;
+  font-family: "GT America", "Satoshi", "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
 
+/* Progress bar fill animation */
+@keyframes fillBar {
+  from {
+    width: 0%;
+  }
+}
 
+/* ==================== MAIN CONTAINER ==================== */
 
+.floating-cards-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.floating-cards-wrapper {
+  max-width: 36rem; /* 576px */
+  width: 100%;
+}
+
+/* ==================== CARD BASE STYLES ==================== */
+
+.card {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 460px;
+  margin-bottom: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+              0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* ==================== FLOAT ANIMATIONS WITH DELAYS ==================== */
+
+.card.float-1 {
+  animation: float 3s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.card.float-2 {
+  animation: float 3s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.card.float-3 {
+  animation: float 3s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+/* ==================== HOVER EFFECTS ==================== */
+
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* ==================== CARD HEADER ==================== */
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.card-label {
+  color: #94a3b8; /* slate-400 */
+  font-size: 0.75rem; /* 12px */
+}
+
+/* ==================== DOTS ==================== */
+
+.dot {
+  width: 1.5rem; /* 24px */
+  height: 1.5rem; /* 24px */
+  border-radius: 9999px;
+}
+
+.dot-purple {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.dot-orange {
+  background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+}
+
+/* ==================== BALANCE TEXT ==================== */
+
+.balance-text {
+  font-size: 2.25rem; /* 36px */
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ==================== FLOW TEXT ==================== */
+
+.flow-text {
+  font-size: 1.875rem; /* 30px */
+  font-weight: 700;
+  color: #0f172a; /* slate-900 */
+}
+
+.percentage {
+  color: #22c55e; /* green-500 */
+  font-size: 0.875rem; /* 14px */
+  margin-left: 0.5rem;
+}
+
+/* ==================== PROGRESS BARS CONTAINER ==================== */
+
+.bars-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ==================== BAR DOTS ==================== */
+
+.bar-dot {
+  width: 0.625rem; /* 10px */
+  height: 0.625rem; /* 10px */
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.bar-dot-purple {
+  background: #667eea;
+}
+
+.bar-dot-cyan {
+  background: #06b6d4;
+}
+
+.bar-dot-orange {
+  background: #f59e0b;
+}
+
+/* ==================== BAR BACKGROUNDS ==================== */
+
+.bar-bg {
+  flex: 1 1 0%;
+  height: 0.625rem; /* 10px */
+  background-color: #f1f5f9; /* slate-100 */
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+/* ==================== BAR FILLS ==================== */
+
+.bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  animation: fillBar 2s ease-out forwards;
+}
+
+.bar-fill-purple {
+  background: linear-gradient(90deg, #667eea 0%, #06b6d4 100%);
+  width: 70%;
+}
+
+.bar-fill-cyan {
+  background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 100%);
+  width: 45%;
+}
+
+.bar-fill-orange {
+  background: linear-gradient(90deg, #f59e0b 0%, #ef4444 100%);
+  width: 28%;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 640px) {
+  .floating-cards-container {
+    padding: 1rem;
+  }
+  
+  .card {
+    padding: 1.25rem;
+  }
+  
+  .balance-text {
+    font-size: 2rem; /* Slightly smaller on mobile */
+  }
+  
+  .flow-text {
+    font-size: 1.5rem; /* Slightly smaller on mobile */
+  }
+}
