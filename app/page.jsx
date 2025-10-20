@@ -104,28 +104,40 @@ export default function Home() {
       </section>
 
       <section className="homeSection-services">
-        <div className="boxServices">
-          <img src="/assets/icons/uploadCVSIcon.png" alt="Import CVSs" />
-          <div>
+        <div className="boxServices card-purple">
+          <img src="/assets/icons/importIcon.svg"
+          width={54}
+          height={54}
+          alt="Import CVSs" />
+          <div className="homeSec-text">
             <label className="subTitles">Import CSVs</label>
             <p className="smallText">Upload bank CSVs and bulk import transactions.</p>
           </div>
+          <div className="gradient-line"></div>
         </div>
 
-        <div className="boxServices">
-          <img src="/assets/icons/quickInsightsIcon.png" alt="Quick Insights" />
-          <div>
+        <div className="boxServices card-blue">
+          <img src="/assets/icons/quickInsightsIcon.svg" 
+          width={54}
+          height={54}
+          alt="Quick Insights" />
+          <div className="homeSec-text">
             <label className="subTitles">Quick Insights</label>
             <p className="smallText">See balance, monthly inflows/outflows and alerts.</p>
           </div>
+          <div className="gradient-line"></div>
         </div>
 
-        <div className="boxServices">
-          <img src="/assets/icons/manualEntryIcon.png" alt="Manual Entry & Budgets" />
-          <div>
+        <div className="boxServices card-orange">
+          <img src="/assets/icons/manualEntryIcon.svg" 
+          width={54}
+          height={54}
+          alt="Manual Entry & Budgets" />
+          <div className="homeSec-text">
             <label className="subTitles">Manual entry & budgets</label>
             <p className="smallText">Add transactions manually and set simple budgets.</p>
           </div>
+          <div className="gradient-line"></div>
         </div>
       </section>
 

@@ -1,0 +1,18 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tallyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5B4FE9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7B3FE4;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Bar Chart - 3 bars with different heights -->
+  <!-- Short bar -->
+  <rect x="4" y="14" width="4" height="6" rx="2" fill="url(#tallyGradient)"/>
+  
+  <!-- Medium bar -->
+  <rect x="10" y="10" width="4" height="10" rx="2" fill="url(#tallyGradient)"/>
+  
+  <!-- Tall bar -->
+  <rect x="16" y="5" width="4" height="15" rx="2" fill="url(#tallyGradient)"/>
+</svg>

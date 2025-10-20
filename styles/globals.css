@@ -73,9 +73,9 @@
 }
 .bigTitles{
   font-family: "GT America", "Satoshi", "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
-  font-size: 3rem;
+  font-size: 3.8rem;
   font-weight: 800;
-  max-width: 400px;
+  max-width: 550px;
   color: #1a0b2e;
 }
 
@@ -92,13 +92,17 @@
   color: white;
   border: none;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 14px;
   cursor: pointer;
-
-  transform: translateZ(0) translateY(0) scale(1);
-  transition: transform var(--btn-transition), box-shadow var(--btn-transition), background var(--btn-transition);
   font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.darkButton:hover{
+  transform: scale(1.1);
+  background-color: #F27D5C;
 }
 
 .whiteButton{
@@ -113,25 +117,12 @@
   text-decoration: none;
 
   transform: translateZ(0) translateY(0) scale(1);
-  transition: transform var(--btn-transition), box-shadow var(--btn-transition), background var(--btn-transition);
   font-weight: 600;
 }
 
-/* hover / focus */
-.darkButton:hover,
-.darkButton:focus-visible {
-  transform: translateY(var(--btn-pop-translate)) scale(var(--btn-pop-scale));
-  box-shadow: 0 20px 50px rgba(226, 225, 225, 0.6);
-  background-color: #F27D5C;
-  outline: none;
-}
-
-.whiteButton:hover,
-.whiteButton:focus-visible {
-  transform: translateY(var(--btn-pop-translate)) scale(var(--btn-pop-scale));
+.whiteButton:hover {
   background-color: white;
   border: 2px solid #b89fc3;
-  outline: none;
 }
 
 /* pressed */
@@ -140,14 +131,10 @@
   box-shadow: 0 10px 28px rgba(0,0,0,0.44);
 }
 
-/* keyboard focus ring (visible for keyboard users) */
-.darkButton:focus-visible {
-  box-shadow: 0 18px 44px rgba(0,0,0,0.5), 0 0 0 5px var(--focus-glow);
-}
 
 .smallText{
-  font-family: "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
-  font-size: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
   max-width: 400px;
   color: rgb(107, 131, 123);
 }
@@ -159,6 +146,12 @@
   display: flex;
   justify-content: space-between;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .navLink {
@@ -176,41 +169,17 @@
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: gray;
-  font-family: "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
-  font-size: 14px;
-
-  --pop-scale: 1.03;
-  --pop-translate: -6px;
-  --pop-shadow: 0 8px 20px rgba(0,0,0,0.28);
-  --pop-shadow-hover: 0 18px 40px rgba(0,0,0,0.36);
-  transform: translateZ(0) translateY(0) scale(1);
-  transition: transform 180ms cubic-bezier(.2,.9,.2,1), box-shadow 180ms cubic-bezier(.2,.9,.2,1);
-  will-change: transform, box-shadow;
-  /* keep pointer cursor for clickable items */
+  color: #334155;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
 }
 
-/* hover + keyboard focus (visible for keyboard users) */
-.navButtons:hover,
-.navButtons:focus-visible {
-  transform: translateY(var(--pop-translate)) scale(var(--pop-scale));
-  box-shadow: var(--pop-shadow-hover);
-  outline: none;
-  padding: 0px 8px;
-  border-radius: 6px;
+.navButtons:hover{
+  color: #5B45F5;
 }
 
-/* pressed / active feel */
-.navButtons:active {
-  transform: translateY(calc(var(--pop-translate) * 0.35)) scale(calc(var(--pop-scale) - 0.02));
-  box-shadow: var(--pop-shadow);
-}
-
-/* accessible focus ring (nice for keyboard users) */
-.navButtons:focus-visible {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.28), 0 0 0 4px rgba(0,195,137,0.08);
-}
 
 .navPages{
   display: none;
@@ -220,7 +189,7 @@
   font-family: "GT America", "Satoshi", "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
   font-size: 24px;
   font-weight: 900;
-  background: linear-gradient(135deg, #5B45F5 0%, #7B65FF 100%);
+  background: linear-gradient(135deg, #5B4FE9 0%, #3B82F6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -285,9 +254,17 @@
 .homeSection-services {
   width: 100%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 50px;
   padding: 100px 0px;
-  background-color: rgb(7, 68, 51);
+  background-color: #FAF8FF;
+  padding: 120px 40px;
+}
+
+.homeSec-text{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .subTitles{
@@ -300,19 +277,24 @@
 .boxServices{
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 10px;
-  background-color: white;
-  padding: 40px 20px;
-  border-radius: 12px;
-    box-shadow:
-    0 30px 80px rgba(0,0,0,0.75),      /* deep soft shadow */
-    0 6px 18px rgba(0,0,0,0.6),        /* mid-range depth */
-    0 1px 0 rgba(255,255,255,0.03) inset; 
-
+  align-items: start;
+  text-align: start;
+  gap: 18px;
+  padding: 50px 30px;
+  border: 2px solid rgba(139, 92, 246, 0.1);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.08);
+  border-radius: 14px;
+  background-color: #FFFFFF;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  
 }
+
+.boxServices:hover .gradient-line {
+  transform: scaleX(1);
+}
+
 
 .homeSection-howItWorks {
   width: 100%;
@@ -321,7 +303,52 @@
   align-items: center;
   justify-content: center;
   gap: 40px;
-  padding: 60px 0px;
+  padding: 80px 0px;
+  background-color: #FAF8FF;
+}
+
+ .boxServices:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.15);
+}
+
+ .gradient-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+
+ .card-purple:hover {
+  border-color: rgba(139, 92, 246, 0.3);
+  background: linear-gradient(135deg, #faf5ff 0%, #fdf2f8 100%);
+}
+
+ .card-purple .gradient-line {
+  background: linear-gradient(90deg, #8B5CF6 0%, #EC4899 100%);
+}
+
+.card-blue:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
+}
+
+.card-blue .gradient-line {
+  background: linear-gradient(90deg, #22D3EE 0%, #8B5CF6 100%);
+}
+
+.card-orange:hover {
+  border-color: rgba(249, 115, 22, 0.3);
+  background: linear-gradient(135deg, #fff7ed 0%, #fef2f2 100%);
+}
+
+.card-orange .gradient-line {
+  background: linear-gradient(90deg, #FB923C 0%, #F97316 100%);
 }
 
 
@@ -338,7 +365,7 @@
   justify-content: center;
   max-width: 300px;
   text-align: center;
-  gap: 10px;
+  gap: 20px;
 }
 
 .howItWorksNumbers{
@@ -346,8 +373,9 @@
   font-size: 26px;
   font-weight: 800;
   color: white;
-  background-color: rgb(11, 99, 74);
-  padding: 30px 40px;
+  background: linear-gradient(180deg, #6C5CE7 0%, #0099FF 100%);
+  box-shadow: 0 20px 60px rgba(108, 92, 231, 0.4);
+  padding: 25px 40px;
   border-radius: 50%;
 }
 
@@ -356,7 +384,8 @@
   display: flex;
   padding: 60px 100px;
   justify-content: space-between;
-  background-color: rgb(7, 68, 51);
+  background-color: #FAF8FF;
+  border-top: 1px solid #ebebeb;
 }
 
 .footerLabels{
@@ -364,11 +393,19 @@
   gap: 40px;
 }
 
+
 .footerText{
-  font-family: "Inter", Arial, sans-serif;
-  font-size: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
   font-weight: 600;
-  color: white;
+  color: #64748b;
+}
+
+.gradientText-blue{
+  background: linear-gradient(90deg, #5B4FE9 0%, #4F9BE9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .alignItems{
@@ -380,7 +417,7 @@
 
 .googleAndGithub{
   display: flex;
-  gap: 10px;
+  gap: 20px;
 }
 
 /* Show the menu button by default (mobile) */
@@ -423,6 +460,9 @@
   padding: 0.75rem;
   z-index: 100;
   top: calc(100% + 8px); 
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 
   /* animation-related */
   opacity: 0;
@@ -455,12 +495,72 @@
   background: #f3f4f6;
 }
 
+
+.profileMenu {              /* Hidden by default */
+  position: absolute;
+  top: 60px;  
+  left: auto;                /* adjust to your navbar height */
+  right: 0;
+  width: 220px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem;
+  z-index: 100;
+  top: calc(100% + 8px); 
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  /* animation-related */
+  opacity: 0;
+  transform: translateY(-10px);     /* start slightly above */
+  pointer-events: none;             /* disables clicking when hidden */
+  transition: opacity 0.25s ease, transform 0.25s ease;
+
+  font-family: "GT America", "Satoshi", "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Only shows when React adds the .open class */
+.profileMenu.open {
+  opacity: 1;
+  transform: translateY(0);         /* slide down into place */
+  pointer-events: auto; 
+}
+
+/* Links inside dropdown */
+.profileMenu a {
+  display: block;
+  color: #111;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+}
+
+.profileMenu a:hover {
+  background: #f3f4f6;
+}
+
+.profileWrapper {
+  position: relative;
+  display: inline-block;
+  gap: 20px;
+}
+
 .signInbutton{
   display: none;
 }
 
 .disNone{
   display: none;
+}
+
+.profileIcon{
+  border: none;
+  background-color: white;
 }
 
 .menuWidth{
@@ -563,14 +663,14 @@
 }
 
 .cashflowSpan{
-  border: 1px solid #8a00c2;
+  border: 1px solid #E9D5FF;
   padding: 8px 12px;
   border-radius: 50px;
-  color: #8a00c2;
+  color: #8B5CF6;
   display: flex;
   align-items: center;
   gap: 4px;
-  background-color: #efdef7;
+  background-color: #FAF5FF;
   font-family: "GT America", "Satoshi", "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
   font-size: 12px;
   font-weight: 600;
@@ -683,10 +783,9 @@
 .balance-text {
   font-size: 2.25rem; /* 36px */
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #7B3FE4;
   background-clip: text;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
 }
 
 /* ==================== FLOW TEXT ==================== */
@@ -695,12 +794,14 @@
   font-size: 1.875rem; /* 30px */
   font-weight: 700;
   color: #0f172a; /* slate-900 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
 }
 
 .percentage {
   color: #22c55e; /* green-500 */
   font-size: 0.875rem; /* 14px */
   margin-left: 0.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
 }
 
 /* ==================== PROGRESS BARS CONTAINER ==================== */

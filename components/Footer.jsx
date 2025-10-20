@@ -8,7 +8,7 @@ const Footer = () => {
             <p className='footerText'>Terms</p>
             <p className='footerText'>Contact</p>
         </div>
-        <p className='footerText'>© Tally by Daniel Pinzon</p>
+        <p className='footerText flex'>© Tally by <p className='gradientText-blue'>Daniel Pinzon</p> </p>
     </footer>
   )
 }

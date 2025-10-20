@@ -18,16 +18,35 @@ const panelRef = useRef(null);
 const buttonRef = useRef(null);
 const pathname = usePathname();
 
+const [ profileOpen, setProfileOpen ] = useState(false);
+const profileButtonRef = useRef(null);
+const profilePanelRef = useRef(null);
+
 useEffect(() => {
     const onPointerDown = (e) => {
-        if (!toggler) return;
-        const t = e.target;
-        if (panelRef.current?.contains(t)) return;
-        if (buttonRef.current?.contains(t)) return;
-        setToggler(false);
+    const t = e.target;
+
+    
+    if (toggler) {
+      const clickedOutsideMobile =
+        !panelRef.current?.contains(t) && !buttonRef.current?.contains(t);
+      if (clickedOutsideMobile) setToggler(false);
+    }
+
+    
+    if (profileOpen) {
+      const clickedOutsideProfile =
+        !profilePanelRef.current?.contains(t) && !profileButtonRef.current?.contains(t);
+      if (clickedOutsideProfile) setProfileOpen(false);
+    }
+
     };
     const onKeyDown = (e) => {
-        if (e.key === "Escape") setToggler(false);
+        if (e.key === "Escape") {
+            if (toggler) setToggler(false);
+            if (profileOpen) setProfileOpen(false);
+        }
+
     };
 
     document.addEventListener("pointerdown", onPointerDown);
@@ -36,10 +55,11 @@ useEffect(() => {
       document.removeEventListener("pointerdown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
-}, [toggler]);
+}, [toggler, profileOpen]);
 
   useEffect(() => {
     setToggler(false);
+    setProfileOpen(false);
   }, [pathname]);
 
 
@@ -66,33 +86,120 @@ useEffect(() => {
 
             <div className="flex-align">
                 <div className="navbarContent">
-                    {session ? (
-                    <>
-                        
-                            <button type="button" onClick={() => signOut()}
-                                className="darkButton disNone">
-                                Sign Out
-                            </button>
-                        
 
-                        <Link href="/profile" className="disNone">
+                <div className="profileWrapper disNone">
+
+                       
+                        
+                        <Link href="/getStarted" className="darkButton disNone">
+                            Get Started
+                        </Link>
+                    
+                        <button href="/profile" className="disNone profileIcon"
+                            ref={profileButtonRef}
+                            onClick={() => setProfileOpen(v => !v)}
+                            aria-expanded={profileOpen}
+                            aria-controls="mainMenu"
+                            aria-haspopup="menu"
+                            >
                             <img src="/assets/icons/profileIcon.png" 
                             alt="" 
                             width={40}
                             height={40}
                             />
-                        </Link>
-                        
-                    </>
-                    ) : (
-                    <> 
-                        <button type="button"
-                        className="darkButton signInbutton">
-                            Sign in
                         </button>
-                        <Link className="whiteButton getStartedBtn" href="/create-prompt">Get Started</Link>
-                    </>
-                    )}
+
+                        <div className={`profileMenu ${profileOpen ? "open" : ""}`}
+                            id="mainMenu"
+                            ref={profilePanelRef}
+                            role="menu"
+                            >
+                                
+                            {session ? (
+                                <>
+                                <p>Welcome, {session.user.name}</p>
+                                
+                                <Link href="/dashboard">
+                                    <div className="flex">
+                                        <Image src="/assets/icons/dashboardIcon.svg"
+                                        width={20}
+                                        height={20}
+                                        alt="Dashboard"/>
+                                        <span>Dashboard</span>
+                                    </div>
+                                </Link>
+                                <Link href="/transactions">
+                                    <div className="flex">
+                                        <Image src="/assets/icons/transactionsIcon.svg"
+                                        width={20}
+                                        height={20}
+                                        alt="Transactions"/>
+                                        <span>Transactions</span>
+                                    </div>
+                                </Link>
+                                <Link href="/transactions">
+                                    <div className="flex">
+                                        <Image src="/assets/icons/insightsIcon.svg"
+                                        width={20}
+                                        height={20}
+                                        alt="Insights"/>
+                                        <span>Insights</span>
+                                    </div>
+                                </Link>
+                                <Link href="/transactions">
+                                    <div className="flex">
+                                        <Image src="/assets/icons/settingsIcon.svg"
+                                        width={20}
+                                        height={20}
+                                        alt="Settings"/>
+                                        <span>Settings</span>
+                                    </div>
+                                </Link>
+                                <button className="darkButton" onClick={() => signOut()}>Sign out</button>   
+                                </>
+                            ) : (
+                                <> 
+                                <Link href="/dashboard">
+                                    <div className="flex">
+                                        <Image src="/assets/icons/dashboardIcon.svg"
+                                        width={20}
+                                        height={20}
+                                        alt="Dashboard"/>
+                                        <span>Dashboard</span>
+                                    </div>
+                                </Link>
+                                <Link href="/transactions">
+                                    <div className="flex">
+                                        <Image src="/assets/icons/transactionsIcon.svg"
+                                        width={20}
+                                        height={20}
+                                        alt="Transactions"/>
+                                        <span>Transactions</span>
+                                    </div>
+                                </Link>
+                                <Link href="/transactions">
+                                    <div className="flex">
+                                        <Image src="/assets/icons/insightsIcon.svg"
+                                        width={20}
+                                        height={20}
+                                        alt="Insights"/>
+                                        <span>Insights</span>
+                                    </div>
+                                </Link>
+                                <Link href="/transactions">
+                                    <div className="flex">
+                                        <Image src="/assets/icons/settingsIcon.svg"
+                                        width={20}
+                                        height={20}
+                                        alt="Settings"/>
+                                        <span>Settings</span>
+                                    </div>
+                                </Link>
+                                <button className="darkButton" onClick={() => signIn()}>Sign in</button>
+                                </>
+                            )}
+                        </div>
+                    </div>
                 </div>
                 
         
@@ -118,30 +225,16 @@ useEffect(() => {
                         id="mainMenu"
                         ref={panelRef}
                         role="menu"
-                    >
+                        >
                         {session ? (
                             <>
-                            <p>Welcome back {session.user.name}</p>
+                            <p>Welcome, {session.user.name}</p>
                             
-                            <Link href="/dashboard">
-                                <Image src="/assets/icons/dashboardIcon.svg"
-                                width={18}
-                                height={18}/>
-                                <p>Dashboard</p>
-                            </Link>
-                            
-
-                            <Link href="/transactions">Transactions</Link>
-                            <Link href="/transactions">Insights</Link>
-                            <button onClick={() => signOut()}>Sign out</button>
-                            </>
-                        ) : (
-                            <>
                             <Link href="/dashboard">
                                 <div className="flex">
                                     <Image src="/assets/icons/dashboardIcon.svg"
-                                    width={18}
-                                    height={18}
+                                    width={20}
+                                    height={20}
                                     alt="Dashboard"/>
                                     <span>Dashboard</span>
                                 </div>
@@ -149,13 +242,61 @@ useEffect(() => {
                             <Link href="/transactions">
                                 <div className="flex">
                                     <Image src="/assets/icons/transactionsIcon.svg"
-                                    width={18}
-                                    height={18}
+                                    width={20}
+                                    height={20}
                                     alt="Transactions"/>
                                     <span>Transactions</span>
                                 </div>
                             </Link>
-                            <Link href="/transactions">Insights</Link>
+                            <Link href="/transactions">
+                                <div className="flex">
+                                    <Image src="/assets/icons/insightsIcon.svg"
+                                    width={20}
+                                    height={20}
+                                    alt="Insights"/>
+                                    <span>Insights</span>
+                                </div>
+                            </Link>
+                            <Link href="/transactions">
+                                <div className="flex">
+                                    <Image src="/assets/icons/settingsIcon.svg"
+                                    width={20}
+                                    height={20}
+                                    alt="Settings"/>
+                                    <span>Settings</span>
+                                </div>
+                            </Link>
+                            <button className="darkButton" onClick={() => signOut()}>Sign out</button>
+                            </>
+                        ) : (
+                            <>
+                            <Link href="/dashboard">
+                                <div className="flex">
+                                    <Image src="/assets/icons/dashboardIcon.svg"
+                                    width={20}
+                                    height={20}
+                                    alt="Dashboard"/>
+                                    <span>Dashboard</span>
+                                </div>
+                            </Link>
+                            <Link href="/transactions">
+                                <div className="flex">
+                                    <Image src="/assets/icons/transactionsIcon.svg"
+                                    width={20}
+                                    height={20}
+                                    alt="Transactions"/>
+                                    <span>Transactions</span>
+                                </div>
+                            </Link>
+                            <Link href="/transactions">
+                                <div className="flex">
+                                    <Image src="/assets/icons/insightsIcon.svg"
+                                    width={20}
+                                    height={20}
+                                    alt="Transactions"/>
+                                    <span>Insights</span>
+                                </div>
+                            </Link>
                             <button className="darkButton">Sign in</button>
                             </>
                         )}
