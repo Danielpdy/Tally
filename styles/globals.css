@@ -891,3 +891,27 @@
     font-size: 1.5rem; /* Slightly smaller on mobile */
   }
 }
+
+
+
+/*---- DASHBOARD PAGE ----- */
+
+.dashboardContent{
+  padding: 20px 20px;
+}
+
+.firstrowDash{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.firstrowBoxes{
+  width: 300px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding: 24px 24px;
+}
