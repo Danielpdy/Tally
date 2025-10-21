@@ -10,6 +10,37 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
 
   return (
     <section className='dashboardContent'>
+
+        <section className='mainMessage'>
+            <div className='mainMessage-content'>
+                <div className='financialFreedom'>Financial Freedom Starts Here</div>
+                <h1 className='bigTitles textAlign'>Take Control of Your Money</h1>
+                <div>
+                    <p className='smallText textAlign'>Track spending, crush goals, and build wealth with AI-powered
+                        insights.
+                    </p>
+                    <p className='smallText textAlign'>
+                        Sign up to unlock all features below
+                    </p>
+                </div>
+                <div className='mainMessage-boxBtns'>
+                    <button className='purpleButtons'>Start Free Trial</button>
+                    <button className='whiteButton'>Watch Demo</button>
+                </div>
+                <p className='smallerText'>No credit card required • 14-day free trial • Cancel anytime</p>
+            </div>
+
+            <div className='mainMessage-content'>
+                <h2 className='bigTitles'
+                style={{textAlign: "center", fontSize:"1.8rem"}}
+                >Everything You Need to Master Your Finances</h2>
+                <p className='smallText'
+                style={{textAlign:"center"}}
+                >See what awaits you inside. Sign up to start tracking today.</p>
+            </div>
+        </section>
+
+        
         <section className='firstRowDash'>
             <div className='firstrowBoxes'>
                 <p className='smallerText'>Total Balance</p>
@@ -65,8 +96,15 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
                     <p>Especial Fund</p>
                 </div>
             </div>
+
+            <div class="blur-overlay">
+                <div class="lock-icon">🔒</div>
+                <h2>Sign Up to Unlock</h2>
+                <button class="unlock-button">Create Free Account</button>
+            </div>
         </section>
-    </section>    
+    </section>
+        
   )
 }
 
