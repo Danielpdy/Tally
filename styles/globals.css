@@ -75,7 +75,7 @@
 .bigTitles{
   font-size: 3.8rem;
   font-weight: 800;
-  max-width: 550px;
+  max-width: 600px;
   color: #1a0b2e;
 }
 
@@ -135,7 +135,6 @@
 .smallText{
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 16px;
-  max-width: 400px;
   color: rgb(107, 131, 123);
 }
 
@@ -892,7 +891,7 @@
 }
 
 .smallerText{
-  font-size: 12px;
+  font-size: 14px;
   color: #6b7280;
 }
 
@@ -906,6 +905,7 @@
   background-color: #FAF8FF;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 80px;
 }
 
@@ -925,6 +925,8 @@
   align-items: start;
   padding: 24px 24px 54px 24px;
   background-color: white;
+  filter: blur(2px);
+  border: 1px solid #d8c6fd;
 }
 
 .monthlyFlowNumbers{
@@ -950,7 +952,7 @@
   background-color: #e4d8fc;
   color: #8B4FFF;
   font-weight: 500;
-  font-size: 12px;
+  font-size: 14px;
   padding: 5px 10px;
   border-radius: 10px;
 }
@@ -959,7 +961,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 60px;
+  gap: 100px;
 }
 .mainMessage-content{
   display: flex;
@@ -989,21 +991,81 @@
   gap: 10px;
 }
 
-.blur-overlay {
-  position: absolute;  /* Key: absolute, not fixed */
+.premium-overlay {
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(248, 249, 250, 0.7);  /* Semi-transparent */
-  backdrop-filter: blur(12px);  /* Creates the blur */
-  -webkit-backdrop-filter: blur(12px);  /* Safari support */
+  right: 0;
+  bottom: 0;
+  background: rgba(250, 248, 255, 0.64); 
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10;
-  border-radius: 24px;
 }
 
+.unlock-message {
+  text-align: center;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
 
+.chart-card {
+  background-color: white;
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 40px 30px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 40px;
+}
 
+.chart-wrap {
+  width: 100%;
+  height: 100%; /* this lets ResponsiveContainer fill the space */
+}
+
+.safeToSpend-progressBar{
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 20px;
+  width: 100%;
+  height: 480px;
+  gap: 40px;
+  padding: 40px 30px;
+}
+
+.graphsSectionOne{
+  display: flex;
+  justify-content: space-evenly;
+  gap: 28px;
+}
+
+.dashboardMain{
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.amountTitle{
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(19, 47, 39)
+}
+
+.safeToSpendData{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
