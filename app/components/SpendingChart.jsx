@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useEffect, useState } from 'react';
+import styles from '../dashboard/dashboard.module.css';
 import {
     PieChart,
     Pie,
@@ -23,10 +24,10 @@ const SpendingChart = () => {
 
     const COLORS = ["#FF8042", "#8A2BE2", "#00C49F", "#00CFFF", "#A9A9A9"];
   return (
-    <div className='chart-card'>
+    <div className={styles.chartCard}>
         <h3 style={{color: "#8B4FFF", fontSize: "24px"}}>Where Your Money Went</h3>
 
-        <div className='chart-wrap'>
+        <div className={styles.chartWrap}>
             <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                     <Pie

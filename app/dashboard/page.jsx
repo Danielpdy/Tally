@@ -4,6 +4,7 @@ import React from 'react'
 import { useState } from 'react'
 import SpendingChart from '@app/components/SpendingChart';
 import SafetoSpend from '@app/components/SafetoSpend';
+import styles from './dashboard.module.css';
 
 const dashboard = () => {
 
@@ -12,11 +13,11 @@ const [monthlyIncome, setMonthlyIncome] = useState(5240);
 const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
 
   return (
-    <section className='dashboardContent'>
-        <div className='dashboardMain'>
-            <section className='mainMessage'>
-                <div className='mainMessage-content'>
-                    <div className='financialFreedom'>Financial Freedom Starts Here</div>
+    <section className={styles.dashboardContent}>
+        <div className={styles.dashboardMain}>
+            <section className={styles.mainMessage}>
+                <div className={styles.mainMessageContent}>
+                    <div className={styles.financialFreedom}>Financial Freedom Starts Here</div>
                     <h1 className='bigTitles textAlign'>Take Control of Your Money</h1>
                     <div>
                         <p className='smallText textAlign'>Track spending, crush goals, and build wealth with AI-powered
@@ -26,14 +27,14 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
                             Sign up to unlock all features below
                         </p>
                     </div>
-                    <div className='mainMessage-boxBtns'>
-                        <button className='purpleButtons'>Start Free Trial</button>
+                    <div className={styles.mainMessageBoxBtns}>
+                        <button className={styles.purpleButtons}>Start Free Trial</button>
                         <button className='whiteButton'>Watch Demo</button>
                     </div>
                     <p className='smallerText'>No credit card required • 14-day free trial • Cancel anytime</p>
                 </div>
 
-                <div className='mainMessage-content'>
+                <div className={styles.mainMessageContent}>
                     <h2 className='subTitles'
                     style={{textAlign: "center", fontSize:"2.5rem", color: "#1a0b2e"}}
                     >Everything You Need to Master Your Finances</h2>
@@ -44,18 +45,18 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
             </section>
 
             
-            <section className='firstRowDash'>
-                <div className='firstrowBoxes'>
+            <section className={styles.firstRowDash}>
+                <div className={styles.firstrowBoxes}>
                     <p className='smallerText'>Total Balance</p>
                     <h2>${balance}</h2>
                     <p className='smallerText'>Updated just now</p>
                 </div>
 
-                <div className='firstrowBoxes'>
+                <div className={styles.firstrowBoxes}>
                     <p className='smallerText'>Monthly Flow</p>
                     <div className='fullWidth'>
-                        <div className='monthlyFlowNumbers'>
-                            <div className='monthlyData'>
+                        <div className={styles.monthlyFlowNumbers}>
+                            <div className={styles.monthlyData}>
                                 <img src="/assets/icons/trendingupIcon.svg"
                                 width={20}
                                 height={20}
@@ -72,8 +73,8 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
                             </div>
                             <p className='smallerText'>Income</p>
                         </div>  
-                        <div className='monthlyFlowNumbers'>
-                            <div className='monthlyData'>
+                        <div className={styles.monthlyFlowNumbers}>
+                            <div className={styles.monthlyData}>
                                 <img src="/assets/icons/trendingdownIcon.svg"
                                 width={20}
                                 height={20}
@@ -93,15 +94,15 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
                     </div>
                 </div>
 
-                <div className='firstrowBoxes'>
+                <div className={styles.firstrowBoxes}>
                     <div>
                         <img src="" alt="" />
                         <p>Especial Fund</p>
                     </div>
                 </div>
 
-                <div class="premium-overlay">
-                    <div class="unlock-message">
+                <div className={styles.premiumOverlay}>
+                    <div className={styles.unlockMessage}>
                         <div class="lock-icon">
                             <img src="./assets/icons/lockIcon.svg"
                             width={60}
@@ -109,12 +110,12 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
                             alt="" />
                         </div>
                         <h3 className='subTitles'>Sign Up to Unlock</h3>
-                        <button className='purpleButtons'>Create Free Account</button>
+                        <button className={styles.purpleButtons}>Create Free Account</button>
                     </div>
                 </div>
             </section>
 
-            <section className='graphsSectionOne'>
+            <section className={styles.graphsSectionOne}>
                 <div className='fullWidth'>
                     <SpendingChart />
                 </div>

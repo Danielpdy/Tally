@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\daten\\OneDrive\\Tally-App\\tally\\backend_tally\\backend_tally.csproj": {}
+    "C:\\Users\\daten\\OneDrive\\Tally\\backend_tally\\backend_tally.csproj": {}
   },
   "projects": {
-    "C:\\Users\\daten\\OneDrive\\Tally-App\\tally\\backend_tally\\backend_tally.csproj": {
+    "C:\\Users\\daten\\OneDrive\\Tally\\backend_tally\\backend_tally.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\daten\\OneDrive\\Tally-App\\tally\\backend_tally\\backend_tally.csproj",
+        "projectUniqueName": "C:\\Users\\daten\\OneDrive\\Tally\\backend_tally\\backend_tally.csproj",
         "projectName": "backend_tally",
-        "projectPath": "C:\\Users\\daten\\OneDrive\\Tally-App\\tally\\backend_tally\\backend_tally.csproj",
+        "projectPath": "C:\\Users\\daten\\OneDrive\\Tally\\backend_tally\\backend_tally.csproj",
         "packagesPath": "C:\\Users\\daten\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\daten\\OneDrive\\Tally-App\\tally\\backend_tally\\obj\\",
+        "outputPath": "C:\\Users\\daten\\OneDrive\\Tally\\backend_tally\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
