@@ -5,6 +5,7 @@ import { useState } from 'react'
 import SpendingChart from '@app/components/SpendingChart';
 import SafetoSpend from '@app/components/SafetoSpend';
 import styles from './dashboard.module.css';
+import CashflowChart from '@app/components/CashflowChart';
 
 const dashboard = () => {
 
@@ -123,6 +124,10 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
                 <div className='fullWidth'>
                     <SafetoSpend />
                 </div>
+            </section>
+            
+            <section>
+                <CashflowChart />
             </section>
         </div>
     </section>
