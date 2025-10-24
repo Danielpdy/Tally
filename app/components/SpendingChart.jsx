@@ -25,7 +25,7 @@ const SpendingChart = () => {
     const COLORS = ["#FF8042", "#8A2BE2", "#00C49F", "#00CFFF", "#A9A9A9"];
   return (
     <div className={styles.chartCard}>
-        <h3 style={{color: "#8B4FFF", fontSize: "24px"}}>Where Your Money Went</h3>
+        <h3 className={styles.spendingChartTitle}>Where Your Money Went</h3>
 
         <div className={styles.chartWrap}>
             <ResponsiveContainer width="100%" height="100%">

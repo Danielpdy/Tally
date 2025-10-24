@@ -1,4 +1,6 @@
 import React from 'react';
+import styles from '../dashboard/dashboard.module.css';
+
 import { LineChart, 
         CartesianGrid, 
         XAxis,
@@ -38,21 +40,25 @@ const cashflowChart = () => {
     ];
 
   return (
-    <div>
-        <LineChart
-            style={{ width: '100%', maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}
-            responsive
-            data={data}
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
-            <CartesianGrid strokeDasharray="4 4" />
-            <XAxis dataKey="name" />
-            <YAxis width="auto" />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="Earnings" stroke="#8884d8" />
-            <Line type="monotone" dataKey="Spendings" stroke="#82ca9d" />
-        </LineChart>
+    <div className={styles.cashFlowChartDash}>
+        <h3 className={styles.cashFlowTitle}>Cash Flow Timeline</h3>
+        <div className='flexCenter'>
+            <LineChart
+                style={{ width: '100%', maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}
+                responsive
+                data={data}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+            >
+                <CartesianGrid strokeDasharray="4 4" />
+                <XAxis dataKey="name" />
+                <YAxis width="auto" />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="Earnings" stroke="#8A2BE2" strokeWidth={4} />
+                <Line type="monotone" dataKey="Spendings" stroke="#FF8042" strokeWidth={4} />
+                <Line type="monotone" dataKey="Balance" stroke="#00D4FF" strokeWidth={4} />
+            </LineChart>
+        </div>
     </div>
   )
 }

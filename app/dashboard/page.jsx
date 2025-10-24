@@ -97,14 +97,14 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
 
                 <div className={styles.firstrowBoxes}>
                     <div>
-                        <img src="" alt="" />
+                       
                         <p>Especial Fund</p>
                     </div>
                 </div>
 
                 <div className={styles.premiumOverlay}>
                     <div className={styles.unlockMessage}>
-                        <div class="lock-icon">
+                        <div className="lock-icon">
                             <img src="./assets/icons/lockIcon.svg"
                             width={60}
                             height={60}
@@ -126,8 +126,10 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
                 </div>
             </section>
             
-            <section>
-                <CashflowChart />
+            <section className='fullWidth'>
+                <div>
+                    <CashflowChart />
+                </div>
             </section>
         </div>
     </section>

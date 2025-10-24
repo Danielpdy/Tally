@@ -2,12 +2,12 @@
 /*---- DASHBOARD PAGE ----- */
 
 .dashboardContent{
-  padding: 20px 20px;
   width: 100%;
   background-color: #FAF8FF;
   display: flex;
   flex-direction: column;
   align-items: center;
+
   gap: 80px;
 }
 
@@ -16,10 +16,11 @@
   justify-content: center;
   gap: 40px;
   backdrop-filter: blur(22px);
+  width: 100%;
 }
 
 .firstrowBoxes{
-  width: 400px;
+  width: 350px;
   border-radius: 18px;
   display: flex;
   flex-direction: column;
@@ -28,7 +29,8 @@
   padding: 24px 24px 54px 24px;
   background-color: white;
   filter: blur(2px);
-  border: 1px solid #d8c6fd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e0e0e0;
 }
 
 .monthlyFlowNumbers{
@@ -102,16 +104,16 @@
 
 .unlockMessage {
   text-align: center;
-  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 10px;
+
 }
 
 .chartCard {
   background-color: white;
-  border: 1px solid var(--card-border);
+  border: 1px solid #e0e0e0;
   border-radius: 16px;
   box-shadow: var(--shadow);
   padding: 40px 30px;
@@ -121,6 +123,7 @@
   flex-direction: column;
   justify-content: flex-start;
   gap: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08)
 }
 
 .chartWrap {
@@ -137,18 +140,22 @@
   height: 480px;
   gap: 40px;
   padding: 40px 30px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08)
 }
 
 .graphsSectionOne{
   display: flex;
   justify-content: space-evenly;
   gap: 28px;
+  width: 100%;
 }
 
 .dashboardMain{
   display: flex;
   flex-direction: column;
   gap: 40px;
+  padding: 40px 10px;
 }
 
 .amountTitle{
@@ -162,4 +169,33 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
+}
+
+.cashFlowChartDash{
+  background-color: white;
+  border-radius: 20px;
+  width: 100%;
+  padding: 40px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08)
+}
+
+.cashFlowTitle{
+  color: #8B4FFF; 
+  font-size: 18px; 
+  text-align: start;
+  font-weight: 600;
+}
+
+.spendingChartTitle, .safetoSpendTitle{
+  color: #8B4FFF;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.cashFlowChart{
+  border: 1px solid #e0e0e0;
 }

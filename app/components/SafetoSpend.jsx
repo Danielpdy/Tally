@@ -10,8 +10,7 @@ const SafetoSpend = () => {
     const percentage = 72;
   return (
     <div className={styles.safeToSpendProgressBar}>
-        <h3 style={{color: "#8B4FFF", fontSize: "24px", 
-            textAlign: "start"}}>Safe to Spend
+        <h3 className={styles.safetoSpendTitle}>Safe to Spend
         </h3>
         <CircularProgressbar
             value={percentage}
