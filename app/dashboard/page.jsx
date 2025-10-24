@@ -36,8 +36,7 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
                 </div>
 
                 <div className={styles.mainMessageContent}>
-                    <h2 className='subTitles'
-                    style={{textAlign: "center", fontSize:"2.5rem", color: "#1a0b2e"}}
+                    <h2 className={styles.dashSubtitle}
                     >Everything You Need to Master Your Finances</h2>
                     <p className='smallText'
                     style={{textAlign:"center"}}

@@ -11,6 +11,12 @@
   gap: 80px;
 }
 
+.dashSubtitle{
+  text-align: center;
+  font-size: 2.5rem;
+  color: #1a0b2e;
+  font-weight: 700;
+}
 .firstRowDash{
   display: flex;
   justify-content: center;
@@ -137,16 +143,19 @@
   background-color: white;
   border-radius: 20px;
   width: 100%;
-  height: 480px;
+  height: 100%;
   gap: 40px;
   padding: 40px 30px;
   border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08)
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .graphsSectionOne{
+  
   display: flex;
-  justify-content: space-evenly;
   gap: 28px;
   width: 100%;
 }
@@ -155,7 +164,7 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
-  padding: 40px 10px;
+  padding: 40px 40px;
 }
 
 .amountTitle{
@@ -190,12 +199,45 @@
   font-weight: 600;
 }
 
-.spendingChartTitle, .safetoSpendTitle{
+.spendingChartTitle{
   color: #8B4FFF;
   font-size: 18px;
   font-weight: 600;
 }
 
+.safetoSpendTitle{
+  color: #8B4FFF;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: start;
+}
+
 .cashFlowChart{
   border: 1px solid #e0e0e0;
+}
+
+.progressBar{
+  width: 140px;
+  height: 140px;
+}
+
+@media (max-width: 768px) {
+  .dashSubtitle{
+    font-size: 1.8rem;
+    width: 400px;
+  }
+  
+  .graphsSectionOne{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .firstRowDash{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .firstrowBoxes{
+    width: 100%;
+  }
 }
