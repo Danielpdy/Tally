@@ -21,6 +21,7 @@ const SafetoSpend = () => {
                 text={`${percentage}%`}
                 styles={buildStyles({
                     textColor: "#333",
+                    textSize: "16px",
                     pathColor: "#00D4FF",
                     trailColor: "#eee",
                 })} 
