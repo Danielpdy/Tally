@@ -82,7 +82,6 @@ html, body {
 .bigTitles{
   font-size: 3.8rem;
   font-weight: 800;
-  max-width: 600px;
   color: #1a0b2e;
 }
 
@@ -218,7 +217,6 @@ html, body {
 }
 
 .darkBlackButton{
-  font-family: "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
   background-color: rgb(33, 33, 33);
   color: white;
   border: none;
@@ -923,6 +921,7 @@ html, body {
   max-width: 600px;
 }
 
+<<<<<<< HEAD
 /*--Mobile Navigation --*/
 @media (max-width: 640px){
   .bigTitles{
@@ -952,4 +951,6 @@ html, body {
 }
 
 
+=======
+>>>>>>> 122e5a2c7a9a5af1c33ce2aeca8034ac260885c2
 

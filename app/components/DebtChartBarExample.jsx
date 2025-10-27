@@ -1,5 +1,8 @@
 import React from 'react';
+<<<<<<< HEAD
 import styles from '../dashboard/dashboard.module.css';
+=======
+>>>>>>> 122e5a2c7a9a5af1c33ce2aeca8034ac260885c2
 import { BarChart,
         CartesianGrid,
         XAxis,
@@ -25,6 +28,7 @@ const DebtChartBarExample = () => {
     ]
 
   return (
+<<<<<<< HEAD
     <div className={styles.debtPayoffChartBox}>
         <h3 className={styles.debtPayoffTitle}>Debt Payoff Visualizer</h3>
         <div className='smallerText flex'>
@@ -33,6 +37,11 @@ const DebtChartBarExample = () => {
         </div>
         <BarChart
             style={{ width: '100%', maxWidth: '700px', minHeight: "400px", aspectRatio: 1.618 }}
+=======
+    <div>
+        <BarChart
+            style={{ width: '100%', maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}
+>>>>>>> 122e5a2c7a9a5af1c33ce2aeca8034ac260885c2
             responsive data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />

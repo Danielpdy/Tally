@@ -184,6 +184,7 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
                 </div>
             </section>
 
+<<<<<<< HEAD
             <section className={styles.debtChartandInsights}>
                 <div className={styles.debtChartandInsightsBoxes}>
                     <DebtChartBarExample />
@@ -248,6 +249,22 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
                             <p className={styles.insightsText}>Your rent is 38% of income - try keeping it under 30%.</p> 
                         </div>
                     </div>
+=======
+            <section>
+                <div>
+                    <DebtChartBarExample />
+                </div>
+                <div>
+                    <div>
+                        <h3 className={styles.goalsBarsTitle}>Insights & Alerts</h3>
+                        <Image 
+                            src="/assets/icons/shineIcon.png"
+                            width={20}
+                            height={20}
+                            alt='Insights Icon'
+                        />
+                    </div>
+>>>>>>> 122e5a2c7a9a5af1c33ce2aeca8034ac260885c2
                 </div>
             </section>
         </div>
