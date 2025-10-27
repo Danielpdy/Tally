@@ -17,7 +17,7 @@ export default function Home() {
             alt="shine" />
             <p>Simple cashflow management</p>
           </div>
-          <h1 className="bigTitles flex">
+          <h1 className="bigTitles flex maxWidth">
             Tally — Simple cashflow for small businesses
           </h1>
           <p className="regularText">Import bank CSVs, track cashflow, and manage budgets — fast and private.</p>

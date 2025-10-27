@@ -7,6 +7,7 @@ const Footer = () => {
             <p className='footerText'>Privacy</p>
             <p className='footerText'>Terms</p>
             <p className='footerText'>Contact</p>
+            <p className='footerText'>v1.0.0</p>
         </div>
         <p className='footerText flex'>© Tally by <p className='gradientText-blue'>Daniel Pinzon</p> </p>
     </footer>

@@ -1,14 +1,10 @@
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
   <defs>
-    <linearGradient id="tallyLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#5B4FE9;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B4FFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6B5FFF;stop-opacity:1" />
     </linearGradient>
   </defs>
-  
-  <!-- Rounded rectangle background with purple-to-blue gradient -->
-  <rect width="40" height="40" rx="10" fill="url(#tallyLogoGradient)"/>
-  
-  <!-- Letter "T" as path -->
-  <path d="M14 12 H26 V15 H22 V28 H18 V15 H14 Z" fill="white"/>
+  <rect width="64" height="64" rx="12" fill="url(#gradient)"/>
+  <text x="32" y="45" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="white" text-anchor="middle">T</text>
 </svg>

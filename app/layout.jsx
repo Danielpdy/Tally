@@ -8,6 +8,7 @@ import Provider from "@app/components/Provider";
 export const metadata = {
   title: "Tally",
   description: "A simple expense tracker",
+  icons: { icon: "/assets/icons/tallyappIcon.svg"}
 };
 
 export default function RootLayout({ children }) {
