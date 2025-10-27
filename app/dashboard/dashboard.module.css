@@ -493,18 +493,22 @@
 
   .chartCard{
     width: 100%;
-    height: 100%;
+    height: 320px;
+    padding: 12px 8px;
   }
 
   .chartCardBox{
-    width: 200px;
-    height: 200px;
-    padding: 10px 10px;
-    height: 100%;
+    width: 100%;
+    height: 350px;
   }
 
   .chartWrap{
-    width: 300px;
+    width: 100%;
+    height: 200px;
+  }
+
+  .spendingChartTitle{
+    font-size: 12px;
   }
 
 }
