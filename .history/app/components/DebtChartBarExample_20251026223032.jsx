@@ -1,5 +1,8 @@
 import React from 'react';
+<<<<<<< HEAD
 import styles from '../dashboard/dashboard.module.css';
+=======
+>>>>>>> 122e5a2c7a9a5af1c33ce2aeca8034ac260885c2
 import { BarChart,
         CartesianGrid,
         XAxis,
