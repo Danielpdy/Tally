@@ -1,6 +1,12 @@
 import React from 'react'
+import { usePathname } from "next/navigation";
 
 const Footer = () => {
+
+  const pathname = usePathname();
+  const hide = pathname === "/LoginSignup";
+  if (hide) return null;
+
   return (
     <footer className='footerBox'>
         <div className='footerLabels'>

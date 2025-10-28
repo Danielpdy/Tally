@@ -11,16 +11,21 @@ import { usePathname } from "next/navigation"
 
 const Navbar = () => {
 
+
+
 const { data: session, status } = useSession();
 const [providers, setProviders] = useState(null);
 const [toggler, setToggler] = useState(false);
 const panelRef = useRef(null);
 const buttonRef = useRef(null);
 const pathname = usePathname();
+const hide = pathname === "/loginSignup"; 
 
 const [ profileOpen, setProfileOpen ] = useState(false);
 const profileButtonRef = useRef(null);
 const profilePanelRef = useRef(null);
+
+if (hide) return null;
 
 useEffect(() => {
     const onPointerDown = (e) => {
