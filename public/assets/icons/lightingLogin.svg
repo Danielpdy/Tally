@@ -1,0 +1,9 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Container background -->
+  <rect width="48" height="48" rx="10" fill="#f0f0f0"/>
+  
+  <!-- Lightning bolt icon (centered) -->
+  <g transform="translate(16, 12)">
+    <path d="M8 2L2 14H8L8 24L14 12H8L8 2Z" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+</svg>

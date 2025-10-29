@@ -1,0 +1,10 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Container background -->
+  <rect width="48" height="48" rx="10" fill="#f0f0f0"/>
+  
+  <!-- Trending up icon (centered) -->
+  <g transform="translate(12, 12)">
+    <path d="M7 17L12 12L15 15L21 9" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M21 9H17M21 9V13" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

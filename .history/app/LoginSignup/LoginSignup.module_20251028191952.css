@@ -1,0 +1,51 @@
+
+
+.mainContainer {
+  position: relative;
+  isolation: isolate;  
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.mainContainer::before {
+  content: "";
+  position: absolute;
+  inset: 0;                
+  z-index: -1;             
+  pointer-events: none;
+
+ 
+  background-image:
+    radial-gradient(900px 600px at 50% 45%, rgba(255,255,255,0.70) 0%, rgba(255,255,255,0.15) 28%, transparent 55%),
+    radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 1) 0px, rgba(33,33,33,0) 20%),
+    radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, rgba(0,0,0,0) 30%),
+    radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 1) 0px, rgba(0,0,0,0) 40%),
+    radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 1) 0px, rgba(0,0,0,0) 40%),
+    radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 1) 0px, rgba(0,0,0,0) 40%),
+    radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 1) 0px, rgba(0,0,0,0) 40%);
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-blend-mode: screen;
+
+  filter: blur(72px) saturate(170%);
+  opacity: 0.24;
+}
+
+
+.mainContainer > * {
+  position: relative;
+  z-index: 1;
+}
+
+.formBox{
+    border: 1px solid black;
+}
+
+.flexAlignCenter{
+    
+}

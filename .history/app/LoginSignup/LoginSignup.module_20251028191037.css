@@ -1,0 +1,30 @@
+
+.mainContainer{
+     content: "";
+  position: absolute;
+  inset: 0;                /* top:0; right:0; bottom:0; left:0 */
+  z-index: 0;              /* behind content */
+  pointer-events: none;
+
+  /* your original stops (kept) plus an extra bright center to increase highlight */
+  background-image:
+    /* extra bright center wash — makes everything read brighter */
+    radial-gradient(900px 600px at 50% 45%, rgba(255,255,255,0.70) 0%, rgba(255,255,255,0.15) 28%, transparent 55%),
+
+    /* your original color blobs (same stops but we reduce the 'transparent' cutoffs so they show more) */
+    radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 1) 0px, rgba(33,33,33,0) 20%),
+    radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, rgba(0,0,0,0) 30%),
+    radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 1) 0px, rgba(0,0,0,0) 40%),
+    radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 1) 0px, rgba(0,0,0,0) 40%),
+    radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 1) 0px, rgba(0,0,0,0) 40%),
+    radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 1) 0px, rgba(0,0,0,0) 40%);
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-blend-mode: screen;
+
+  /* tuned: slightly less blur, preserve saturation but increase opacity to strengthen */
+  filter: blur(72px) saturate(170%);
+  opacity: 0.24;
+    min-height: 100vh;
+}

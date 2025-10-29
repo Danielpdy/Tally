@@ -1,0 +1,9 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Container background -->
+  <rect width="48" height="48" rx="10" fill="#f0f0f0"/>
+  
+  <!-- Shield icon (centered) -->
+  <g transform="translate(15, 14)">
+    <path d="M9 2L3 5V10C3 14.5 5.5 18.5 9 20C12.5 18.5 15 14.5 15 10V5L9 2Z" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+</svg>
