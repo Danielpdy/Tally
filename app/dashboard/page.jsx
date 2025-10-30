@@ -2,14 +2,13 @@ import { cookies } from "next/headers";
 import React from 'react';
 import DashboardClient from "./DashboardClient";
 
-const page = () => {
+export default async function Page() {
 
-    const cookieStore = cookies();
-    const session = cookieStore.get("session");
-    const isLoggedIn = Boolean(session);
+  const cookieStore = await cookies();     
+  const sessionCookie = cookieStore.get('session');   
+  const isLoggedIn = Boolean(sessionCookie?.value);
 
-  return <DashboardClient isLoggedIn={isLoggedIn} />
+  return <DashboardClient isLoggedIn={isLoggedIn} />;
 }
 
-export default page
 
