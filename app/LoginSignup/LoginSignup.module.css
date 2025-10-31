@@ -126,10 +126,21 @@
 }
 
 .analytics:hover {
-    transform: translateY(-12px) scale(1.03);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.analytics:nth-child(1):hover {
     border: 1px solid #8B4FFF;
+}
+
+.analytics:nth-child(2):hover {
+    border: 1px solid #FF8042;
+}
+
+.analytics:nth-child(3):hover {
+    border: 1px solid #00D4FF;
 }
 
 
@@ -175,6 +186,27 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 6px;
+}
+
+.formHeaderSignup {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.formHeaderSignup h2 {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #FF8042 0%, #FF6B42 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+}
+
+.formHeaderSignup p {
+    color: #666;
+    font-size: 14px;
+    font-weight: 400;
 }
 
 .formHeader p {
@@ -262,7 +294,8 @@
     color: #1a0b2e;
 }
 
-.inputFieldPassword {
+.inputFieldPassword,
+.inputFieldPasswordSignup {
     width: 100%;
     padding: 14px 14px 14px 48px;
     font-size: 14px;
@@ -283,13 +316,35 @@
     color: #999;
 }
 
-.inputFieldPassword:focus {
+.inputFieldSignup {
+    width: 100%;
+    padding: 14px 14px 14px 48px;
+    font-size: 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+    background: #fafafa;
+    color: #1a0b2e;
+}
+
+.inputFieldSignup:focus {
     border-color: #FF8042;
+    background: #ffffff;
+}
+
+.inputFieldPassword:focus {
+    border-color: #8B4FFF;
     background: #ffffff;
 }
 
 .inputFieldPassword::placeholder {
     color: #999;
+}
+
+.inputFieldPasswordSignup:focus {
+    border-color: #FF8042;
+    background: #ffffff;
 }
 
 /* Password field with show/hide button */
@@ -381,6 +436,25 @@
     box-shadow: 0 8px 16px rgba(139, 79, 255, 0.3);
 }
 
+.submitButtonSignup {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #FF8042 0%, #FF6B42 100%);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.submitButtonSignup:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(255, 128, 66, 0.3);
+}
+
 /* Divider (OR CONTINUE WITH) */
 .divider {
     display: flex;
@@ -430,6 +504,12 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.socialButtonSignup:hover {
+    border-color: #FF8042;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 .socialButton svg {
     width: 20px;
     height: 20px;
@@ -451,6 +531,24 @@
 }
 
 .signupPrompt a:hover {
+    opacity: 0.8;
+}
+
+.loginPrompt {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.loginPrompt a {
+    color: #8B4FFF;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 4px;
+    transition: opacity 0.3s ease;
+}
+
+.loginPrompt a:hover {
     opacity: 0.8;
 }
 

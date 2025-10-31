@@ -63,10 +63,10 @@ const switchButton = (color) => {
                 <div className={styles.analyticsBox}>
                     <div className={styles.analytics}>
                         <div className={styles.flexAlignGap10}>
-                            <Image 
+                            <Image
                                 src="assets/icons/trendingUpLogin.svg"
-                                width={50}
-                                height={50}
+                                width={48}
+                                height={48}
                                 alt='trending up'
                             />
                             <div>
@@ -75,7 +75,7 @@ const switchButton = (color) => {
                             </div>
                         </div>
                         <div>
-                            <Image 
+                            <Image
                                 src="assets/icons/arrowLogin.svg"
                                 width={20}
                                 height={20}
@@ -86,10 +86,10 @@ const switchButton = (color) => {
 
                     <div className={styles.analytics}>
                         <div className={styles.flexAlignGap10}>
-                            <Image 
+                            <Image
                                 src="assets/icons/shieldLogin.svg"
-                                width={50}
-                                height={50}
+                                width={48}
+                                height={48}
                                 alt='shield'
                             />
                             <div>
@@ -98,7 +98,7 @@ const switchButton = (color) => {
                             </div>
                         </div>
                         <div>
-                            <Image 
+                            <Image
                                 src="assets/icons/arrowLogin.svg"
                                 width={20}
                                 height={20}
@@ -109,10 +109,10 @@ const switchButton = (color) => {
 
                     <div className={styles.analytics}>
                         <div className={styles.flexAlignGap10}>
-                            <Image 
+                            <Image
                                 src="assets/icons/lightingLogin.svg"
-                                width={50}
-                                height={50}
+                                width={48}
+                                height={48}
                                 alt='lighting'
                             />
                             <div>
@@ -121,7 +121,7 @@ const switchButton = (color) => {
                             </div>
                         </div>
                         <div>
-                            <Image 
+                            <Image
                                 src="assets/icons/arrowLogin.svg"
                                 width={20}
                                 height={20}
@@ -232,14 +232,14 @@ const switchButton = (color) => {
                     </>
                     ) : (
                     <>
-                        <div className={styles.formHeader}>
+                        <div className={styles.formHeaderSignup}>
                             <h2>Join Tally</h2>
                             <p>Create an account to start tracking your finances</p>
                         </div>
 
                         <div className={styles.formInputs}>
                             <div className={styles.inputWrapper}>
-                                <label htmlFor="email">Full Name</label>
+                                <label htmlFor="fullname">Full Name</label>
                                 <div className={styles.inputContainer}>
                                     <span className={styles.inputIcon}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-icon lucide-user-round">
@@ -248,16 +248,16 @@ const switchButton = (color) => {
                                         </svg>
                                     </span>
                                     <input
-                                        type="email"
-                                        id="email"
-                                        className={styles.inputField}
-                                        placeholder='Jonh Doe'
+                                        type="text"
+                                        id="fullname"
+                                        className={styles.inputFieldSignup}
+                                        placeholder='John Doe'
                                     />
                                 </div>
                             </div>
 
                             <div className={styles.inputWrapper}>
-                                <label htmlFor="email">Email Address</label>
+                                <label htmlFor="emailSignup">Email Address</label>
                                 <div className={styles.inputContainer}>
                                     <span className={styles.inputIcon}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
@@ -267,18 +267,18 @@ const switchButton = (color) => {
                                     </span>
                                     <input
                                         type="email"
-                                        id="email"
-                                        className={styles.inputField}
+                                        id="emailSignup"
+                                        className={styles.inputFieldSignup}
                                         placeholder='you@example.com'
                                     />
                                 </div>
                             </div>
 
                             {/* Password component here */}
-                            <PasswordInput />
+                            <PasswordInput isSignup={true} />
 
-                            <button type="submit" className={styles.submitButton}>
-                                Create account
+                            <button type="submit" className={styles.submitButtonSignup}>
+                                Create Account
                             </button>
 
                             <div className={styles.divider}>
@@ -286,7 +286,7 @@ const switchButton = (color) => {
                             </div>
 
                             <div className={styles.socialButtons}>
-                                <button type="button" className={styles.socialButton}>
+                                <button type="button" className={`${styles.socialButton} ${styles.socialButtonSignup}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#666666"/>
                                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#666666"/>
@@ -295,22 +295,22 @@ const switchButton = (color) => {
                                     </svg>
                                 </button>
 
-                                <button type="button" className={styles.socialButton}>
+                                <button type="button" className={`${styles.socialButton} ${styles.socialButtonSignup}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                         <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z" fill="#666666"/>
                                     </svg>
                                 </button>
 
-                                <button type="button" className={styles.socialButton}>
+                                <button type="button" className={`${styles.socialButton} ${styles.socialButtonSignup}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="#666666"/>
                                     </svg>
                                 </button>
                             </div>
 
-                            <div className={styles.signupPrompt}>
+                            <div className={styles.loginPrompt}>
                                 <span>Already have an account?</span>
-                                <Link href='/'>Log in now</Link>
+                                <Link href='/'>Log in here</Link>
                             </div>
                         </div>
                     </>

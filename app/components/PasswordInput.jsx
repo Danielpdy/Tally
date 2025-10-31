@@ -4,7 +4,7 @@ import React from 'react';
 import styles from '../LoginSignup/LoginSignup.module.css';
 import { useState } from 'react';
 
-const PasswordInput = () => {
+const PasswordInput = ({ isSignup = false }) => {
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -23,7 +23,7 @@ const PasswordInput = () => {
                 <input
                     type={showPassword ? "text" : "password"}
                     id="password"
-                    className={styles.inputFieldPassword}
+                    className={isSignup ? `${styles.inputFieldPassword} ${styles.inputFieldPasswordSignup}` : styles.inputFieldPassword}
                     placeholder='••••••••'
                 />
             
