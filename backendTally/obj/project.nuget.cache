@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "+3NcXFbrZ6c=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\daten\\OneDrive\\Tally\\backendTally\\backendTally.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\daten\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.9\\microsoft.aspnetcore.openapi.9.0.9.nupkg.sha512",
+    "C:\\Users\\daten\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -44,11 +44,54 @@
   z-index: 1;
 }
 
+/* Floating corner icons */
+.floatingIcon {
+  position: fixed;
+  z-index: 10;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.floatingIcon:hover {
+  opacity: 1;
+}
+
+.topRightIcon {
+  top: 40px;
+  right: 40px;
+  animation: floatTopRight 3s ease-in-out infinite;
+}
+
+.bottomLeftIcon {
+  bottom: 40px;
+  left: 40px;
+  animation: floatBottomLeft 3s ease-in-out infinite;
+}
+
+@keyframes floatTopRight {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-10px, 10px);
+  }
+}
+
+@keyframes floatBottomLeft {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(10px, -10px);
+  }
+}
+
 .formBox{
     display: grid;
     grid-template-columns: 1.3fr 1fr;
-    max-width: 1100px;
+    max-width: 1300px;
     width: 100%;
+    margin: 0 auto;
 }
 
 .tallyTitle{
@@ -65,8 +108,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    padding: 2rem 3rem;
-    gap: 20px;
+    padding: 2.5rem 3.5rem;
+    gap: 24px;
 }
 
 .flexAlignGap10{
@@ -156,17 +199,31 @@
     color: #1a0b2e;
 }
 
+.trustedMessage {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #666;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 8px;
+}
+
+.trustedMessage svg {
+    flex-shrink: 0;
+}
+
 .formBoxRight{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 2rem 1.5rem;
+    padding: 2.5rem 2rem;
 }
 
 .form{
     width: 100%;
     margin: 0 auto;
-    padding: 30px 25px;
+    padding: 36px 30px;
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -554,6 +611,21 @@
 
 /* Responsive Design - Tablet and Mobile */
 @media (max-width: 768px) {
+    .topRightIcon {
+        top: 20px;
+        right: 20px;
+    }
+
+    .bottomLeftIcon {
+        bottom: 20px;
+        left: 20px;
+    }
+
+    .floatingIcon svg {
+        width: 36px;
+        height: 36px;
+    }
+
     .formBox {
         grid-template-columns: 1fr;
         max-width: 100%;
@@ -628,6 +700,21 @@
 
 /* Mobile specific adjustments */
 @media (max-width: 480px) {
+    .topRightIcon {
+        top: 15px;
+        right: 15px;
+    }
+
+    .bottomLeftIcon {
+        bottom: 15px;
+        left: 15px;
+    }
+
+    .floatingIcon svg {
+        width: 32px;
+        height: 32px;
+    }
+
     .formBoxLeft {
         padding: 1.5rem;
         gap: 16px;

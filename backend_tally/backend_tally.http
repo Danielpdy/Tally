@@ -1,6 +1,0 @@
-@backend_tally_HostAddress = http://localhost:5218
-
-GET {{backend_tally_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
