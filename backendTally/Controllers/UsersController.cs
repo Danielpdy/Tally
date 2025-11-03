@@ -33,7 +33,7 @@ namespace backendTally.Controllers
             return Ok(user);
         }
 
-        [HttpPost]
+       /* [HttpPost] 
         public async Task<ActionResult<User>> AddUser(User newUser)
         {
             if (newUser == null)
@@ -45,6 +45,40 @@ namespace backendTally.Controllers
 
             return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, newUser);
 
+        }*/
+
+        [HttpPost("signup")]
+        public async Task<ActionResult<User>> SignUp([FromBody] SignupDto dto) 
+        {
+            if (string.IsNullOrWhiteSpace(dto.Email) ||
+            string.IsNullOrWhiteSpace(dt0.Name) ||
+            string.IsNullOrWhiteSpace(dto.Password))
+            {
+                return BadRequest("Email, name, and password are required.")
+            }
+
+            bool exists = await _context.User.AnyAsync(u => u.Email == dto.Email);
+            if (exists) return Conflict("Email already registered.");
+
+            string hash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
+            var user = new User
+            {
+                Email = dto.Email,
+                Name = dto.Name,
+                Password = hash
+            };
+
+            _context.User.Add(User);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, new
+            {
+                user.Id,
+                user.Email,
+                user.Name,
+                user.CreatedAt
+            });
         }
 
         [HttpPut("{id}")]
@@ -59,7 +93,7 @@ namespace backendTally.Controllers
             user.Id = updatedUser.Id;
             user.Name = updatedUser.Name;
             user.Email = updatedUser.Email;
-            user.Password = updatedUser.Password;
+            user.PasswordHash = updatedUser.PasswordHash;
             user.PhoneNumber = updatedUser.PhoneNumber;
             user.CreatedAt = updatedUser.CreatedAt;
 
