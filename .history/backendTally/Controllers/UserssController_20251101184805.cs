@@ -1,0 +1,11 @@
+
+
+
+namespace backendTally.Conr
+
+private readonly TallyDbConetxt _context;
+
+public UsersController(TallyDbConetxt context)
+{
+    _context = context;
+}

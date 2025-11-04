@@ -261,3 +261,4 @@ C:\Users\daten\Tally\backendTally\obj\Debug\net9.0\staticwebassets.build.endpoin
 C:\Users\daten\Tally\backendTally\obj\Debug\net9.0\backendT.E59DAF64.Up2Date
 C:\Users\daten\Tally\backendTally\obj\Debug\net9.0\backendTally.genruntimeconfig.cache
 C:\Users\daten\Tally\backendTally\obj\Debug\net9.0\ref\backendTally.dll
+C:\Users\daten\OneDrive\Tally\backendTally\bin\Debug\net9.0\BCrypt.Net-Next.dll
