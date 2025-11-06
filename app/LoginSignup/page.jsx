@@ -15,13 +15,17 @@ const page = () => {
 
 const [toggleForm, setToggleForm] = useState(true);
 const [buttonState, setButtonState]= useState('login');
-const [form, setForm] = useState({
+const [formSignup, setFormSignup] = useState({
     newUser: {
         name: "",
         email: "",
         password: "",
         phonenumber: ""
 }});
+const [formLogin, setFormLogin] = useState({
+    email: "",
+    password: "",
+})
 const [status, setStatus] = useState("idle")
 const params = useSearchParams();
 const callbackUrl = params.get("callbackUrl") || "/dashboard";
@@ -36,25 +40,34 @@ const switchButton = (color) => {
     }
 }
 
-function handleOnchange(e) {
+function handleOnchangeSignup(e) {
     const { name, value } = e.target;
-    setForm( prev => ({...prev, [name]: value}));
+    setFormSignup( prev => ({...prev, [name]: value}));
+}
+
+function handleOnchangesLogin(e) {
+    const { name, value } = e.target;
+    setFormLogin(prev => ({...prev, [name]: value}));
 }
 
 async function handleSubmit(e) {
-    e.preventDefault();
-    setStatus("Submitting")
-    try{
-        const created = await createUser(form);
-        setForm({ name: "", email: "", password: "", phonenumber: ""});
-        setStatus("success");
-    } catch (err) {
-        setStatus(`error: ${err.message}`);
+
+        if (toggleForm === false){
+        e.preventDefault();
+        setStatus("Submitting")
+        try{
+            const created = await createUser(formSignup);
+            setForm({ name: "", email: "", password: "", phonenumber: ""});
+            setStatus("success");
+        } catch (err) {
+            setStatus(`error: ${err.message}`);
+        }
+    } else {
+        e.preventDefault();
+        setStatus("logging in");
+        signIn("credentials")
     }
 }
-
-
-
 
   return (
     <div className={styles.mainContainer}>
@@ -228,7 +241,8 @@ async function handleSubmit(e) {
                                     </span>
                                     <input
                                         name='email'
-                                        type="email"
+                                        value={formLogin.email}
+                                        onChange={handleOnchangesLogin}
                                         id="email"
                                         className={styles.inputField}
                                         placeholder='you@example.com'
@@ -237,7 +251,10 @@ async function handleSubmit(e) {
                             </div>
 
                             {/* Password component here */}
-                            <PasswordInput />
+                            <PasswordInput 
+                                value={formLogin.password}
+                                onChange={handleOnchangesLogin}
+                            />
 
                             <div className={styles.rememberForgotRow}>
                                 <div className={styles.rememberMe}>
@@ -249,9 +266,7 @@ async function handleSubmit(e) {
                                 </Link>
                             </div>
 
-                            <button type="submit" className={styles.submitButton}
-                                
-                            >
+                            <button type="submit" className={styles.submitButton}                                >
                                 Sign In to Dashboard
                             </button>
 
@@ -279,7 +294,9 @@ async function handleSubmit(e) {
                                     </svg>
                                 </button>
 
-                                <button type="button" className={styles.socialButton}>
+                                <button type="button" className={styles.socialButton}
+                                    onClick={() => signIn("twitter", { callbackUrl })} 
+                                >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="#666666"/>
                                     </svg>
@@ -311,8 +328,8 @@ async function handleSubmit(e) {
                                     </span>
                                     <input
                                         name='name'
-                                        value={form.name}
-                                        onChange={handleOnchange}
+                                        value={formSignup.name}
+                                        onChange={handleOnchangeSignup}
                                         type="text"
                                         id="fullname"
                                         className={styles.inputFieldSignup}
@@ -332,8 +349,8 @@ async function handleSubmit(e) {
                                     </span>
                                     <input
                                         name='email'
-                                        value={form.email}
-                                        onChange={handleOnchange}
+                                        value={formSignup.email}
+                                        onChange={handleOnchangeSignup}
                                         type="email"
                                         id="emailSignup"
                                         className={styles.inputFieldSignup}
@@ -345,8 +362,8 @@ async function handleSubmit(e) {
                             {/* Password component here */}
                             <PasswordInput 
                                 isSignup={true}
-                                value={form.password} 
-                                onChange={handleOnchange}
+                                value={formSignup.password} 
+                                onChange={handleOnchangeSignup}
                             />
 
                             <div className={styles.inputWrapper}>
@@ -361,8 +378,8 @@ async function handleSubmit(e) {
                                     </span>
                                     <input
                                         name='phonenumber'
-                                        value={form.phonenumber}
-                                        onChange={handleOnchange}
+                                        value={formSignup.phonenumber}
+                                        onChange={handleOnchangeSignup}
                                         type="number"
                                         id="emailSignup"
                                         className={styles.inputFieldSignup}

@@ -1,6 +1,9 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import GitHub from  "next-auth/providers/github";
+import Twitter from "next-auth/providers/twitter"
+import CredentialsProvider from "next-auth/providers/credentials";
+import { createSession } from "@services/userService";
 
 export const {
   handlers: { GET, POST },
@@ -16,7 +19,39 @@ export const {
     GitHub({
         clientId: process.env.GITHUB_ID,
         clientSecret: process.env.GITHUB_SECRET,
-    })
+    }),
+    Twitter({
+      clientId: process.env.TWITTER_ID,
+      clientSecret: process.env.TWITTER_SECRET,
+    }),
+
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: {label: "Email", type: "text"},
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials) {
+
+        try{
+        
+        const res = await userClient.createSession({
+          email: credentials.email,
+          password: credentials.password,
+        });
+
+        const user = res?.data?.user;
+        if (!user) return null;
+
+        return user;
+        } catch (err) {
+          console.error("Authorize error:", err);
+          return null;
+        }
+
+      },
+    }),
+
   ],
   session: { strategy: "jwt" },
 
