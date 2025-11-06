@@ -26,7 +26,9 @@ const [formLogin, setFormLogin] = useState({
     email: "",
     password: "",
 })
-const [status, setStatus] = useState("idle")
+const [status, setStatus] = useState("idle");
+const [signupBtn, setSignupBtn] = useState("Create Account")
+const [loginBtn, setLoginBtn] = useState("Sign in");
 const params = useSearchParams();
 const callbackUrl = params.get("callbackUrl") || "/dashboard";
 
@@ -54,17 +56,16 @@ async function handleSubmit(e) {
 
         if (toggleForm === false){
         e.preventDefault();
-        setStatus("Submitting")
         try{
-            const created = await createUser(formSignup);
+            setSignupBtn("Creating Account...");
+            await createUser(formSignup);
             setFormSignup({ name: "", email: "", password: "", phonenumber: ""});
-            setStatus("success");
         } catch (err) {
             setStatus(`error: ${err.message}`);
         }
     } else {
         e.preventDefault();
-        setStatus("logging in");
+        setLoginBtn("Logging in...");
         await signIn("credentials", {
             ...formLogin,
             callbackUrl,
@@ -271,7 +272,7 @@ async function handleSubmit(e) {
                             </div>
 
                             <button type="submit" className={styles.submitButton}                                >
-                                Sign In to Dashboard
+                                {loginBtn}
                             </button>
 
                             <div className={styles.divider}>
@@ -396,7 +397,7 @@ async function handleSubmit(e) {
                                 className={styles.submitButtonSignup}
                                 disabled={status === "submiting"}
                                 >
-                                Create Account
+                                {signupBtn}
                             </button>
                             {status !== "idle" && console.log(status)}
 

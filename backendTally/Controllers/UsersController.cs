@@ -67,7 +67,8 @@ namespace backendTally.Controllers
             {
                 Email = dto.Email,
                 Name = dto.Name,
-                PasswordHash = hash
+                PasswordHash = hash,
+                PhoneNumber = dto.PhoneNumber
             };
 
             _context.Users.Add(user);
@@ -78,6 +79,7 @@ namespace backendTally.Controllers
                 user.Id,
                 user.Email,
                 user.Name,
+                user.PhoneNumber,
                 user.CreatedAt
             });
         }

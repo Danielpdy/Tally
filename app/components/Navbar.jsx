@@ -306,7 +306,9 @@ useEffect(() => {
                                     <span>Insights</span>
                                 </div>
                             </Link>
-                            <button className="darkButton">Sign in</button>
+                            <button className="darkButton"
+                                onClick={() => router.push(`/LoginSignup?callbackUrl=${pathname}`)}
+                            >Sign in</button>
                             </>
                         )}
                     </div>
