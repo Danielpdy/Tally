@@ -11,6 +11,7 @@ import { useSearchParams } from 'next/navigation';
 import { createUser } from '@services/userService';
 
 
+
 const page = () => {
 
 const [toggleForm, setToggleForm] = useState(true);
@@ -25,8 +26,9 @@ const [formSignup, setFormSignup] = useState({
 const [formLogin, setFormLogin] = useState({
     email: "",
     password: "",
-})
+});
 const [status, setStatus] = useState("idle");
+const [isCreated, setIsCreated] = useState(false);
 const [signupBtn, setSignupBtn] = useState("Create Account")
 const [loginBtn, setLoginBtn] = useState("Sign in");
 const params = useSearchParams();
@@ -57,15 +59,22 @@ async function handleSubmit(e) {
         if (toggleForm === false){
         e.preventDefault();
         try{
-            setSignupBtn("Creating Account...");
+            setSignupBtn(<span class="svg-spinners--180-ring"></span>);
             await createUser(formSignup);
             setFormSignup({ name: "", email: "", password: "", phonenumber: ""});
+            setSignupBtn("Create Account");
+            setIsCreated(true);
+
+            // Auto-hide the success message after 4 seconds
+            setTimeout(() => {
+                setIsCreated(false);
+            }, 4000);
         } catch (err) {
             setStatus(`error: ${err.message}`);
         }
     } else {
         e.preventDefault();
-        setLoginBtn("Logging in...");
+        setLoginBtn(<span class="svg-spinners--180-ring"></span>);
         await signIn("credentials", {
             ...formLogin,
             callbackUrl,
@@ -76,6 +85,21 @@ async function handleSubmit(e) {
 
   return (
     <div className={styles.mainContainer}>
+        {/* Success Popup */}
+        {isCreated && (
+            <div className={styles.successPopup}>
+                <div className={styles.successIcon}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                </div>
+                <div className={styles.successContent}>
+                    <h4>Account Created!</h4>
+                    <p>Welcome to Tally. You can now sign in.</p>
+                </div>
+            </div>
+        )}
+
         <div className={`${styles.floatingIcon} ${styles.topRightIcon}`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8B4FFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
@@ -393,13 +417,12 @@ async function handleSubmit(e) {
                                 </div>
                             </div>
 
-                            <button type="submit" 
+                            <button type="submit"
                                 className={styles.submitButtonSignup}
                                 disabled={status === "submiting"}
                                 >
                                 {signupBtn}
                             </button>
-                            {status !== "idle" && console.log(status)}
 
                             <div className={styles.divider}>
                                 <span>OR CONTINUE WITH</span>
