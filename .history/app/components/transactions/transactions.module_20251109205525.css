@@ -1,0 +1,32 @@
+
+.mainContainer{
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 20px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.titleContainer{
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.emptyStats{
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  justify-content: start;
+  gap: 20px;
+}
+
+.emptyTransMessage{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

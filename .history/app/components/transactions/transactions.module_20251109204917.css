@@ -1,0 +1,23 @@
+
+.mainContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 20px;
+  flex-direction: column;
+}
+
+.titleContainer{
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.emptyStats{
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  justify-content: start;
+}

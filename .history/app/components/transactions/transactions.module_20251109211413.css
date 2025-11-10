@@ -1,0 +1,38 @@
+
+.mainContainer{
+  display: flex;
+  align-items: center;
+  padding: 20px 20px;
+  flex-direction: column;
+  gap: 20px;
+  min-height: calc(100vh - 80px - 150px); /* viewport height - navbar - footer (adjust these values based on your actual navbar/footer heights) */
+}
+
+.titleContainer{
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.emptyStats{
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  justify-content: start;
+  gap: 20px;
+}
+
+.emptyTransMessage{
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center ;
+}
+
+.emptyMessage{
+  display: flex;
+  flex-direction: column;
+  jus
+}

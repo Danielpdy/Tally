@@ -1,0 +1,13 @@
+
+.mainContainer{
+  display: flex;
+  justify-content: center;
+  padding: 20px 20px;
+  flex-direction: column;
+}
+
+.titleContainer{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

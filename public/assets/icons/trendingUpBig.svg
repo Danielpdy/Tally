@@ -1,0 +1,12 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circular background -->
+  <circle cx="100" cy="100" r="80" fill="#E5D9F2"/>
+  
+  <!-- Trending up arrow -->
+  <path d="M60 115 L90 85 L110 105 L140 75 M140 75 L140 95 M140 75 L120 75" 
+        stroke="#7C3AED" 
+        stroke-width="8" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" 
+        fill="none"/>
+</svg>
