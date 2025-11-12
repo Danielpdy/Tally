@@ -17,7 +17,7 @@ const Footer = () => {
             <p className='footerText'>Contact</p>
             <p className='footerText'>v1.0.0</p>
         </div>
-        <p className='footerText flex'>© Tally by <p className='gradientText-blue'>Daniel Pinzon</p> </p>
+        <p className='footerText flex'>© Tally by <span className='gradientText-blue'>Daniel Pinzon</span> </p>
     </footer>
   )
 }
