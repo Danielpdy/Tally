@@ -425,8 +425,8 @@
 .dropdownButton {
   width: 100%;
   padding: 14px 16px;
-  background: #F8F6FF;
-  border: 2px solid #8B5CF6;
+  background: white;
+  border: 2px solid #E5E7EB;
   border-radius: 12px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
   font-size: 15px;
@@ -441,8 +441,13 @@
 }
 
 .dropdownButton:hover {
-  background: #F3ECFF;
-  border-color: #7B3FE4;
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+}
+
+.dropdownButton.open {
+  border-color: #8B5CF6;
+  background: white;
 }
 
 .dropdownButton svg {
@@ -480,11 +485,225 @@
   cursor: pointer;
   transition: all 0.15s ease;
   background: white;
+  margin: 4px 8px;
+  border-radius: 8px;
 }
 
 .dropdownItem:hover {
-  background: #EBF8FF;
+  background: #00D4FF;
+  color: white;
+}
+
+/* Button Group Styles */
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.backButton {
+  flex: 1;
+  padding: 10px 24px;
+  background: #F3F4F6;
+  color: #374151;
+  border: none;
+  border-radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  background: #00D4FF;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+.nextButton {
+  flex: 1;
+  padding: 10px 24px;
+  background: #8B5CF6;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.nextButton:hover {
+  background: #7C3AED;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.nextButton:disabled {
+  background: #C4B5FD;
+  cursor: default;
+  transform: none;
+}
+
+.nextButton:disabled:hover {
+  background: #C4B5FD;
+  transform: none;
+  box-shadow: none;
+}
+
+.nextButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* TRANSACTION DETAILS STYLES */
+.transactionDetailsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.transactionDetailsContainer h4 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
   color: #1a1a2e;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.transactionDetailsContainer > p {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  color: #94A3B8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.formLabel {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.formInput {
+  width: 100%;
+  padding: 14px 16px;
+  background: #F8F9FA;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #1a1a2e;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.formInput::placeholder {
+  color: #94A3B8;
+}
+
+.formInput:focus {
+  outline: none;
+  background: white;
+  border-color: #8B5CF6;
+}
+
+.formTextarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: #F8F9FA;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #1a1a2e;
+  transition: all 0.2s ease;
+  resize: vertical;
+  min-height: 100px;
+  box-sizing: border-box;
+}
+
+.formTextarea::placeholder {
+  color: #94A3B8;
+}
+
+.formTextarea:focus {
+  outline: none;
+  background: white;
+  border-color: #8B5CF6;
+}
+
+.backButtonDetails {
+  flex: 1;
+  padding: 10px 24px;
+  background: #F3F4F6;
+  color: #374151;
+  border: none;
+  border-radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backButtonDetails:hover {
+  background: #00D4FF;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+.reviewButton {
+  flex: 1;
+  padding: 10px 24px;
+  background: #8B5CF6;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.reviewButton:hover:not(:disabled) {
+  background: #7C3AED;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.reviewButton:disabled {
+  background: #C4B5FD;
+  cursor: default;
+  transform: none;
+}
+
+.reviewButton svg {
+  width: 20px;
+  height: 20px;
 }
 
 /* Responsive Design */

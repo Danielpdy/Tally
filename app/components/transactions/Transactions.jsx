@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use } from 'react'
 import { useState, useEffect, useRef } from 'react';
 import Image from '@node_modules/next/image';
 import styles from './transactions.module.css'
@@ -8,9 +8,19 @@ const Transactions = () => {
     const [transactionsNumber, setTransactionsNumber] = useState(0);
     const [sidePannelToogle, setSidePannelToggle] = useState(false);
     const [typeTransaction, setTypeTransaction] = useState();
-    const [isOpen, setIsOpen] = useState(false);
-    const [addCategory, setAddCategory] = useState(null)
+    //const [isOpen, setIsOpen] = useState(false);
+    const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+    const [isAccountOpen, setIsAccountOpen] = useState(false);
+    const [isStatusOpen, setIsStatusOpen] = useState(false);
+    const [addCategory, setAddCategory] = useState(null);
+    const [addDescription, setAddDescription] = useState(null);
+    const [addAmount, setAddAmount] = useState(null);
+    const [addAccount, setAddAccount] = useState(null);
+    const [addStatus, setAddStatus] = useState(null);
     const sidePannelRef = useRef(null);
+    const dropdownMenuCategory = useRef(null);
+    const dropdownMenuAccount = useRef(null);
+    const dropdownMenuStatus = useRef(null);
 
     const SELECT_TYPE = 'SELECT_TYPE';
     const SELECT_CATEGORY = 'SELECT_CATEGORY';
@@ -18,6 +28,8 @@ const Transactions = () => {
     const REVIEW_AND_CONFIRM = 'REVIEW_AND_CONFIRM';
 
     const categories = ["Salary", "Freelance", "Investment", "Business", "Gift", "Other"];
+    const accounts = ["Cash", "Checking", "Savings", "Credit Card"];
+    const status = ["Clear", "Pending"];
 
     const steps = {
         SELECT_TYPE,
@@ -25,7 +37,6 @@ const Transactions = () => {
         TRANSACTIONS_DETAILS,
         REVIEW_AND_CONFIRM
     };
-
 
     const [currentStepPannel, setCurrentStepPannel] = useState(steps.SELECT_TYPE);
 
@@ -40,6 +51,59 @@ const Transactions = () => {
 
         return () => {
             document.removeEventListener("click", handler)
+        }
+    });
+
+    useEffect( () => {
+
+        if (!isCategoryOpen) return;
+
+        function handlerDropdown (e) {
+            if (!dropdownMenuCategory.current.contains(e.target)){
+                categoryDropdown.close();
+                setAddCategory(null);
+            }
+        }
+
+        document.addEventListener("click", handlerDropdown);
+
+        return () => {
+            document.removeEventListener("click", handlerDropdown);
+        }
+    
+    })
+
+    useEffect( () => {
+        if (!isAccountOpen) return;
+
+        function handlerDropdown (e) {
+            if (!dropdownMenuAccount.current.contains(e.target)) {
+                accountDropdown.close();
+                setAddAccount(null);
+            }
+        }
+
+        document.addEventListener("click", handlerDropdown);
+
+        return () => {
+            document.removeEventListener("click", handlerDropdown);
+        }
+    })
+
+    useEffect(() => {
+        if (!isStatusOpen) return;
+
+        function handlerDropdown(e) {
+            if (!dropdownMenuStatus.current.contains(e.target)){
+                statusDropdown.close();
+                setAddStatus(null);
+            }
+        }
+
+        document.addEventListener("click", handlerDropdown);
+
+        return () => {
+            document.removeEventListener("click", handlerDropdown);
         }
     })
 
@@ -57,13 +121,23 @@ const Transactions = () => {
         setCurrentStepPannel(currentStep);
     }
 
-    const handleToggleDropdown = () => {
+    /*const handleToggleDropdown = () => {
         setIsOpen(!isOpen);
-    }
+    }*/
 
-    const handleCloseDropdown = () => {
+    const handleDropdowns = (isOpen, setIsOpen) => ({
+        toggle: () => setIsOpen(!isOpen),
+        close: () => setIsOpen(false),
+        open: () => setIsOpen(true)
+    });
+
+    const categoryDropdown = handleDropdowns(isCategoryOpen, setIsCategoryOpen);
+    const accountDropdown = handleDropdowns(isAccountOpen, setIsAccountOpen);
+    const statusDropdown = handleDropdowns(isStatusOpen, setIsStatusOpen);
+
+    /*const handleCloseDropdown = () => {
         setIsOpen(false);
-    }
+    }*/
 
     if ( transactionsNumber <= 0 ) {
         return(
@@ -83,6 +157,7 @@ const Transactions = () => {
                                     src='/assets/icons/plusWhite.svg'
                                     width={20}
                                     height={20}
+                                    alt='plus'
                                 />
                                 Add Transaction</button>
                             <button>
@@ -90,6 +165,7 @@ const Transactions = () => {
                                     src='/assets/icons/export.svg'
                                     width={20}
                                     height={20}
+                                    alt='export'
                                 />
                                 Export
                             </button>
@@ -129,6 +205,7 @@ const Transactions = () => {
                                 src='/assets/icons/plusWhite.svg'
                                 width={20}
                                 height={20}
+                                alt='plus'
                             />
                             Add Your First Transaction</button>
                     </section>
@@ -254,15 +331,16 @@ const Transactions = () => {
                             </label>
                             <div className={styles.dropdownWrapper}>
                                 <button
-                                    className={`${styles.dropdownButton} ${isOpen ? styles.open : ""}`}
-                                    onClick={handleToggleDropdown}
+                                    ref={dropdownMenuCategory}
+                                    className={`${styles.dropdownButton} ${isCategoryOpen ? styles.open : ""}`}
+                                    onClick={categoryDropdown.toggle}
                                 >
                                     {addCategory === null ? "Choose a category" : addCategory}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="m6 9 6 6 6-6"/>
                                     </svg>
                                 </button>
-                                {isOpen && (
+                                {isCategoryOpen && (
                                     <div className={styles.dropdownMenu}>
                                         {categories.map((category, index) => (
                                             <div
@@ -270,7 +348,7 @@ const Transactions = () => {
                                                 className={styles.dropdownItem}
                                                 onClick={() => {
                                                     setAddCategory(category);
-                                                    handleCloseDropdown();
+                                                    categoryDropdown.close();
                                                 }}
                                             >
                                                 {category}
@@ -280,7 +358,139 @@ const Transactions = () => {
                                 )}
                             </div>
                         </div>
+                        <div className={styles.buttonGroup}>
+                            <button
+                                className={styles.backButton}
+                                onClick={() => setCurrentStepPannel(steps.SELECT_TYPE)}
+                            >Back</button>
+                            <button
+                                className={styles.nextButton}
+                                disabled = {addCategory === null ? true : false}
+                                onClick={() => setCurrentStepPannel(steps.TRANSACTIONS_DETAILS)}
+                            >
+                                Next
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M5 12h14"/>
+                                    <path d="m12 5 7 7-7 7"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
+                </div>
+
+                <div className={`${styles.asideContent} ${currentStepPannel === steps.TRANSACTIONS_DETAILS ? "" : styles.hidden}`}>
+                    <div className={styles.transactionDetailsContainer}>
+                        <h4>Transaction Details</h4>
+                        <p>Fill in the details of your transaction.</p>
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="Date" className={styles.formLabel}>Date</label>
+                            <input type="date" className={styles.formInput} placeholder={Date.now()}/>
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="Description" className={styles.formLabel}>Description</label>
+                            <input type="text" className={styles.formInput} placeholder='e.g., Weekly groceries'
+                                onChange={(e) => setAddDescription(e.target.value)}
+                            />
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="Account" className={styles.formLabel}>Account</label>
+                            <div className={styles.dropdownWrapper}>
+                                <button
+                                    ref={dropdownMenuAccount}
+                                    className={`${styles.dropdownButton} ${isAccountOpen ? styles.open : ""}`}
+                                    onClick={accountDropdown.toggle}
+                                >
+                                    {addAccount === null ? 'Choose an account' : addAccount}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="m6 9 6 6 6-6"/>
+                                    </svg>
+                                </button>
+                                {isAccountOpen && (
+                                <div className={styles.dropdownMenu}>
+                                    {accounts.map((account, index) => (
+                                        <div key={index}
+                                            className={styles.dropdownItem}
+                                            onClick={() => {
+                                                setAddAccount(account);
+                                                accountDropdown.close();
+                                            }}
+                                        >
+                                            {account}
+                                        </div>
+                                    ))}
+                                </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="Amount" className={styles.formLabel}>Amount</label>
+                            <input type="number" className={styles.formInput} placeholder='0.00'
+                                onChange={(e) => setAddAmount(e.target.value)}
+                            />
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="Notes" className={styles.formLabel}>Notes (Optional)</label>
+                            <textarea className={styles.formTextarea} placeholder='Add any additional notes...'></textarea>
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="Status" className={styles.formLabel}>Status</label>
+                            <div className={styles.dropdownWrapper}>
+                                <button
+                                    ref={dropdownMenuStatus}
+                                    className={`${styles.dropdownButton} ${isStatusOpen ? styles.open : ""}`}
+                                    onClick={statusDropdown.toggle}
+                                >
+                                    {addStatus === null ? 'Transaction status' : addStatus}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="m6 9 6 6 6-6"/>
+                                    </svg>
+                                </button>
+                                {isStatusOpen && (
+                                <div className={styles.dropdownMenu}>
+                                    {status.map((selected, index) => (
+                                        <div key={index}
+                                            className={styles.dropdownItem}
+                                            onClick={() => {
+                                                setAddStatus(selected);
+                                                statusDropdown.close();
+                                            }}
+                                        >
+                                            {selected}
+                                        </div>
+                                    ))}
+                                </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className={styles.buttonGroup}>
+                            <button
+                                className={styles.backButtonDetails}
+                                onClick={() => setCurrentStepPannel(steps.SELECT_CATEGORY)}
+                            >Back</button>
+                            <button
+                                className={styles.reviewButton}
+                                disabled={addAccount === null || addAmount === null || addDescription === null ? true : false}
+                                onClick={() => setCurrentStepPannel(steps.REVIEW_AND_CONFIRM)}
+                            >
+                                Review
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M5 12h14"/>
+                                    <path d="m12 5 7 7-7 7"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={`${styles.asideContent} ${currentStepPannel === steps.REVIEW_AND_CONFIRM ? "" : styles.hidden}`}>
+                    This is the final step
                 </div>
             </aside>
             </>
