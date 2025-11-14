@@ -12,11 +12,14 @@ const Transactions = () => {
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
     const [isAccountOpen, setIsAccountOpen] = useState(false);
     const [isStatusOpen, setIsStatusOpen] = useState(false);
-    const [addCategory, setAddCategory] = useState(null);
-    const [addDescription, setAddDescription] = useState(null);
-    const [addAmount, setAddAmount] = useState(null);
-    const [addAccount, setAddAccount] = useState(null);
-    const [addStatus, setAddStatus] = useState(null);
+    const [addType, setAddType] = useState("");
+    const [addDate, setAddDate] = useState("");
+    const [addCategory, setAddCategory] = useState("");
+    const [addDescription, setAddDescription] = useState("");
+    const [addAmount, setAddAmount] = useState("");
+    const [addAccount, setAddAccount] = useState("");
+    const [addStatus, setAddStatus] = useState("");
+    const [addNotes, setAddNotes] = useState("");
     const [stepNumber, setStepNumber] = useState(1);
     const sidePannelRef = useRef(null);
     const dropdownMenuCategory = useRef(null);
@@ -32,12 +35,24 @@ const Transactions = () => {
     const accounts = ["Cash", "Checking", "Savings", "Credit Card"];
     const status = ["Clear", "Pending"];
 
+    const transaction = {
+        Type: addType,
+        Category: addCategory,
+        Date: addDate,
+        Description: addDescription,
+        Account: addAccount,
+        Amount: addAmount,
+        Status: addStatus
+    }
+
     const steps = {
         SELECT_TYPE,
         SELECT_CATEGORY,
         TRANSACTIONS_DETAILS,
         REVIEW_AND_CONFIRM
     };
+
+
 
     const [currentStepPannel, setCurrentStepPannel] = useState(steps.SELECT_TYPE);
 
@@ -62,7 +77,7 @@ const Transactions = () => {
         function handlerDropdown (e) {
             if (!dropdownMenuCategory.current.contains(e.target)){
                 categoryDropdown.close();
-                setAddCategory(null);
+                setAddCategory("");
             }
         }
 
@@ -97,7 +112,7 @@ const Transactions = () => {
         function handlerDropdown(e) {
             if (!dropdownMenuStatus.current.contains(e.target)){
                 statusDropdown.close();
-                setAddStatus(null);
+                setAddStatus("");
             }
         }
 
@@ -110,7 +125,14 @@ const Transactions = () => {
 
     const closePannelBtn = () => {
         setSidePannelToggle(false);
-        setAddCategory(null);
+        setAddAccount("");
+        setAddAmount("");
+        setAddCategory("");
+        setAddDate("");
+        setAddDescription("");
+        setAddStatus("");
+        setAddType("");
+        setAddNotes("");
 
         setTimeout(function () {
             setCurrentStepPannel(steps.SELECT_TYPE);
@@ -242,6 +264,7 @@ const Transactions = () => {
                             onClick={() => {
                                 nextStepPannel(steps.SELECT_CATEGORY, "Income");
                                 setStepNumber(2);
+                                setAddType("Income");
                             }}
                         >
                             <div className={styles.transactionIcon}>
@@ -258,6 +281,7 @@ const Transactions = () => {
                             onClick={() => {
                                 nextStepPannel(steps.SELECT_CATEGORY, "Expense");
                                 setStepNumber(2);
+                                setAddType("Expense");
                             }}
                         >
                             <div className={styles.transactionIcon}>
@@ -274,6 +298,7 @@ const Transactions = () => {
                             onClick={() => {
                                 nextStepPannel(steps.SELECT_CATEGORY, "Transfer");
                                 setStepNumber(2);
+                                setAddType("Transfer");
                             }}
                         >
                             <div className={styles.transactionIcon}>
@@ -291,6 +316,7 @@ const Transactions = () => {
                             onClick={() => {
                                 nextStepPannel(steps.SELECT_CATEGORY, "Loan");
                                 setStepNumber(2);
+                                setAddType("Loan");
                             }}
                         >
                             <div className={styles.transactionIcon}>
@@ -307,6 +333,7 @@ const Transactions = () => {
                             onClick={() => {
                                 nextStepPannel(steps.SELECT_CATEGORY, "Savings");
                                 setStepNumber(2);
+                                setAddType("Savings");
                             }}
                         >
                             <div className={styles.transactionIcon}>
@@ -322,6 +349,7 @@ const Transactions = () => {
                             onClick={() => {
                                 nextStepPannel(steps.SELECT_CATEGORY, "Goals");
                                 setStepNumber(2);
+                                setAddType("Goal");
                             }}
                         >
                             <div className={styles.transactionIcon}>
@@ -355,7 +383,7 @@ const Transactions = () => {
                                     className={`${styles.dropdownButton} ${isCategoryOpen ? styles.open : ""}`}
                                     onClick={categoryDropdown.toggle}
                                 >
-                                    {addCategory === null ? "Choose a category" : addCategory}
+                                    {addCategory === "" ? "Choose a category" : addCategory}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="m6 9 6 6 6-6"/>
                                     </svg>
@@ -388,7 +416,7 @@ const Transactions = () => {
                             >Back</button>
                             <button
                                 className={styles.nextButton}
-                                disabled = {addCategory === null ? true : false}
+                                disabled = {addCategory === "" ? true : false}
                                 onClick={() => {
                                     setCurrentStepPannel(steps.TRANSACTIONS_DETAILS);
                                     setStepNumber(3);
@@ -411,7 +439,10 @@ const Transactions = () => {
 
                         <div className={styles.formGroup}>
                             <label htmlFor="Date" className={styles.formLabel}>Date <span className={styles.required}>*</span></label>
-                            <input type="date" className={styles.formInput} placeholder={Date.UTC()}/>
+                            <input type="date" className={styles.formInput}
+                                value={addDate}
+                                onChange={(e) => setAddDate(e.target.value)}
+                            />
                         </div>
 
                         <div className={styles.formGroup}>
@@ -430,7 +461,7 @@ const Transactions = () => {
                                     className={`${styles.dropdownButton} ${isAccountOpen ? styles.open : ""}`}
                                     onClick={accountDropdown.toggle}
                                 >
-                                    {addAccount === null ? 'Choose an account' : addAccount}
+                                    {addAccount === "" ? 'Choose an account' : addAccount}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="m6 9 6 6 6-6"/>
                                     </svg>
@@ -463,7 +494,10 @@ const Transactions = () => {
 
                         <div className={styles.formGroup}>
                             <label htmlFor="Notes" className={styles.formLabel}>Notes (Optional)</label>
-                            <textarea className={styles.formTextarea} placeholder='Add any additional notes...'></textarea>
+                            <textarea className={styles.formTextarea} placeholder='Add any additional notes...'
+                                value={addNotes}
+                                onChange={(e) => setAddNotes(e.target.value)}
+                            ></textarea>
                         </div>
 
                         <div className={styles.formGroup}>
@@ -474,7 +508,7 @@ const Transactions = () => {
                                     className={`${styles.dropdownButton} ${isStatusOpen ? styles.open : ""}`}
                                     onClick={statusDropdown.toggle}
                                 >
-                                    {addStatus === null ? 'Transaction status' : addStatus}
+                                    {addStatus === "" ? 'Transaction status' : addStatus}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="m6 9 6 6 6-6"/>
                                     </svg>
@@ -507,7 +541,7 @@ const Transactions = () => {
                             >Back</button>
                             <button
                                 className={styles.reviewButton}
-                                disabled={!addAccount || !addAmount || !addDescription || !addStatus}
+                                disabled={!addAccount || !addAmount || !addDescription || !addStatus || !addDate}
                                 onClick={() => {
                                     setCurrentStepPannel(steps.REVIEW_AND_CONFIRM);
                                     setStepNumber(4);
@@ -524,7 +558,62 @@ const Transactions = () => {
                 </div>
 
                 <div className={`${styles.asideContent} ${currentStepPannel === steps.REVIEW_AND_CONFIRM ? "" : styles.hidden}`}>
-                    This is the final step
+                    <div className={styles.reviewContainer}>
+                        <h4>Review & Confirm</h4>
+                        <p>Please review your transaction before confirming.</p>
+
+                        <div className={styles.reviewDetailsBox}>
+                            <div className={styles.reviewRow}>
+                                <span className={styles.reviewLabel}>Type</span>
+                                <span className={styles.reviewValue}>{addType}</span>
+                            </div>
+                            <div className={styles.reviewRow}>
+                                <span className={styles.reviewLabel}>Category</span>
+                                <span className={styles.reviewValue}>{addCategory}</span>
+                            </div>
+                            <div className={styles.reviewRow}>
+                                <span className={styles.reviewLabel}>Date</span>
+                                <span className={styles.reviewValue}>{addDate}</span>
+                            </div>
+                            <div className={styles.reviewRow}>
+                                <span className={styles.reviewLabel}>Description</span>
+                                <span className={styles.reviewValue}>{addDescription}</span>
+                            </div>
+                            <div className={styles.reviewRow}>
+                                <span className={styles.reviewLabel}>Account</span>
+                                <span className={styles.reviewValue}>{addAccount}</span>
+                            </div>
+                            <div className={styles.reviewRow}>
+                                <span className={styles.reviewLabel}>Amount</span>
+                                <span className={styles.reviewAmountValue}>${addAmount}</span>
+                            </div>
+                            {addNotes && addNotes.trim() !== "" && (
+                                <div className={styles.reviewRowNotes}>
+                                    <span className={styles.reviewLabel}>Notes</span>
+                                    <span className={styles.reviewValue}>{addNotes}</span>
+                                </div>
+                            )}
+                            <div className={styles.reviewRow}>
+                                <span className={styles.reviewLabel}>Status</span>
+                                <span className={styles.reviewValue}>{addStatus}</span>
+                            </div>
+                        </div>
+
+                        <div className={styles.reviewButtonGroup}>
+                            <button
+                                className={styles.editButton}
+                                onClick={() => {
+                                    setStepNumber(3);
+                                    setCurrentStepPannel(steps.TRANSACTIONS_DETAILS);
+                                }}
+                            >
+                                Edit
+                            </button>
+                            <button className={styles.confirmButton}>
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </aside>
             </>
