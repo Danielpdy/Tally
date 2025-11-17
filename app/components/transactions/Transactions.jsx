@@ -1,7 +1,8 @@
 import React, { use } from 'react'
 import { useState, useEffect, useRef } from 'react';
 import Image from '@node_modules/next/image';
-import styles from './transactions.module.css'
+import styles from './transactions.module.css';
+import { useClickOutside } from './hooks/useClickOutside';
 import TransactionsEmptyState from './TransactionsEmptyState';
 import TransactionsSidePannel from './TransactionsSidePannel';
 
@@ -10,6 +11,7 @@ const Transactions = () => {
      // For now, hardcoded empty array. Later you'll fetch from your C# backend
     const [transactions, setTransactions] = useState([]);
     const [sidePanelOpen, setSidePanelOpen] = useState(false);
+    const sidePanelRef = useRef(null);
 
     const handleAddTransaction = (newTransaction) => {
         // For now, just add to state. Later, you'll POST to your C# backend
@@ -17,6 +19,13 @@ const Transactions = () => {
         setTransactions(prev => [...prev, { ...newTransaction, id: Date.now() }]);
         setSidePanelOpen(false);
     };
+
+    const handleClose = () => {
+        setSidePanelOpen(false);
+    }
+
+    //useClickOutside(sidePanelRef, handleClose);
+    
 
     return (
         <>
@@ -36,6 +45,7 @@ const Transactions = () => {
                 isOpen={sidePanelOpen}
                 onClose={() => setSidePanelOpen(false)}
                 onSubmit={handleAddTransaction}
+                //sidePanelRef={sidePanelRef}
             />
         </>
     );

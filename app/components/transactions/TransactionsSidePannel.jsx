@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useClickOutside } from './hooks/useClickOutside';
 import { useDropdown } from './hooks/useDropdown';
+import { useClickOutside } from './hooks/useClickOutside';
 import Image from 'next/image';
 import styles from './transactions.module.css';
 
 
 const TransactionsSidePannel = ({ isOpen, onClose, onSubmit }) => {
     const [stepNumber, setStepNumber] = useState(1);
-    const sidePanelRef = useRef(null);
+    const sidePanelRef = useRef();
 
     const SELECT_TYPE = 'SELECT_TYPE';
     const SELECT_CATEGORY = 'SELECT_CATEGORY';
@@ -16,7 +16,7 @@ const TransactionsSidePannel = ({ isOpen, onClose, onSubmit }) => {
 
     const categories = ["Salary", "Freelance", "Investment", "Business", "Gift", "Other"];
     const accounts = ["Cash", "Checking", "Savings", "Credit Card"];
-    const status = ["Clear", "Pending"];
+    const statuses = ["Clear", "Pending"];
 
      
 
@@ -64,7 +64,8 @@ const TransactionsSidePannel = ({ isOpen, onClose, onSubmit }) => {
         }, 1000);
 
     };
-    useClickOutside(sidePanelRef, onClose);
+
+    useClickOutside(sidePanelRef, handleClose);
 
     const updateField = (field, value) => {
         setFormData(prev => ({...prev, [field]: value }))
@@ -202,7 +203,7 @@ const TransactionsSidePannel = ({ isOpen, onClose, onSubmit }) => {
                                     <path d="M12 8h.01"/>
                                 </svg>
                             </label>
-                            <div className={styles.dropdownWrapper}  ref={categoryDropdown.dropdownRef}>
+                            <div className={styles.dropdownWrapper}>
                                 <button
                                     className={`${styles.dropdownButton} ${categoryDropdown.isOpen ? styles.open : ""}`}
                                     onClick={categoryDropdown.toggle}
@@ -213,12 +214,12 @@ const TransactionsSidePannel = ({ isOpen, onClose, onSubmit }) => {
                                     </svg>
                                 </button>
                                 {categoryDropdown.isOpen && (
-                                    <div className={styles.dropdownMenu}>
+                                    <div className={styles.dropdownMenu} ref={categoryDropdown.dropdownRef}>
                                         {categories.map((category, index) => (
                                             <div
                                                 key={index}
                                                 className={styles.dropdownItem}
-                                                onClick={(e) => {
+                                                onClick={() => {
                                                     updateField('category', category)
                                                     categoryDropdown.close();
                                                 }}
@@ -273,7 +274,7 @@ const TransactionsSidePannel = ({ isOpen, onClose, onSubmit }) => {
                             <label htmlFor="Description" className={styles.formLabel}>Description <span className={styles.required}>*</span></label>
                             <input type="text" className={styles.formInput}
                                 value={formData.description} placeholder='e.g., Weekly groceries'
-                                onChange={(e) => setAddDescription('descripction', e.target.value)}
+                                onChange={(e) => updateField('description', e.target.value)}
                             />
                         </div>
 

@@ -3,16 +3,13 @@ import { useClickOutside } from './useClickOutside';
 
 import React from 'react'
 
-export const useDropdown = (onClose) => {
+export const useDropdown = () => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     const toggle = () => setIsOpen(prev => !prev);
     const open = () => setIsOpen(true);
-    const close = () => {
-        setIsOpen(false);
-        if (onClose) onClose();
-    };
+    const close = () => setIsOpen(false);
 
     useClickOutside(dropdownRef, close);
 

@@ -50,6 +50,11 @@
   align-items: center;
 }
 
+/* Skeleton Spacing */
+.skeletonMarginTop {
+  margin-top: 12px;
+}
+
 .titleContainer button {
   padding: 12px 24px;
   border-radius: 12px;
