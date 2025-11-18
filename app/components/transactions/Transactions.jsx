@@ -1,43 +1,395 @@
-import React, { use } from 'react'
-import { useState, useEffect, useRef } from 'react';
-import Image from '@node_modules/next/image';
-import styles from './transactions.module.css';
+import React, { useState, useRef } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import styles from './transactionsPreview.module.css';
 import { useClickOutside } from './hooks/useClickOutside';
 import TransactionsEmptyState from './TransactionsEmptyState';
 import TransactionsSidePannel from './TransactionsSidePannel';
+import SevendayOverview from '../SevendayOverview';
 
 const Transactions = () => {
-
-     // For now, hardcoded empty array. Later you'll fetch from your C# backend
-    const [transactions, setTransactions] = useState([]);
+    const [transactions, setTransactions] = useState([
+        {
+            id: 1,
+            description: 'FedEx',
+            date: '2025-11-19',
+            category: 'Investment',
+            type: 'Income',
+            amount: 332.00,
+            account: 'Checking',
+            status: 'Cleared'
+        },
+        {
+            id: 2,
+            description: 'movies',
+            date: '2025-11-17',
+            category: 'Entertainment',
+            type: 'Expense',
+            amount: 123.00,
+            account: 'Checking',
+            status: 'Cleared'
+        }
+    ]);
     const [sidePanelOpen, setSidePanelOpen] = useState(false);
+    const [globalIncome, setGlobalIncome] = useState(332.00);
+    const [globalExpenses, setGlobalExpenses] = useState(123.00);
+    const [globalNet, setGlobalNet] = useState(209.00);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedFilter, setSelectedFilter] = useState(null);
+    const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
+    const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
     const sidePanelRef = useRef(null);
 
     const handleAddTransaction = (newTransaction) => {
-        // For now, just add to state. Later, you'll POST to your C# backend
         console.log("New transaction:", newTransaction);
         setTransactions(prev => [...prev, { ...newTransaction, id: Date.now() }]);
         setSidePanelOpen(false);
     };
 
-    const handleClose = () => {
-        setSidePanelOpen(false);
-    }
+    const filters = [
+        { name: 'Income', icon: '/assets/icons/incomeIcon.svg', count: 1 },
+        { name: 'Expense', icon: '/assets/icons/expenseIcon.svg', count: 1 },
+        { name: 'Transfer', icon: '/assets/icons/transferIcon.svg' },
+        { name: 'Loan', icon: '/assets/icons/loanIcon.svg' },
+        { name: 'Savings', icon: '/assets/icons/savingsIcon.svg' },
+        { name: 'Goal', icon: '/assets/icons/goalIcon.svg' }
+    ];
 
-    //useClickOutside(sidePanelRef, handleClose);
-    
+    const chartData = [
+        { name: 'Tue', Income: 0, Expenses: 0 },
+        { name: 'Wed', Income: 0, Expenses: 0 },
+        { name: 'Thu', Income: 0, Expenses: 0 },
+        { name: 'Fri', Income: 0, Expenses: 0 },
+        { name: 'Sat', Income: 0, Expenses: 0 },
+        { name: 'Sun', Income: 0, Expenses: 120 },
+        { name: 'Mon', Income: 0, Expenses: 0 }
+    ];
 
     return (
         <>
             {transactions.length === 0 ? (
                 <TransactionsEmptyState onAddClick={() => setSidePanelOpen(true)} />
             ) : (
-                // TODO: Replace this with your actual dashboard component
-                <div>
-                    <h1>Dashboard Will Go Here</h1>
-                    <p>You have {transactions.length} transaction(s)</p>
-                    <button onClick={() => setSidePanelOpen(true)}>Add Another Transaction</button>
-                    <pre>{JSON.stringify(transactions, null, 2)}</pre>
+                <div className={styles.transactionsContainer}>
+                    <div className={styles.transactionsContent}>
+                        {/* Header Section */}
+                        <section className={styles.headerSection}>
+                            <div>
+                                <h2 className={styles.mainTitle}>Transactions</h2>
+                                <p className={styles.description}>Track and manage your financial activity • Press <kbd>N</kbd> to add</p>
+                            </div>
+                            <div className={styles.buttonGroup}>
+                                <button
+                                    className={styles.getStartedButton}
+                                    onClick={() => setSidePanelOpen(true)}
+                                >
+                                    <Image
+                                        src='/assets/icons/plusWhite.svg'
+                                        width={20}
+                                        height={20}
+                                        alt='plus'
+                                    />
+                                    Add Transaction
+                                </button>
+                                <button className={styles.viewDemoButton}>
+                                    <Image
+                                        src='/assets/icons/export.svg'
+                                        width={20}
+                                        height={20}
+                                        alt='export'
+                                    />
+                                    Export
+                                </button>
+                            </div>
+                        </section>
+
+                        {/* Financial Summary Badges */}
+                        <section className={styles.financialSummary}>
+                            <div className={styles.summaryBadge}>
+                                <p className={styles.summaryLabel}>Income:</p>
+                                <span className={styles.summaryAmount}>${globalIncome.toFixed(2)}</span>
+                            </div>
+                            <div className={`${styles.summaryBadge} ${styles.expenseBadge}`}>
+                                <p className={styles.summaryLabel}>Expenses:</p>
+                                <span className={styles.summaryAmount}>${globalExpenses.toFixed(2)}</span>
+                            </div>
+                            <div className={`${styles.summaryBadge} ${styles.netBadge}`}>
+                                <p className={styles.summaryLabel}>Net:</p>
+                                <span className={styles.summaryAmount}>${globalNet.toFixed(2)}</span>
+                            </div>
+                        </section>
+
+                        {/* Two Column Layout */}
+                        <div className={styles.twoColumnLayout}>
+                            {/* Left Column */}
+                            <div className={styles.leftColumn}>
+                                {/* 7-Day Overview Chart */}
+                                <div className={styles.graphCard}>
+                                    <div className={styles.graphHeader}>
+                                        <Image
+                                            src='/assets/icons/trendingUpBlue.svg'
+                                            width={20}
+                                            height={20}
+                                            alt='trending'
+                                        />
+                                        <h3 className={styles.graphTitle}>7-Day Overview</h3>
+                                    </div>
+                                    <div className={styles.graphWrapper}>
+                                        <SevendayOverview data={chartData} />
+                                    </div>
+                                </div>
+
+                                {/* Search Bar */}
+                                <div className={styles.searchBar}>
+                                    <Image
+                                        src='/assets/icons/searchIcon.svg'
+                                        width={20}
+                                        height={20}
+                                        alt='search'
+                                    />
+                                    <input
+                                        type="text"
+                                        className={styles.searchInput}
+                                        placeholder="Search transactions by description or category..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                </div>
+
+                                {/* Filters Section */}
+                                <div className={styles.filtersSection}>
+                                    <p className={styles.filterLabel}>Quick filters</p>
+                                    <div className={styles.filterButtons}>
+                                        {filters.map((filter, index) => (
+                                            <button
+                                                key={index}
+                                                className={`${styles.filterBtn} ${selectedFilter === filter.name ? styles.filterBtnActive : ''}`}
+                                                onClick={() => setSelectedFilter(selectedFilter === filter.name ? null : filter.name)}
+                                            >
+                                                <Image
+                                                    src={filter.icon}
+                                                    width={16}
+                                                    height={16}
+                                                    alt={filter.name}
+                                                />
+                                                {filter.name}
+                                                {filter.count && (
+                                                    <span className={styles.filterCount}>{filter.count}</span>
+                                                )}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Sorting Bar */}
+                                <div className={styles.sortingBar}>
+                                    <div className={styles.statusDropdownWrapper}>
+                                        <button
+                                            className={styles.statusDropdown}
+                                            onClick={() => setStatusDropdownOpen(!statusDropdownOpen)}
+                                        >
+                                            <Image
+                                                src='/assets/icons/filterIcon.svg'
+                                                width={16}
+                                                height={16}
+                                                alt='filter'
+                                            />
+                                            All Status
+                                            <Image
+                                                src='/assets/icons/chevronDown.svg'
+                                                width={16}
+                                                height={16}
+                                                alt='chevron'
+                                            />
+                                        </button>
+                                        {statusDropdownOpen && (
+                                            <div className={styles.dropdownMenu}>
+                                                <button className={styles.dropdownItem}>All Status</button>
+                                                <button className={styles.dropdownItem}>Cleared</button>
+                                                <button className={styles.dropdownItem}>Pending</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className={styles.sortDropdownWrapper}>
+                                        <button
+                                            className={styles.sortButton}
+                                            onClick={() => setSortDropdownOpen(!sortDropdownOpen)}
+                                        >
+                                            Newest First
+                                            <Image
+                                                src='/assets/icons/chevronDown.svg'
+                                                width={16}
+                                                height={16}
+                                                alt='chevron'
+                                            />
+                                        </button>
+                                        {sortDropdownOpen && (
+                                            <div className={styles.dropdownMenu}>
+                                                <button className={styles.dropdownItem}>Newest First</button>
+                                                <button className={styles.dropdownItem}>Oldest First</button>
+                                                <button className={styles.dropdownItem}>Highest Amount</button>
+                                                <button className={styles.dropdownItem}>Lowest Amount</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Transactions List */}
+                                <div className={styles.transactionsList}>
+                                    {transactions.map((transaction) => (
+                                        <div key={transaction.id} className={styles.transactionCard}>
+                                            <div className={styles.transactionLeft}>
+                                                <div className={styles.transactionIcon}>
+                                                    <Image
+                                                        src={transaction.type === 'Income' ? '/assets/icons/trendingUpBlue.svg' : '/assets/icons/trendingdownIcon.svg'}
+                                                        width={20}
+                                                        height={20}
+                                                        alt='transaction type'
+                                                    />
+                                                </div>
+                                                <div className={styles.transactionInfo}>
+                                                    <h4 className={styles.transactionName}>{transaction.description}</h4>
+                                                    <p className={styles.transactionDetails}>
+                                                        {transaction.date} • {transaction.category}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className={styles.transactionRight}>
+                                                <h4 className={`${styles.transactionAmount} ${transaction.type === 'Income' ? styles.incomeAmount : styles.expenseAmount}`}>
+                                                    {transaction.type === 'Income' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                                                </h4>
+                                            </div>
+                                            <div className={styles.transactionBottom}>
+                                                <p className={styles.accountLabel}>{transaction.account}</p>
+                                                <span className={styles.statusBadge}>{transaction.status}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Right Column */}
+                            <div className={styles.rightColumn}>
+                                {/* Net Balance Card */}
+                                <div className={styles.balanceCard}>
+                                    <p className={styles.balanceLabel}>Net Balance</p>
+                                    <h2 className={styles.balanceAmount}>${globalNet.toFixed(2)}</h2>
+                                    <div className={styles.cashFlowIndicator}>
+                                        <Image
+                                            src='/assets/icons/trendingUpArrow.svg'
+                                            width={16}
+                                            height={16}
+                                            alt='trending up'
+                                        />
+                                        <span className={styles.cashFlowText}>Positive flow</span>
+                                    </div>
+
+                                    {/* Cash Flow Breakdown */}
+                                    <div className={styles.cashFlowBreakdown}>
+                                        <div className={styles.breakdownHeader}>
+                                            <Image
+                                                src='/assets/icons/trendingupIcon.svg'
+                                                width={16}
+                                                height={16}
+                                                alt='activity'
+                                            />
+                                            <h4 className={styles.breakdownTitle}>Cash Flow Breakdown</h4>
+                                        </div>
+
+                                        <div className={styles.breakdownItem}>
+                                            <span className={styles.breakdownLabel}>Income</span>
+                                            <span className={styles.incomeText}>${globalIncome.toFixed(2)}</span>
+                                        </div>
+                                        <div className={styles.progressBarIncome}></div>
+
+                                        <div className={styles.breakdownItem}>
+                                            <span className={styles.breakdownLabel}>Expenses</span>
+                                            <span className={styles.expenseText}>${globalExpenses.toFixed(2)}</span>
+                                        </div>
+                                        <div className={styles.progressBarExpense}></div>
+                                    </div>
+
+                                    {/* Total Transactions */}
+                                    <div className={styles.totalTransactions}>
+                                        <span className={styles.totalLabel}>Total Transactions</span>
+                                        <span className={styles.totalNumber}>{transactions.length}</span>
+                                    </div>
+                                </div>
+
+                                {/* Quick Actions Card */}
+                                <div className={styles.quickActionsCard}>
+                                    <h3 className={styles.quickActionsTitle}>Quick Actions</h3>
+                                    <div className={styles.actionsList}>
+                                        <button
+                                            className={styles.actionButton}
+                                            onClick={() => setSidePanelOpen(true)}
+                                        >
+                                            <div className={styles.actionIconPurple}>
+                                                <span>+</span>
+                                            </div>
+                                            Add Transaction
+                                        </button>
+                                        <button className={styles.actionButton}>
+                                            <div className={styles.actionIconBlue}>
+                                                <span>↓</span>
+                                            </div>
+                                            Export CSV
+                                        </button>
+                                        <button className={styles.actionButton}>
+                                            <div className={styles.actionIconOrange}>
+                                                <span>↑</span>
+                                            </div>
+                                            Import CSV
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* See How Your Money Works Card */}
+                                <div className={styles.balanceCard} style={{ background: 'linear-gradient(135deg, #F5F3FF 0%, #FFF0F8 100%)' }}>
+                                    <div className={styles.breakdownHeader}>
+                                        <Image
+                                            src='/assets/icons/trendingupIcon.svg'
+                                            width={20}
+                                            height={20}
+                                            alt='insights'
+                                        />
+                                        <h4 className={styles.breakdownTitle}>See How Your Money Works for You</h4>
+                                    </div>
+                                    <p className={styles.smallerText} style={{ marginTop: '12px', lineHeight: '1.6' }}>
+                                        You've recorded all your transactions here — great job keeping your finances organized!
+                                        Head over to your Dashboard to see how your income, expenses, goals, and savings come together in real-time graphs and summaries.
+                                    </p>
+
+                                    {/* Quick snapshot */}
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', padding: '12px', background: 'white', borderRadius: '12px' }}>
+                                        <div>
+                                            <p className={styles.breakdownLabel} style={{ fontSize: '12px' }}>Quick snapshot this week</p>
+                                            <div style={{ display: 'flex', gap: '24px', marginTop: '8px' }}>
+                                                <div>
+                                                    <p style={{ fontSize: '12px', color: '#6b7280' }}>Spending:</p>
+                                                    <p style={{ fontSize: '14px', fontWeight: '600', color: '#FF8042' }}>$1,230</p>
+                                                </div>
+                                                <div>
+                                                    <p style={{ fontSize: '12px', color: '#6b7280' }}>Income:</p>
+                                                    <p style={{ fontSize: '14px', fontWeight: '600', color: '#38BDF8' }}>$1,800</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <Link href="/dashboard" style={{ textDecoration: 'none' }}>
+                                        <button className={styles.unlockButton} style={{ marginTop: '16px' }}>
+                                            Go to Dashboard
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M5 12h14"/>
+                                                <path d="m12 5 7 7-7 7"/>
+                                            </svg>
+                                        </button>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
 
@@ -45,628 +397,9 @@ const Transactions = () => {
                 isOpen={sidePanelOpen}
                 onClose={() => setSidePanelOpen(false)}
                 onSubmit={handleAddTransaction}
-                //sidePanelRef={sidePanelRef}
             />
         </>
     );
+};
 
-    /*const [transactionsNumber, setTransactionsNumber] = useState(0);
-    const [sidePannelToogle, setSidePannelToggle] = useState(false);
-    const [typeTransaction, setTypeTransaction] = useState();
-    //const [isOpen, setIsOpen] = useState(false);
-    const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-    const [isAccountOpen, setIsAccountOpen] = useState(false);
-    const [isStatusOpen, setIsStatusOpen] = useState(false);
-    const [addType, setAddType] = useState("");
-    const [addDate, setAddDate] = useState("");
-    const [addCategory, setAddCategory] = useState("");
-    const [addDescription, setAddDescription] = useState("");
-    const [addAmount, setAddAmount] = useState("");
-    const [addAccount, setAddAccount] = useState("");
-    const [addStatus, setAddStatus] = useState("");
-    const [addNotes, setAddNotes] = useState("");
-    const [stepNumber, setStepNumber] = useState(1);
-    const sidePannelRef = useRef(null);
-    const dropdownMenuCategory = useRef(null);
-    const dropdownMenuAccount = useRef(null);
-    const dropdownMenuStatus = useRef(null);
-
-    const SELECT_TYPE = 'SELECT_TYPE';
-    const SELECT_CATEGORY = 'SELECT_CATEGORY';
-    const TRANSACTIONS_DETAILS = 'TRANSACTIONS_DETAILS';
-    const REVIEW_AND_CONFIRM = 'REVIEW_AND_CONFIRM';
-
-    const categories = ["Salary", "Freelance", "Investment", "Business", "Gift", "Other"];
-    const accounts = ["Cash", "Checking", "Savings", "Credit Card"];
-    const status = ["Clear", "Pending"];
-
-    const transaction = {
-        Type: addType,
-        Category: addCategory,
-        Date: addDate,
-        Description: addDescription,
-        Account: addAccount,
-        Amount: addAmount,
-        Status: addStatus
-    }
-
-    const steps = {
-        SELECT_TYPE,
-        SELECT_CATEGORY,
-        TRANSACTIONS_DETAILS,
-        REVIEW_AND_CONFIRM
-    };
-
-
-
-    const [currentStepPannel, setCurrentStepPannel] = useState(steps.SELECT_TYPE);
-
-    useEffect( () => {
-        function handler (e){
-            if (!sidePannelRef.current.contains(e.target)){
-                closePannelBtn();
-            }
-        }
-
-        document.addEventListener("click", handler);
-
-        return () => {
-            document.removeEventListener("click", handler)
-        }
-    });
-
-    useEffect( () => {
-
-        if (!isCategoryOpen) return;
-
-        function handlerDropdown (e) {
-            if (!dropdownMenuCategory.current.contains(e.target)){
-                categoryDropdown.close();
-                setAddCategory("");
-            }
-        }
-
-        document.addEventListener("click", handlerDropdown);
-
-        return () => {
-            document.removeEventListener("click", handlerDropdown);
-        }
-    
-    })
-
-    useEffect( () => {
-        if (!isAccountOpen) return;
-
-        function handlerDropdown (e) {
-            if (!dropdownMenuAccount.current.contains(e.target)) {
-                accountDropdown.close();
-                setAddAccount(null);
-            }
-        }
-
-        document.addEventListener("click", handlerDropdown);
-
-        return () => {
-            document.removeEventListener("click", handlerDropdown);
-        }
-    })
-
-    useEffect(() => {
-        if (!isStatusOpen) return;
-
-        function handlerDropdown(e) {
-            if (!dropdownMenuStatus.current.contains(e.target)){
-                statusDropdown.close();
-                setAddStatus("");
-            }
-        }
-
-        document.addEventListener("click", handlerDropdown);
-
-        return () => {
-            document.removeEventListener("click", handlerDropdown);
-        }
-    })
-
-    const closePannelBtn = () => {
-        setSidePannelToggle(false);
-        setAddAccount("");
-        setAddAmount("");
-        setAddCategory("");
-        setAddDate("");
-        setAddDescription("");
-        setAddStatus("");
-        setAddType("");
-        setAddNotes("");
-
-        setTimeout(function () {
-            setCurrentStepPannel(steps.SELECT_TYPE);
-            setStepNumber(1);
-        }, 1000);
-    }
-
-    const nextStepPannel = ( currentStep, type ) => {
-        setTypeTransaction(type);
-        setCurrentStepPannel(currentStep);
-    }*/
-
-    /*const handleToggleDropdown = () => {
-        setIsOpen(!isOpen);
-    }*/
-
-    /*const handleDropdowns = (isOpen, setIsOpen) => ({
-        toggle: () => setIsOpen(!isOpen),
-        close: () => setIsOpen(false),
-        open: () => setIsOpen(true)
-    });
-
-    const categoryDropdown = handleDropdowns(isCategoryOpen, setIsCategoryOpen);
-    const accountDropdown = handleDropdowns(isAccountOpen, setIsAccountOpen);
-    const statusDropdown = handleDropdowns(isStatusOpen, setIsStatusOpen);
-    */
-
-    /*const handleCloseDropdown = () => {
-        setIsOpen(false);
-    }*/
-
-    /*if ( transactionsNumber <= 0 ) {
-        return(
-            <>
-            {sidePannelToogle && <div className={styles.overlay}></div>}
-            <div className={styles.mainContainer}>
-                <section className={styles.titleContainer}>
-                        <div>
-                            <h1>Transactions</h1>
-                            <p>Track and manage your financial activity • Press <kbd>N</kbd> to add</p>
-                        </div>
-                        <div>
-                            <button
-                             onClick={() => setSidePannelToggle(true)}
-                            >
-                                <Image 
-                                    src='/assets/icons/plusWhite.svg'
-                                    width={20}
-                                    height={20}
-                                    alt='plus'
-                                />
-                                Add Transaction</button>
-                            <button>
-                                <Image 
-                                    src='/assets/icons/export.svg'
-                                    width={20}
-                                    height={20}
-                                    alt='export'
-                                />
-                                Export
-                            </button>
-                        </div>
-                </section>
-                <section className={styles.emptyStats}>
-                        <div>
-                            <p>Income: </p>
-                            <span>$0.00</span>
-                        </div>
-                         <div>
-                            <p>Expenses: </p>
-                            <span>$0.00</span>
-                        </div>
-                         <div>
-                            <p>Net: </p>
-                            <span>$0.00</span>
-                        </div>
-                </section>
-                <section className={styles.emptyTransMessage}>
-                    <section className={styles.emptyMessage}>
-                        <div className={styles.messageEmpty}>
-                            <Image
-                                src="/assets/icons/trendingUpBig.svg"
-                                width={140}
-                                height={140}
-                                alt='trending up'
-                            />
-                            <h2>No transactions yet</h2>
-                            <p>Start tracking your financial journey by adding your first transaction.
-                            It only takes a few seconds!</p>
-                        </div>
-                        <button
-                            onClick={() => setSidePannelToggle(true)}
-                        >
-                            <Image 
-                                src='/assets/icons/plusWhite.svg'
-                                width={20}
-                                height={20}
-                                alt='plus'
-                            />
-                            Add Your First Transaction</button>
-                    </section>
-                </section>
-            </div>*/
-
-           /* return(
-            <>
-            <aside ref={sidePannelRef} className={`${styles.aside} ${sidePannelToogle ? styles.visible : ""}`}>
-                <div className={styles.asideHeader}>
-                    <div className={styles.asideHeaderText}>
-                        <h3>Add Transaction</h3>
-                        <p>Step {stepNumber} of 4 • Press ESC to close</p>
-                    </div>
-                    <button
-                        className={styles.closeButton}
-                        onClick={() => closePannelBtn()}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M18 6 6 18"/>
-                            <path d="m6 6 12 12"/>
-                        </svg>
-                    </button>
-                </div>
-
-                <div className={`${styles.asideContent} ${currentStepPannel === steps.SELECT_TYPE ? "" : styles.hidden }`}>
-                    
-                    <h4>What type of transaction are you recording?</h4>
-                    <p>Select the category that best describes this transaction.</p>
-
-                    <div className={styles.transactionGrid}>
-                        <div
-                            className={`${styles.transactionCard} ${styles.income}`}
-                            onClick={() => {
-                                nextStepPannel(steps.SELECT_CATEGORY, "Income");
-                                setStepNumber(2);
-                                setAddType("Income");
-                            }}
-                        >
-                            <div className={styles.transactionIcon}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="m22 7-8.5 8.5-5-5L1 18"/>
-                                    <path d="M16 7h6v6"/>
-                                </svg>
-                            </div>
-                            <span>Income</span>
-                        </div>
-
-                        <div
-                            className={`${styles.transactionCard} ${styles.expense}`}
-                            onClick={() => {
-                                nextStepPannel(steps.SELECT_CATEGORY, "Expense");
-                                setStepNumber(2);
-                                setAddType("Expense");
-                            }}
-                        >
-                            <div className={styles.transactionIcon}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="m22 17-8.5-8.5-5 5L1 6"/>
-                                    <path d="M16 17h6v-6"/>
-                                </svg>
-                            </div>
-                            <span>Expense</span>
-                        </div>
-
-                        <div
-                            className={`${styles.transactionCard} ${styles.transfer}`}
-                            onClick={() => {
-                                nextStepPannel(steps.SELECT_CATEGORY, "Transfer");
-                                setStepNumber(2);
-                                setAddType("Transfer");
-                            }}
-                        >
-                            <div className={styles.transactionIcon}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="m17 11-5-5-5 5"/>
-                                    <path d="M12 18V6"/>
-                                    <path d="m7 13 5 5 5-5"/>
-                                </svg>
-                            </div>
-                            <span>Transfer</span>
-                        </div>
-
-                        <div
-                            className={`${styles.transactionCard} ${styles.loan}`}
-                            onClick={() => {
-                                nextStepPannel(steps.SELECT_CATEGORY, "Loan");
-                                setStepNumber(2);
-                                setAddType("Loan");
-                            }}
-                        >
-                            <div className={styles.transactionIcon}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                                </svg>
-                            </div>
-                            <span>Loan</span>
-                        </div>
-
-                        <div
-                            className={`${styles.transactionCard} ${styles.savings}`}
-                            onClick={() => {
-                                nextStepPannel(steps.SELECT_CATEGORY, "Savings");
-                                setStepNumber(2);
-                                setAddType("Savings");
-                            }}
-                        >
-                            <div className={styles.transactionIcon}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z"/>
-                                </svg>
-                            </div>
-                            <span>Savings</span>
-                        </div>
-
-                        <div
-                            className={`${styles.transactionCard} ${styles.goal}`}
-                            onClick={() => {
-                                nextStepPannel(steps.SELECT_CATEGORY, "Goals");
-                                setStepNumber(2);
-                                setAddType("Goal");
-                            }}
-                        >
-                            <div className={styles.transactionIcon}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <circle cx="12" cy="12" r="6"/>
-                                    <circle cx="12" cy="12" r="2"/>
-                                </svg>
-                            </div>
-                            <span>Goal</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div className={`${styles.asideContent} ${currentStepPannel === steps.SELECT_CATEGORY ? "" : styles.hidden}`}>
-                    <div className={styles.selectCategoryContainer}>
-                        <h4>Select Category</h4>
-                        <p>Choose the specific category for this income.</p>
-                        <div className={styles.categoryFormGroup}>
-                            <label htmlFor="Category" className={styles.categoryLabel}>
-                                Category
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M12 16v-4"/>
-                                    <path d="M12 8h.01"/>
-                                </svg>
-                            </label>
-                            <div className={styles.dropdownWrapper}>
-                                <button
-                                    ref={dropdownMenuCategory}
-                                    className={`${styles.dropdownButton} ${isCategoryOpen ? styles.open : ""}`}
-                                    onClick={categoryDropdown.toggle}
-                                >
-                                    {addCategory === "" ? "Choose a category" : addCategory}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="m6 9 6 6 6-6"/>
-                                    </svg>
-                                </button>
-                                {isCategoryOpen && (
-                                    <div className={styles.dropdownMenu}>
-                                        {categories.map((category, index) => (
-                                            <div
-                                                key={index}
-                                                className={styles.dropdownItem}
-                                                onClick={() => {
-                                                    setAddCategory(category);
-                                                    categoryDropdown.close();
-                                                }}
-                                            >
-                                                {category}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className={styles.buttonGroup}>
-                            <button
-                                className={styles.backButton}
-                                onClick={() => {
-                                    setCurrentStepPannel(steps.SELECT_TYPE);
-                                    setStepNumber(1);
-                                }}
-                            >Back</button>
-                            <button
-                                className={styles.nextButton}
-                                disabled = {addCategory === "" ? true : false}
-                                onClick={() => {
-                                    setCurrentStepPannel(steps.TRANSACTIONS_DETAILS);
-                                    setStepNumber(3);
-                                }}
-                            >
-                                Next
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M5 12h14"/>
-                                    <path d="m12 5 7 7-7 7"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div className={`${styles.asideContent} ${currentStepPannel === steps.TRANSACTIONS_DETAILS ? "" : styles.hidden}`}>
-                    <div className={styles.transactionDetailsContainer}>
-                        <h4>Transaction Details</h4>
-                        <p>Fill in the details of your transaction.</p>
-
-                        <div className={styles.formGroup}>
-                            <label htmlFor="Date" className={styles.formLabel}>Date <span className={styles.required}>*</span></label>
-                            <input type="date" className={styles.formInput}
-                                value={addDate}
-                                onChange={(e) => setAddDate(e.target.value)}
-                            />
-                        </div>
-
-                        <div className={styles.formGroup}>
-                            <label htmlFor="Description" className={styles.formLabel}>Description <span className={styles.required}>*</span></label>
-                            <input type="text" className={styles.formInput}
-                                value={addDescription} placeholder='e.g., Weekly groceries'
-                                onChange={(e) => setAddDescription(e.target.value)}
-                            />
-                        </div>
-
-                        <div className={styles.formGroup}>
-                            <label htmlFor="Account" className={styles.formLabel}>Account <span className={styles.required}>*</span></label>
-                            <div className={styles.dropdownWrapper}>
-                                <button
-                                    ref={dropdownMenuAccount}
-                                    className={`${styles.dropdownButton} ${isAccountOpen ? styles.open : ""}`}
-                                    onClick={accountDropdown.toggle}
-                                >
-                                    {addAccount === "" ? 'Choose an account' : addAccount}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="m6 9 6 6 6-6"/>
-                                    </svg>
-                                </button>
-                                {isAccountOpen && (
-                                <div className={styles.dropdownMenu}>
-                                    {accounts.map((account, index) => (
-                                        <div key={index}
-                                            className={styles.dropdownItem}
-                                            onClick={() => {
-                                                setAddAccount(account);
-                                                accountDropdown.close();
-                                            }}
-                                        >
-                                            {account}
-                                        </div>
-                                    ))}
-                                </div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className={styles.formGroup}>
-                            <label htmlFor="Amount" className={styles.formLabel}>Amount <span className={styles.required}>*</span></label>
-                            <input type="number" className={styles.formInput}
-                                value={addAmount} placeholder='0.00'
-                                onChange={(e) => setAddAmount(e.target.value)}
-                            />
-                        </div>
-
-                        <div className={styles.formGroup}>
-                            <label htmlFor="Notes" className={styles.formLabel}>Notes (Optional)</label>
-                            <textarea className={styles.formTextarea} placeholder='Add any additional notes...'
-                                value={addNotes}
-                                onChange={(e) => setAddNotes(e.target.value)}
-                            ></textarea>
-                        </div>
-
-                        <div className={styles.formGroup}>
-                            <label htmlFor="Status" className={styles.formLabel}>Status <span className={styles.required}>*</span></label>
-                            <div className={styles.dropdownWrapper}>
-                                <button
-                                    ref={dropdownMenuStatus}
-                                    className={`${styles.dropdownButton} ${isStatusOpen ? styles.open : ""}`}
-                                    onClick={statusDropdown.toggle}
-                                >
-                                    {addStatus === "" ? 'Transaction status' : addStatus}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="m6 9 6 6 6-6"/>
-                                    </svg>
-                                </button>
-                                {isStatusOpen && (
-                                <div className={styles.dropdownMenu}>
-                                    {status.map((selected, index) => (
-                                        <div key={index}
-                                            className={styles.dropdownItem}
-                                            onClick={() => {
-                                                setAddStatus(selected);
-                                                statusDropdown.close();
-                                            }}
-                                        >
-                                            {selected}
-                                        </div>
-                                    ))}
-                                </div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className={styles.buttonGroup}>
-                            <button
-                                className={styles.backButtonDetails}
-                                onClick={() => {
-                                    setCurrentStepPannel(steps.SELECT_CATEGORY);
-                                    setStepNumber(2);
-                                }}
-                            >Back</button>
-                            <button
-                                className={styles.reviewButton}
-                                disabled={!addAccount || !addAmount || !addDescription || !addStatus || !addDate}
-                                onClick={() => {
-                                    setCurrentStepPannel(steps.REVIEW_AND_CONFIRM);
-                                    setStepNumber(4);
-                                }}
-                            >
-                                Review
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M5 12h14"/>
-                                    <path d="m12 5 7 7-7 7"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div className={`${styles.asideContent} ${currentStepPannel === steps.REVIEW_AND_CONFIRM ? "" : styles.hidden}`}>
-                    <div className={styles.reviewContainer}>
-                        <h4>Review & Confirm</h4>
-                        <p>Please review your transaction before confirming.</p>
-
-                        <div className={styles.reviewDetailsBox}>
-                            <div className={styles.reviewRow}>
-                                <span className={styles.reviewLabel}>Type</span>
-                                <span className={styles.reviewValue}>{addType}</span>
-                            </div>
-                            <div className={styles.reviewRow}>
-                                <span className={styles.reviewLabel}>Category</span>
-                                <span className={styles.reviewValue}>{addCategory}</span>
-                            </div>
-                            <div className={styles.reviewRow}>
-                                <span className={styles.reviewLabel}>Date</span>
-                                <span className={styles.reviewValue}>{addDate}</span>
-                            </div>
-                            <div className={styles.reviewRow}>
-                                <span className={styles.reviewLabel}>Description</span>
-                                <span className={styles.reviewValue}>{addDescription}</span>
-                            </div>
-                            <div className={styles.reviewRow}>
-                                <span className={styles.reviewLabel}>Account</span>
-                                <span className={styles.reviewValue}>{addAccount}</span>
-                            </div>
-                            <div className={styles.reviewRow}>
-                                <span className={styles.reviewLabel}>Amount</span>
-                                <span className={styles.reviewAmountValue}>${addAmount}</span>
-                            </div>
-                            {addNotes && addNotes.trim() !== "" && (
-                                <div className={styles.reviewRowNotes}>
-                                    <span className={styles.reviewLabel}>Notes</span>
-                                    <span className={styles.reviewValue}>{addNotes}</span>
-                                </div>
-                            )}
-                            <div className={styles.reviewRow}>
-                                <span className={styles.reviewLabel}>Status</span>
-                                <span className={styles.reviewValue}>{addStatus}</span>
-                            </div>
-                        </div>
-
-                        <div className={styles.reviewButtonGroup}>
-                            <button
-                                className={styles.editButton}
-                                onClick={() => {
-                                    setStepNumber(3);
-                                    setCurrentStepPannel(steps.TRANSACTIONS_DETAILS);
-                                }}
-                            >
-                                Edit
-                            </button>
-                            <button className={styles.confirmButton}>
-                                Confirm
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-            </>
-        ) */
-    
-}
-
-export default Transactions
+export default Transactions;

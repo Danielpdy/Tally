@@ -60,7 +60,7 @@
 }
 
 .expenseBadge .summaryAmount {
-  color: #EA580C;
+  color: #FF8042;
 }
 
 .netBadge .summaryAmount {
@@ -119,13 +119,15 @@
 /* Header Section */
 .headerSection {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .mainTitle {
-  font-size: 24px;
+  font-size: 36px;
   font-weight: 700;
   color: #1a0b2e;
   margin: 0;
@@ -215,7 +217,7 @@
 }
 
 .getStartedButton {
-  background: linear-gradient(135deg, #8B4FFF 0%, #6B5FFF 100%);
+  background: linear-gradient(135deg, #FF8042 0%, #FF6B42 100%);
   color: white;
   border: none;
   font-weight: 600;
@@ -228,11 +230,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
 }
 
 .getStartedButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(139, 79, 255, 0.3);
+  box-shadow: 0 8px 16px rgba(255, 128, 66, 0.4);
 }
 
 .viewDemoButton {
@@ -864,7 +867,7 @@
   justify-content: center;
   gap: 8px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #8B4FFF 0%, #6366F1 100%);
+  background: linear-gradient(135deg, #FF8042 0%, #FF6B42 100%);
   color: white;
   border: none;
   border-radius: 10px;
@@ -873,6 +876,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   width: 100%;
+  text-decoration: none;
 }
 
 .unlockButton img {
@@ -881,7 +885,8 @@
 
 .unlockButton:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(139, 79, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(255, 128, 66, 0.4);
+  text-decoration: none;
 }
 
 /* Signup Banner Popup */
@@ -1149,6 +1154,19 @@
   .featureSubtitle {
     font-size: 12px;
   }
+}
+
+/* Additional Utility Classes */
+.smallerText {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.description {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0;
 }
 
 /* Responsive for Two Column Layout */

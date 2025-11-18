@@ -1,6 +1,20 @@
 import React from 'react';
-import Skeleton from '@app/components/Skeleton';
-import styles from './transactions.module.css';
+import styles from './transactionsSkeleton.module.css';
+
+// Local Skeleton component
+const Skeleton = ({ variant = 'text', width, height, className = '' }) => {
+    const style = {
+        width: width || '100%',
+        height: height || '16px'
+    };
+
+    return (
+        <div
+            className={`${styles.skeleton} ${variant ? styles[variant] : ''} ${className}`}
+            style={style}
+        />
+    );
+};
 
 const TransactionsSkeleton = () => {
     return (

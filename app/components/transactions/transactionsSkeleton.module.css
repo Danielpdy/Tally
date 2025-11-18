@@ -1,4 +1,4 @@
-/* Base Skeleton Animation */
+/* Base Skeleton Animations */
 @keyframes shimmer {
     0% {
         background-position: -1000px 0;
@@ -137,4 +137,125 @@
 .skeleton.line {
     border-radius: 4px;
     height: 12px;
+}
+
+/* Skeleton Spacing */
+.skeletonMarginTop {
+    margin-top: 12px;
+}
+
+/* Layout Styles for TransactionsSkeleton */
+.mainContainer {
+    display: flex;
+    align-items: center;
+    padding: 40px 40px;
+    flex-direction: column;
+    gap: 24px;
+    min-height: calc(100vh - 80px - 150px);
+    background: linear-gradient(180deg, #F8F6FF 0%, #FFFFFF 100%);
+}
+
+.titleContainer {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.emptyStats {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 16px;
+}
+
+.emptyTransMessage {
+    width: 100%;
+    max-width: 1400px;
+    min-height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #E5E7EB;
+}
+
+.emptyMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 60px 40px;
+}
+
+.messageEmpty {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .mainContainer {
+        padding: 32px 24px;
+    }
+
+    .emptyStats {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mainContainer {
+        padding: 24px 20px;
+        min-height: calc(100vh - 80px - 100px);
+    }
+
+    .titleContainer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        margin-bottom: 12px;
+    }
+
+    .emptyStats {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+    }
+
+    .emptyTransMessage {
+        min-height: 400px;
+    }
+
+    .emptyMessage {
+        padding: 40px 24px;
+        gap: 24px;
+    }
+
+    .messageEmpty {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 640px) {
+    .mainContainer {
+        padding: 20px 16px;
+    }
+
+    .emptyTransMessage {
+        min-height: 350px;
+        border-radius: 16px;
+    }
+
+    .emptyMessage {
+        padding: 32px 20px;
+        gap: 20px;
+    }
 }
