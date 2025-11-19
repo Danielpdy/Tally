@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useSyncExternalStore } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './transactionsPreview.module.css';
@@ -6,45 +6,42 @@ import { useClickOutside } from './hooks/useClickOutside';
 import TransactionsEmptyState from './TransactionsEmptyState';
 import TransactionsSidePannel from './TransactionsSidePannel';
 import SevendayOverview from '../SevendayOverview';
+import { Addtransaction, TransactionService } from '@services/TransactionService';
 
 const Transactions = () => {
-    const [transactions, setTransactions] = useState([
-        {
-            id: 1,
-            description: 'FedEx',
-            date: '2025-11-19',
-            category: 'Investment',
-            type: 'Income',
-            amount: 332.00,
-            account: 'Checking',
-            status: 'Cleared'
-        },
-        {
-            id: 2,
-            description: 'movies',
-            date: '2025-11-17',
-            category: 'Entertainment',
-            type: 'Expense',
-            amount: 123.00,
-            account: 'Checking',
-            status: 'Cleared'
-        }
-    ]);
+    const [transactions, setTransactions] = useState([]);
     const [sidePanelOpen, setSidePanelOpen] = useState(false);
-    const [globalIncome, setGlobalIncome] = useState(332.00);
-    const [globalExpenses, setGlobalExpenses] = useState(123.00);
-    const [globalNet, setGlobalNet] = useState(209.00);
+    const [globalIncome, setGlobalIncome] = useState(0.00);
+    const [globalExpenses, setGlobalExpenses] = useState(0.00);
+    const [globalNet, setGlobalNet] = useState(0.00);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedFilter, setSelectedFilter] = useState(null);
     const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
     const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
+    const [isAdded, setIsAdded] = useState(false);
     const sidePanelRef = useRef(null);
+
+    useEffect(() => {
+
+    })
 
     const handleAddTransaction = (newTransaction) => {
         console.log("New transaction:", newTransaction);
-        setTransactions(prev => [...prev, { ...newTransaction, id: Date.now() }]);
+        setTransactions(prev => [...prev, newTransaction]);
         setSidePanelOpen(false);
+        submitTransaction(newTransaction);
     };
+
+    async function submitTransaction(newTransaction) {
+        try {
+            const result = await Addtransaction(newTransaction);
+            setIsAdded(true);
+            console.log("Transaction added:", result);
+        } catch (error) {
+            console.error("Failed to add transaction:",error);
+        }
+        
+    }
 
     const filters = [
         { name: 'Income', icon: '/assets/icons/incomeIcon.svg', count: 1 },
@@ -256,7 +253,7 @@ const Transactions = () => {
                                             </div>
                                             <div className={styles.transactionRight}>
                                                 <h4 className={`${styles.transactionAmount} ${transaction.type === 'Income' ? styles.incomeAmount : styles.expenseAmount}`}>
-                                                    {transaction.type === 'Income' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                                                    {transaction.type === 'Income' ? '+' : '-'}${transaction.amount}
                                                 </h4>
                                             </div>
                                             <div className={styles.transactionBottom}>
@@ -395,8 +392,12 @@ const Transactions = () => {
 
             <TransactionsSidePannel
                 isOpen={sidePanelOpen}
-                onClose={() => setSidePanelOpen(false)}
+                onClose={() => {
+                    setSidePanelOpen(false);
+                    setIsAdded(false);
+                }}
                 onSubmit={handleAddTransaction}
+                transactionAdded={isAdded}
             />
         </>
     );

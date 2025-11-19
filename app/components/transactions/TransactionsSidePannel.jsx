@@ -5,7 +5,7 @@ import Image from 'next/image';
 import styles from './transactions.module.css';
 
 
-const TransactionsSidePannel = ({ isOpen, onClose, onSubmit }) => {
+const TransactionsSidePannel = ({ isOpen, onClose, onSubmit, transactionAdded }) => {
     const [stepNumber, setStepNumber] = useState(1);
     const sidePanelRef = useRef();
 
@@ -13,6 +13,7 @@ const TransactionsSidePannel = ({ isOpen, onClose, onSubmit }) => {
     const SELECT_CATEGORY = 'SELECT_CATEGORY';
     const TRANSACTIONS_DETAILS = 'TRANSACTIONS_DETAILS';
     const REVIEW_AND_CONFIRM = 'REVIEW_AND_CONFIRM';
+    const TRANSACTION_ADDED = "TRANSACTION_ADDED";
 
     const categories = ["Salary", "Freelance", "Investment", "Business", "Gift", "Other"];
     const accounts = ["Cash", "Checking", "Savings", "Credit Card"];
@@ -24,7 +25,8 @@ const TransactionsSidePannel = ({ isOpen, onClose, onSubmit }) => {
         SELECT_TYPE,
         SELECT_CATEGORY,
         TRANSACTIONS_DETAILS,
-        REVIEW_AND_CONFIRM
+        REVIEW_AND_CONFIRM,
+        TRANSACTION_ADDED
     };
 
     const [currentStepPannel, setCurrentStepPannel] = useState(steps.SELECT_TYPE);
@@ -79,7 +81,6 @@ const TransactionsSidePannel = ({ isOpen, onClose, onSubmit }) => {
 
     const handleConfirm = () => {
         onSubmit(formData);
-        handleClose();
     };
 
 
@@ -434,12 +435,59 @@ const TransactionsSidePannel = ({ isOpen, onClose, onSubmit }) => {
                             >
                                 Edit
                             </button>
-                            <button className={styles.confirmButton}>
+                            <button className={styles.confirmButton}
+                                onClick={() => {
+                                    handleConfirm();
+                                    setCurrentStepPannel(steps.TRANSACTION_ADDED);
+                                    setStepNumber(5);
+                                }}
+                            >
                                 Confirm
                             </button>
                         </div>
                     </div>
                 </div>
+                
+                {transactionAdded && (
+                <div className={`${styles.asideContent} ${currentStepPannel === steps.TRANSACTION_ADDED ? "" : styles.hidden}`}>
+                    <div className={styles.successContainer}>
+                        <div className={styles.successIconWrapper}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={styles.successIcon}>
+                                <path d="M20 6 9 17l-5-5"/>
+                            </svg>
+                        </div>
+                        <h4>Transaction Added!</h4>
+                        <p>Your transaction has been recorded successfully.</p>
+                        <div className={styles.successButtonGroup}>
+                            <button
+                                className={styles.addAnotherButton}
+                                onClick={() => {
+                                    setFormData({
+                                        type: "",
+                                        category: "",
+                                        date: "",
+                                        description: "",
+                                        account: "",
+                                        amount: "",
+                                        status: "",
+                                        notes: ""
+                                    });
+                                    setCurrentStepPannel(steps.SELECT_TYPE);
+                                    setStepNumber(1);
+                                }}
+                            >
+                                Add Another
+                            </button>
+                            <button
+                                className={styles.viewTransactionsButton}
+                                onClick={handleClose}
+                            >
+                                View Transactions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                )}
             </aside>
             </>
      )

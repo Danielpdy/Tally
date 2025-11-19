@@ -29,7 +29,7 @@ namespace backendTally.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Transaction>> AddTransaction (Transaction newTransaction)
+        public async Task<ActionResult<Transaction>> AddTransaction ([FromBody] Transaction newTransaction)
         {
             if (newTransaction == null)
             {
