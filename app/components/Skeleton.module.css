@@ -1,0 +1,140 @@
+/* Base Skeleton Animation */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Base Skeleton Styles */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        #F3F4F6 0%,
+        #E5E7EB 20%,
+        #F3F4F6 40%,
+        #F3F4F6 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+/* Skeleton Variants */
+.skeleton.title {
+    border-radius: 12px;
+    background: linear-gradient(
+        90deg,
+        #E9D5FF 0%,
+        #DDD6FE 20%,
+        #E9D5FF 40%,
+        #E9D5FF 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+.skeleton.heading {
+    border-radius: 10px;
+}
+
+.skeleton.text {
+    border-radius: 6px;
+    height: 16px;
+}
+
+.skeleton.button {
+    border-radius: 12px;
+    background: linear-gradient(
+        90deg,
+        #EBF8FF 0%,
+        #DBEAFE 20%,
+        #EBF8FF 40%,
+        #EBF8FF 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+.skeleton.card {
+    border-radius: 20px;
+    background: linear-gradient(
+        90deg,
+        #FFFFFF 0%,
+        #F9FAFB 20%,
+        #FFFFFF 40%,
+        #FFFFFF 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.skeleton.stat {
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        #F3E8FF 0%,
+        #EDE9FE 20%,
+        #F3E8FF 40%,
+        #F3E8FF 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+.skeleton.circle {
+    border-radius: 50%;
+    background: linear-gradient(
+        135deg,
+        #EBF8FF 0%,
+        #E0F2FE 50%,
+        #EBF8FF 100%
+    );
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.skeleton.chart {
+    border-radius: 16px;
+    background: linear-gradient(
+        90deg,
+        #FAF8FF 0%,
+        #F3F4F6 20%,
+        #FAF8FF 40%,
+        #FAF8FF 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2.5s infinite linear;
+}
+
+.skeleton.input {
+    border-radius: 12px;
+    height: 48px;
+    background: linear-gradient(
+        90deg,
+        #F8F9FA 0%,
+        #E5E7EB 20%,
+        #F8F9FA 40%,
+        #F8F9FA 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+.skeleton.line {
+    border-radius: 4px;
+    height: 12px;
+}
