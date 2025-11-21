@@ -27,12 +27,20 @@ const Transactions = () => {
         fetchTransactions();
     },[]);
 
-    const handleAddTransaction = (newTransaction) => {
-        console.log("New transaction:", newTransaction);
-        //setTransactions(prev => [...prev, newTransaction]);
+    const handleAddTransaction = async (newTransaction) => {
+        //console.log("New transaction:", newTransaction);
+        const tempId = Date.now();
+        setTransactions(prev => [...prev, {...newTransaction, id: tempId}]);
         //setSidePanelOpen(false);
-        submitTransaction(newTransaction);
-        setIsAdded(true)
+
+        try {
+            const data = await Addtransaction(newTransaction);
+            setTransactions(prev => prev.map(t => t.id === tempId ? data : t));
+            setIsAdded(true);
+        } catch(error) {
+            setTransactions(prev => prev.filter(t => t.id !== tempId));
+            console.error("Failed to add transaction");
+        }
     };
 
     async function fetchTransactions() {
@@ -40,7 +48,7 @@ const Transactions = () => {
         setTransactions(data);
     }
 
-    async function submitTransaction(newTransaction) {
+    /*async function submitTransaction(newTransaction) {
         try {
             const result = await Addtransaction(newTransaction);
             //setIsAdded(true);
@@ -48,8 +56,10 @@ const Transactions = () => {
         } catch (error) {
             console.error("Failed to add transaction: ",error);
         }
+
+        return result;
         
-    }
+    }*/
 
     const filters = [
         { name: 'Income', icon: '/assets/icons/incomeIcon.svg', count: 1 },

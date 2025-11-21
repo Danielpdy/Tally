@@ -482,7 +482,6 @@ const TransactionsSidePannel = ({ isOpen, onClose, onSubmit, transactionAdded })
                                 className={styles.viewTransactionsButton}
                                 onClick={() => {
                                     handleClose();
-                                    handleConfirm();
                                 }}
                             >
                                 View Transactions
