@@ -1,0 +1,486 @@
+import React, { useState, useRef, useEffect, useSyncExternalStore } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import styles from './transactionsPreview.module.css';
+import { useClickOutside } from './hooks/useClickOutside';
+import TransactionsEmptyState from './TransactionsEmptyState';
+import TransactionsSidePannel from './TransactionsSidePannel';
+import SevendayOverview from '../SevendayOverview';
+import { Addtransaction, GetTransactions, TransactionService } from '@services/TransactionService';
+
+const Transactions = () => {
+    const [transactions, setTransactions] = useState([]);
+    const [sidePanelOpen, setSidePanelOpen] = useState(false);
+    const [globalIncome, setGlobalIncome] = useState(0.00);
+    const [globalExpenses, setGlobalExpenses] = useState(0.00);
+    const [globalNet, setGlobalNet] = useState(0.00);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedFilter, setSelectedFilter] = useState(null);
+    const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
+    const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
+    const [isAdded, setIsAdded] = useState(false);
+    const sidePanelRef = useRef(null);
+
+
+
+    useEffect(() => {
+        fetchTransactions();
+    },[]);
+
+    const handleAddTransaction = async (newTransaction) => {
+        //console.log("New transaction:", newTransaction);
+        const tempId = Date.now();
+        setTransactions(prev => [...prev, {...newTransaction, id: tempId}]);
+        //setSidePanelOpen(false);
+
+        try {
+            const data = await Addtransaction(newTransaction);
+            setTransactions(prev => prev.map(t => t.id === tempId ? data : t));
+            setIsAdded(true);
+        } catch(error) {
+            setTransactions(prev => prev.filter(t => t.id !== tempId));
+            console.error("Failed to add transaction");
+        }
+    };
+
+    async function fetchTransactions() {
+        const data = await GetTransactions();
+        setTransactions(data);
+    }
+
+    const calculateGlobals = () => {
+        const totalIncome = data.reduce((sum, t) => (
+            t.type === "Income" ? sum + t.amount : sum
+        ), 0);
+
+        const totalExpenses = data.reduce((sum, t) => (
+            t.type === "Expenses" ? sum + t.amount : sum
+        ), 0);
+
+        const totalNet = totalIncome - totalExpenses;
+
+        set
+
+    }
+
+    
+
+
+
+    /*async function submitTransaction(newTransaction) {
+        try {
+            const result = await Addtransaction(newTransaction);
+            //setIsAdded(true);
+            console.log("Transaction added:", result);
+        } catch (error) {
+            console.error("Failed to add transaction: ",error);
+        }
+
+        return result;
+        
+    }*/
+
+    const filters = [
+        { name: 'Income', icon: '/assets/icons/incomeIcon.svg', count: 1 },
+        { name: 'Expense', icon: '/assets/icons/expenseIcon.svg', count: 1 },
+        { name: 'Transfer', icon: '/assets/icons/transferIcon.svg' },
+        { name: 'Loan', icon: '/assets/icons/loanIcon.svg' },
+        { name: 'Savings', icon: '/assets/icons/savingsIcon.svg' },
+        { name: 'Goal', icon: '/assets/icons/goalIcon.svg' }
+    ];
+
+    const chartData = [
+        { name: 'Tue', Income: 0, Expenses: 0 },
+        { name: 'Wed', Income: 0, Expenses: 0 },
+        { name: 'Thu', Income: 0, Expenses: 0 },
+        { name: 'Fri', Income: 0, Expenses: 0 },
+        { name: 'Sat', Income: 0, Expenses: 0 },
+        { name: 'Sun', Income: 0, Expenses: 120 },
+        { name: 'Mon', Income: 0, Expenses: 0 }
+    ];
+
+    // Get icon based on transaction type (main category)
+    const getCategoryIcon = (type) => {
+        const icons = {
+            'Income': '/assets/icons/trendingUpBlue.svg',
+            'Expense': '/assets/icons/trendingdownIcon.svg',
+            'Transfer': '/assets/icons/transferIconColored.svg',
+            'Loan': '/assets/icons/loanIconColored.svg',
+            'Savings': '/assets/icons/savingsIconColored.svg',
+            'Goal': '/assets/icons/goalIconColored.svg'
+        };
+        return icons[type] || '/assets/icons/trendingUpBlue.svg';
+    };
+
+    // Get background color based on transaction type (main category)
+    const getCategoryBgColor = (type) => {
+        const colors = {
+            'Income': '#E0F7FA',
+            'Expense': '#FFE8E0',
+            'Transfer': '#F3E5F5',
+            'Loan': '#E0F2F1',
+            'Savings': '#EDE7F6',
+            'Goal': '#FFF3E0'
+        };
+        return colors[type] || '#f0f9ff';
+    };
+
+    // Get icon color based on transaction type
+    const getCategoryIconColor = (type) => {
+        const colors = {
+            'Income': '#00BCD4',
+            'Expense': '#FF8042',
+            'Transfer': '#9333EA',
+            'Loan': '#00BCD4',
+            'Savings': '#9333EA',
+            'Goal': '#F59E0B'
+        };
+        return colors[type] || '#00BCD4';
+    };
+
+
+    return (
+        <>
+            {transactions.length === 0 ? (
+                <TransactionsEmptyState onAddClick={() => setSidePanelOpen(true)} />
+            ) : (
+                <div className={styles.transactionsContainer}>
+                    <div className={styles.transactionsContent}>
+                        {/* Header Section */}
+                        <section className={styles.headerSection}>
+                            <div>
+                                <h2 className={styles.mainTitle}>Transactions</h2>
+                                <p className={styles.description}>Track and manage your financial activity • Press <kbd>N</kbd> to add</p>
+                            </div>
+                            <div className={styles.buttonGroup}>
+                                <button
+                                    className={styles.getStartedButton}
+                                    onClick={() => setSidePanelOpen(true)}
+                                >
+                                    <Image
+                                        src='/assets/icons/plusWhite.svg'
+                                        width={20}
+                                        height={20}
+                                        alt='plus'
+                                    />
+                                    Add Transaction
+                                </button>
+                                <button className={styles.viewDemoButton}>
+                                    <Image
+                                        src='/assets/icons/export.svg'
+                                        width={20}
+                                        height={20}
+                                        alt='export'
+                                    />
+                                    Export
+                                </button>
+                            </div>
+                        </section>
+
+                        {/* Financial Summary Badges */}
+                        <section className={styles.financialSummary}>
+                            <div className={styles.summaryBadge}>
+                                <p className={styles.summaryLabel}>Income:</p>
+                                <span className={styles.summaryAmount}>${globalIncome}</span>
+                            </div>
+                            <div className={`${styles.summaryBadge} ${styles.expenseBadge}`}>
+                                <p className={styles.summaryLabel}>Expenses:</p>
+                                <span className={styles.summaryAmount}>${globalExpenses}</span>
+                            </div>
+                            <div className={`${styles.summaryBadge} ${styles.netBadge}`}>
+                                <p className={styles.summaryLabel}>Net:</p>
+                                <span className={styles.summaryAmount}>${globalNet}</span>
+                            </div>
+                        </section>
+
+                        {/* Two Column Layout */}
+                        <div className={styles.twoColumnLayout}>
+                            {/* Left Column */}
+                            <div className={styles.leftColumn}>
+                                {/* 7-Day Overview Chart */}
+                                <div className={styles.graphCard}>
+                                    <div className={styles.graphHeader}>
+                                        <Image
+                                            src='/assets/icons/trendingUpBlue.svg'
+                                            width={20}
+                                            height={20}
+                                            alt='trending'
+                                        />
+                                        <h3 className={styles.graphTitle}>7-Day Overview</h3>
+                                    </div>
+                                    <div className={styles.graphWrapper}>
+                                        <SevendayOverview data={chartData} />
+                                    </div>
+                                </div>
+
+                                {/* Search Bar */}
+                                <div className={styles.searchBar}>
+                                    <Image
+                                        src='/assets/icons/searchIcon.svg'
+                                        width={20}
+                                        height={20}
+                                        alt='search'
+                                    />
+                                    <input
+                                        type="text"
+                                        className={styles.searchInput}
+                                        placeholder="Search transactions by description or category..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                </div>
+
+                                {/* Filters Section */}
+                                <div className={styles.filtersSection}>
+                                    <p className={styles.filterLabel}>Quick filters</p>
+                                    <div className={styles.filterButtons}>
+                                        {filters.map((filter, index) => (
+                                            <button
+                                                key={index}
+                                                className={`${styles.filterBtn} ${selectedFilter === filter.name ? styles.filterBtnActive : ''}`}
+                                                onClick={() => setSelectedFilter(selectedFilter === filter.name ? null : filter.name)}
+                                            >
+                                                <Image
+                                                    src={filter.icon}
+                                                    width={16}
+                                                    height={16}
+                                                    alt={filter.name}
+                                                />
+                                                {filter.name}
+                                                {filter.count && (
+                                                    <span className={styles.filterCount}>{filter.count}</span>
+                                                )}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Sorting Bar */}
+                                <div className={styles.sortingBar}>
+                                    <div className={styles.statusDropdownWrapper}>
+                                        <button
+                                            className={styles.statusDropdown}
+                                            onClick={() => setStatusDropdownOpen(!statusDropdownOpen)}
+                                        >
+                                            <Image
+                                                src='/assets/icons/filterIcon.svg'
+                                                width={16}
+                                                height={16}
+                                                alt='filter'
+                                            />
+                                            All Status
+                                            <Image
+                                                src='/assets/icons/chevronDown.svg'
+                                                width={16}
+                                                height={16}
+                                                alt='chevron'
+                                            />
+                                        </button>
+                                        {statusDropdownOpen && (
+                                            <div className={styles.dropdownMenu}>
+                                                <button className={styles.dropdownItem}>All Status</button>
+                                                <button className={styles.dropdownItem}>Cleared</button>
+                                                <button className={styles.dropdownItem}>Pending</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className={styles.sortDropdownWrapper}>
+                                        <button
+                                            className={styles.sortButton}
+                                            onClick={() => setSortDropdownOpen(!sortDropdownOpen)}
+                                        >
+                                            Newest First
+                                            <Image
+                                                src='/assets/icons/chevronDown.svg'
+                                                width={16}
+                                                height={16}
+                                                alt='chevron'
+                                            />
+                                        </button>
+                                        {sortDropdownOpen && (
+                                            <div className={styles.dropdownMenu}>
+                                                <button className={styles.dropdownItem}>Newest First</button>
+                                                <button className={styles.dropdownItem}>Oldest First</button>
+                                                <button className={styles.dropdownItem}>Highest Amount</button>
+                                                <button className={styles.dropdownItem}>Lowest Amount</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Transactions List */}
+                                <div className={styles.transactionsList}>
+                                    {transactions.map((transaction) => (
+                                        <div key={transaction.id} className={styles.transactionCard}>
+                                            <div className={styles.transactionLeft}>
+                                                <div
+                                                    className={styles.transactionIcon}
+                                                    style={{ backgroundColor: getCategoryBgColor(transaction.type) }}
+                                                >
+                                                    <Image
+                                                        src={getCategoryIcon(transaction.type)}
+                                                        width={24}
+                                                        height={24}
+                                                        alt={`${transaction.type} icon`}
+                                                    />
+                                                </div>
+                                                <div className={styles.transactionInfo}>
+                                                    <h4 className={styles.transactionName}>{transaction.description}</h4>
+                                                    <p className={styles.transactionDetails}>
+                                                        {transaction.date} • {transaction.category}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className={styles.transactionRight}>
+                                                <h4 className={`${styles.transactionAmount} ${transaction.type === 'Income' ? styles.incomeAmount : styles.expenseAmount}`}>
+                                                    {transaction.type === 'Income' ? '+' : '-'}${transaction.amount}
+                                                </h4>
+                                            </div>
+                                            <div className={styles.transactionBottom}>
+                                                <p className={styles.accountLabel}>{transaction.account}</p>
+                                                <span className={styles.statusBadge}>{transaction.status}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Right Column */}
+                            <div className={styles.rightColumn}>
+                                {/* Net Balance Card */}
+                                <div className={styles.balanceCard}>
+                                    <p className={styles.balanceLabel}>Net Balance</p>
+                                    <h2 className={styles.balanceAmount}>${globalNet.toFixed(2)}</h2>
+                                    <div className={styles.cashFlowIndicator}>
+                                        <Image
+                                            src='/assets/icons/trendingUpArrow.svg'
+                                            width={16}
+                                            height={16}
+                                            alt='trending up'
+                                        />
+                                        <span className={styles.cashFlowText}>Positive flow</span>
+                                    </div>
+
+                                    {/* Cash Flow Breakdown */}
+                                    <div className={styles.cashFlowBreakdown}>
+                                        <div className={styles.breakdownHeader}>
+                                            <Image
+                                                src='/assets/icons/trendingupIcon.svg'
+                                                width={16}
+                                                height={16}
+                                                alt='activity'
+                                            />
+                                            <h4 className={styles.breakdownTitle}>Cash Flow Breakdown</h4>
+                                        </div>
+
+                                        <div className={styles.breakdownItem}>
+                                            <span className={styles.breakdownLabel}>Income</span>
+                                            <span className={styles.incomeText}>${globalIncome}</span>
+                                        </div>
+                                        <div className={styles.progressBarIncome}></div>
+
+                                        <div className={styles.breakdownItem}>
+                                            <span className={styles.breakdownLabel}>Expenses</span>
+                                            <span className={styles.expenseText}>${globalExpenses.toFixed(2)}</span>
+                                        </div>
+                                        <div className={styles.progressBarExpense}></div>
+                                    </div>
+
+                                    {/* Total Transactions */}
+                                    <div className={styles.totalTransactions}>
+                                        <span className={styles.totalLabel}>Total Transactions</span>
+                                        <span className={styles.totalNumber}>{transactions.length}</span>
+                                    </div>
+                                </div>
+
+                                {/* Quick Actions Card */}
+                                <div className={styles.quickActionsCard}>
+                                    <h3 className={styles.quickActionsTitle}>Quick Actions</h3>
+                                    <div className={styles.actionsList}>
+                                        <button
+                                            className={styles.actionButton}
+                                            onClick={() => setSidePanelOpen(true)}
+                                        >
+                                            <div className={styles.actionIconPurple}>
+                                                <span>+</span>
+                                            </div>
+                                            Add Transaction
+                                        </button>
+                                        <button className={styles.actionButton}>
+                                            <div className={styles.actionIconBlue}>
+                                                <span>↓</span>
+                                            </div>
+                                            Export CSV
+                                        </button>
+                                        <button className={styles.actionButton}>
+                                            <div className={styles.actionIconOrange}>
+                                                <span>↑</span>
+                                            </div>
+                                            Import CSV
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* See How Your Money Works Card */}
+                                <div className={styles.balanceCard} style={{ background: 'linear-gradient(135deg, #F5F3FF 0%, #FFF0F8 100%)' }}>
+                                    <div className={styles.breakdownHeader}>
+                                        <Image
+                                            src='/assets/icons/trendingupIcon.svg'
+                                            width={20}
+                                            height={20}
+                                            alt='insights'
+                                        />
+                                        <h4 className={styles.breakdownTitle}>See How Your Money Works for You</h4>
+                                    </div>
+                                    <p className={styles.smallerText} style={{ marginTop: '12px', lineHeight: '1.6' }}>
+                                        You've recorded all your transactions here — great job keeping your finances organized!
+                                        Head over to your Dashboard to see how your income, expenses, goals, and savings come together in real-time graphs and summaries.
+                                    </p>
+
+                                    {/* Quick snapshot */}
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', padding: '12px', background: 'white', borderRadius: '12px' }}>
+                                        <div>
+                                            <p className={styles.breakdownLabel} style={{ fontSize: '12px' }}>Quick snapshot this week</p>
+                                            <div style={{ display: 'flex', gap: '24px', marginTop: '8px' }}>
+                                                <div>
+                                                    <p style={{ fontSize: '12px', color: '#6b7280' }}>Spending:</p>
+                                                    <p style={{ fontSize: '14px', fontWeight: '600', color: '#FF8042' }}>$1,230</p>
+                                                </div>
+                                                <div>
+                                                    <p style={{ fontSize: '12px', color: '#6b7280' }}>Income:</p>
+                                                    <p style={{ fontSize: '14px', fontWeight: '600', color: '#38BDF8' }}>$1,800</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <Link href="/dashboard" style={{ textDecoration: 'none' }}>
+                                        <button className={styles.unlockButton} style={{ marginTop: '16px' }}>
+                                            Go to Dashboard
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M5 12h14"/>
+                                                <path d="m12 5 7 7-7 7"/>
+                                            </svg>
+                                        </button>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <TransactionsSidePannel
+                isOpen={sidePanelOpen}
+                onClose={() => {
+                    setSidePanelOpen(false);
+                    setIsAdded(false);
+                }}
+                onSubmit={handleAddTransaction}
+                transactionAdded={isAdded}
+            />
+        </>
+    );
+};
+
+export default Transactions;

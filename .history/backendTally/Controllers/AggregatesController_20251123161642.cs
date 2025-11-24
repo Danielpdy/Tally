@@ -1,0 +1,21 @@
+
+
+using backendTally.Data;
+using backendTally.Services;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
+
+namespace backendTally.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AggregatesController : ControllerBase
+    {
+        private readonly AggregateService
+
+        public class AggregatesController (TallyDbContext context)
+        {
+            _context = context
+        }
+    }
+}

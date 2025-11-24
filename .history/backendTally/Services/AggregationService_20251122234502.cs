@@ -1,0 +1,73 @@
+
+using backendTally.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+namespace backendTally.Services
+{
+    public class AggregateService
+    {
+        private readonly TallyDbContext _context;
+
+        public AggregateService( TallyDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task UpdateDailyAggregate(int userId, DateOnly date)
+        {
+            var aggregate = await _context.DailyAggregates
+                .FirstOrDefaultAsync(a => a.UserId == userId && a.Date == date);
+            
+            if (aggregate == null)
+            {
+                aggregate = new DailyAggregate
+                {
+                    UserId = userId,
+                    Date = date
+                };
+                _context.DailyAggregates.Add(aggregate);
+            }
+
+
+            var transactionsForDay = await _context.Transactions
+                .Where(t => t.UserId == userId && t.Date == date)
+                .ToListAsync();
+
+            aggregate.TotalEarnings = transactionsForDay
+                .Where(t => t.Type == "Income")
+                .Sum(t => (decimal)t.Amount);
+
+            aggregate.TotalSpendings = transactionsForDay
+                .Where(t => t.Type == "Expense")
+                .Sum(t => (decimal)t.Amount);
+
+            aggregate.NetAmount = aggregate.TotalEarnings - aggregate.TotalSpendings;
+
+            aggregate.TransactionCount = transactionsForDay.Count;
+
+            aggregate.LastUpdated = DateTime.UtcNow;
+
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<object>> GetWeeklySummary(int userId)
+        {
+            var startDate = endDate.AddDays(-6);
+
+            var aggregates = await _context.DailyAggregates
+                .Where(a => a.UserId == userId &&
+                    a.Date >= startDate &&
+                    a.Date <= endDate)
+                .OrderBy(a => a.Date)
+                .ToListAsync();
+
+            var result = new List<object>();
+
+            for (int i = 0; i < 7; i++)
+            {
+                var currentDate
+            }
+        }
+    }
+}
