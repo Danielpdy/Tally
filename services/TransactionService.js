@@ -1,11 +1,19 @@
-import Transactions from "@app/components/transactions/Transactions";
 import { apiRequest } from "@lib/httpClient";
+import { headers } from "@node_modules/next/headers";
 
-export const Addtransaction = (transaction) => {
+export const Addtransaction = (transaction, accessToken) => {
+
     return apiRequest("/transactions", {
+        headers : {
+            "Authorization": `Bearer ${accessToken}`
+        },
         method: "POST",
         body: JSON.stringify(transaction)
     })
 }
 
-export const GetTransactions = () => apiRequest("/transactions");
+export const GetTransactions = (accessToken) => apiRequest("/transactions", {
+    headers: {
+        "Authorization": `Bearer ${accessToken}`
+    }
+});

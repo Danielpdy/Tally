@@ -47,7 +47,13 @@ export const {
           return null;
         }
 
-        return user;
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            accessToken: user.token,
+          }
+
         } catch (err) {
           console.error("Authorize error:", err);
           console.error("Error details:", err.response?.data); 
@@ -58,7 +64,10 @@ export const {
     }),
 
   ],
-  session: { strategy: "jwt" },
+  session: {  
+    strategy: "jwt" ,
+    maxAge: 60 * 60,
+  },
 
   callbacks: {
     async redirect({ url, baseUrl}) {
@@ -69,6 +78,24 @@ export const {
         if (u.origin === baseUrl) return url;
       } catch {}
         return baseUrl;
+    },
+
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+        token.email = user.email
+        token.name = user.name
+        token.accessToken = user.accessToken
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      session.user.id = token.id
+      session.user.email = token.email
+      session.user.name = token.name
+      session.accessToken = token.accessToken
+      return session
     },
   },
 });

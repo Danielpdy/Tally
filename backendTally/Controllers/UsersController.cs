@@ -5,6 +5,7 @@ using backendTally.Data;
 using backendTally.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using backendTally.Services;
 
 namespace backendTally.Controllers
 {
@@ -13,9 +14,11 @@ namespace backendTally.Controllers
     public class UsersController : ControllerBase
     {
         private readonly TallyDbContext _context;
-        public UsersController(TallyDbContext context)
+        private readonly JwtService _jwtService;
+        public UsersController(TallyDbContext context, JwtService jwtService)
         {
             _context = context;
+            _jwtService = jwtService;
         }
 
         [HttpGet]
@@ -94,15 +97,17 @@ namespace backendTally.Controllers
             }
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
-            if (user is null) return Unauthorized("Invalid email or password is null");
+            if (user is null) return Unauthorized("Invalid email or password");
 
             bool valid = BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash);
             if (!valid) return Unauthorized("Invalid email or password");
 
+            var token = _jwtService.GenerateToken(user);
+
             return Ok(new
             {
                 message = "Login succesful",
-                user = new { user.Id, user.Email, user.Name }
+                user = new { user.Id, user.Email, user.Name, token }
             });
         }
 

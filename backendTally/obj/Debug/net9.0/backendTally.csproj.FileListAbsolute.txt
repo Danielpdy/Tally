@@ -262,3 +262,11 @@ C:\Users\daten\Tally\backendTally\obj\Debug\net9.0\backendT.E59DAF64.Up2Date
 C:\Users\daten\Tally\backendTally\obj\Debug\net9.0\backendTally.genruntimeconfig.cache
 C:\Users\daten\Tally\backendTally\obj\Debug\net9.0\ref\backendTally.dll
 C:\Users\daten\OneDrive\Tally\backendTally\bin\Debug\net9.0\BCrypt.Net-Next.dll
+C:\Users\daten\Tally\backendTally\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\daten\Tally\backendTally\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\daten\Tally\backendTally\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\daten\Tally\backendTally\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\daten\Tally\backendTally\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\daten\Tally\backendTally\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\daten\Tally\backendTally\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\daten\Tally\backendTally\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll

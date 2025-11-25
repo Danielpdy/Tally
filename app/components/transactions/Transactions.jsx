@@ -7,6 +7,8 @@ import TransactionsEmptyState from './TransactionsEmptyState';
 import TransactionsSidePannel from './TransactionsSidePannel';
 import SevendayOverview from '../SevendayOverview';
 import { Addtransaction, GetTransactions, TransactionService } from '@services/TransactionService';
+import { useSession } from '@node_modules/next-auth/react';
+import { GetWeeklySummary } from '@services/AggregationService';
 
 const Transactions = () => {
     const [transactions, setTransactions] = useState([]);
@@ -16,13 +18,16 @@ const Transactions = () => {
     const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
     const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
     const [isAdded, setIsAdded] = useState(false);
+    const [weeklyOverview, setWeeklyOverview] = useState();
     const sidePanelRef = useRef(null);
+    const { data: session } = useSession();
 
 
 
     useEffect(() => {
         fetchTransactions();
-    },[]);
+        getChartData();
+    },[session]);
 
     const handleAddTransaction = async (newTransaction) => {
         //console.log("New transaction:", newTransaction);
@@ -31,7 +36,7 @@ const Transactions = () => {
         //setSidePanelOpen(false);
 
         try {
-            const data = await Addtransaction(newTransaction);
+            const data = await Addtransaction(newTransaction, session.accessToken);
             setTransactions(prev => prev.map(t => t.id === tempId ? data : t));
             setIsAdded(true);
         } catch(error) {
@@ -42,7 +47,7 @@ const Transactions = () => {
     };
 
     async function fetchTransactions() {
-        const data = await GetTransactions();
+        const data = await GetTransactions(session.accessToken);
         setTransactions(data);
     }
 
@@ -107,15 +112,10 @@ const Transactions = () => {
         { name: 'Goal', icon: '/assets/icons/goalIcon.svg' }
     ];
 
-    const chartData = [
-        { name: 'Tue', Income: 0, Expenses: 0 },
-        { name: 'Wed', Income: 0, Expenses: 0 },
-        { name: 'Thu', Income: 0, Expenses: 0 },
-        { name: 'Fri', Income: 0, Expenses: 0 },
-        { name: 'Sat', Income: 0, Expenses: 0 },
-        { name: 'Sun', Income: 0, Expenses: 120 },
-        { name: 'Mon', Income: 0, Expenses: 0 }
-    ];
+    const getChartData = async () => {
+        const data = await GetWeeklySummary(session.accessToken);
+        setWeeklyOverview(data);
+    }
 
     // Get icon based on transaction type (main category)
     const getCategoryIcon = (type) => {

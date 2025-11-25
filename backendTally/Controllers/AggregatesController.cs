@@ -1,5 +1,6 @@
 
 
+using System.Security.Claims;
 using backendTally.Data;
 using backendTally.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,9 +21,16 @@ namespace backendTally.Controllers
         [HttpGet("weekly-summary")]
         public async Task<ActionResult<List<object>>> GetWeeklySummary()
         {
-            int userId = 1;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var summary = await _aggregateService.GetWeeklySummary(userId)             ;
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+            
+            var authenticatedUserId = int.Parse(userIdClaim);
+
+            var summary = await _aggregateService.GetWeeklySummary(authenticatedUserId)             ;
 
             return Ok(summary);
         }
