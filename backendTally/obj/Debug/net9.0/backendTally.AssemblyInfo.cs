@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("backendTally")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+01c7fcee60fc46e75a00ae25c1e20c7186c57339")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+79a403714b1777013cc8cdf12aa9edbea517d7f7")]
 [assembly: System.Reflection.AssemblyProductAttribute("backendTally")]
 [assembly: System.Reflection.AssemblyTitleAttribute("backendTally")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
