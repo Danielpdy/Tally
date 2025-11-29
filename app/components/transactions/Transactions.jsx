@@ -21,6 +21,9 @@ const Transactions = () => {
     const [isAdded, setIsAdded] = useState(false);
     const [weeklyOverview, setWeeklyOverview] = useState();
     const sidePanelRef = useRef(null);
+    const [dateFilter, setDateFilter] = useState(null);
+    const [statusFilter, setStatusFilter] = useState(null);
+    const [amountFilter, setAmountFilter] = useState(null);
     const { data: session } = useSession();
 
 
@@ -30,11 +33,10 @@ const Transactions = () => {
         getChartData();
     },[]);
 
+
     const handleAddTransaction = async (newTransaction) => {
-        //console.log("New transaction:", newTransaction);
         const tempId = Date.now();
         setTransactions(prev => [...prev, {...newTransaction, id: tempId}]);
-        //setSidePanelOpen(false);
 
         try {
             const data = await Addtransaction(newTransaction, session.accessToken);
@@ -71,6 +73,11 @@ const Transactions = () => {
         }
     }, [transactions]);
 
+    const weeklySafeToSpend = {
+        amount: 450.00,  // Hardcoded for now
+        isPositive: true
+    };
+
     /*function calculateGlobals (data) {
         const totalIncome = data.reduce((sum, t) => (
             t.type === "Income" ? sum + t.amount : sum
@@ -86,10 +93,6 @@ const Transactions = () => {
         setGlobalExpenses(totalExpenses);
         setGlobalNet(totalNet);
     }*/
-
-    
-
-
 
     /*async function submitTransaction(newTransaction) {
         try {
@@ -112,20 +115,98 @@ const Transactions = () => {
     }, [transactions]);
 
     const filters = [
-        { name: 'Income', icon: '/assets/icons/incomeIcon.svg', count: filterCount['Income'] || 0 },
-        { name: 'Expense', icon: '/assets/icons/expenseIcon.svg', count: filterCount['Expense'] || 0 },
-        { name: 'Transfer', icon: '/assets/icons/transferIcon.svg', count: filterCount['Transfer'] || 0 },
-        { name: 'Loan', icon: '/assets/icons/loanIcon.svg', count: filterCount['Loan'] || 0 },
-        { name: 'Savings', icon: '/assets/icons/savingsIcon.svg', count: filterCount['Savings'] || 0 },
-        { name: 'Goal', icon: '/assets/icons/goalIcon.svg', count: filterCount['Goal'] || 0 }
+        { name: 'Income', icon: '/assets/icons/incomeIcon.svg', count: filterCount['Income']},
+        { name: 'Expense', icon: '/assets/icons/expenseIcon.svg', count: filterCount['Expense']},
+        { name: 'Transfer', icon: '/assets/icons/transferIcon.svg', count: filterCount['Transfer']},
+        { name: 'Loan', icon: '/assets/icons/loanIcon.svg', count: filterCount['Loan']},
+        { name: 'Savings', icon: '/assets/icons/savingsIcon.svg', count: filterCount['Savings']},
+        { name: 'Goal', icon: '/assets/icons/goalIcon.svg', count: filterCount['Goal']}
     ];
 
     const getChartData = async () => {
         const response = await GetWeeklySummary(session.accessToken);
         setWeeklyOverview(response);
+    };
+
+    const filterBySearch = () => {
+        if (!searchQuery) return transactions;
+
+        const query = searchQuery.toLowerCase();
+
+        return transactions.filter(t => t.description.toLowerCase().includes(query)
+        || t.category.toLowerCase().includes(query));
     }
 
+    const filterByButton = () => {
+        return transactions.filter(t => t.type === selectedFilter)
+    };
 
+    const filterByDate = () => {
+        if (!dateFilter) return transactions;
+
+        const copy = [...transactions];
+
+        return copy.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+
+            if (dateFilter === 'newest'){
+                return dateB - dateA;
+            }
+
+            if (dateFilter === 'oldest'){
+                return dateA - dateB;
+            }
+        })
+    };
+
+    const filterByAmount = () => {
+        if (!amountFilter) return transactions;
+
+        const copy = [...transactions];
+
+        return copy.sort((a, b) => {
+            if (amountFilter === 'lowest'){
+                return a.amount - b.amount;
+            }
+
+            if (amountFilter === 'highest'){
+                return b.amount - a.amount;
+            }
+        })
+    }
+
+    const filterByStatus = () => {
+        if (!statusFilter) return transactions;
+
+        return transactions.filter(t => t.status === statusFilter);
+    }
+
+    const filteredTransactions = useMemo(() => {
+        if (searchQuery) return filterBySearch();
+
+        if (selectedFilter) return filterByButton();
+
+        if (dateFilter) return filterByDate();
+
+        if (statusFilter) return filterByStatus();
+
+        if(amountFilter) return filterByAmount();
+
+        return transactions;
+    }, [transactions, selectedFilter, searchQuery, dateFilter, statusFilter, amountFilter]);
+
+    const clearButtonFilters = () => {
+        setSelectedFilter(null);
+        setDateFilter(null);
+        setStatusFilter(null);
+        setSearchQuery(null);
+        setAmountFilter(null);
+    };
+
+    const filterButton = useMemo(() => {
+        if (!setSelectedFilter) return transactions;
+    })
     // Get icon based on transaction type (main category)
     const getCategoryIcon = (type) => {
         const icons = {
@@ -259,13 +340,25 @@ const Transactions = () => {
 
                                 {/* Filters Section */}
                                 <div className={styles.filtersSection}>
-                                    <p className={styles.filterLabel}>Quick filters</p>
+                                    <div className={styles.filterHeader}>
+                                        <p className={styles.filterLabel}>Quick filters</p>
+                                        {(selectedFilter || dateFilter || statusFilter || searchQuery || amountFilter) && (
+                                            <button className={styles.clearFiltersBtn}
+                                                onClick={() => clearButtonFilters()}
+                                            >
+                                                Clear filters
+                                            </button>
+                                        )}
+                                    </div>
                                     <div className={styles.filterButtons}>
                                         {filters.map((filter, index) => (
                                             <button
                                                 key={index}
                                                 className={`${styles.filterBtn} ${selectedFilter === filter.name ? styles.filterBtnActive : ''}`}
-                                                onClick={() => setSelectedFilter(selectedFilter === filter.name ? null : filter.name)}
+                                                onClick={() => {
+                                                    setSelectedFilter(selectedFilter === filter.name ? null : filter.name);
+                                                    //setFilterClicked(true);
+                                                }}
                                             >
                                                 <Image
                                                     src={filter.icon}
@@ -305,9 +398,19 @@ const Transactions = () => {
                                         </button>
                                         {statusDropdownOpen && (
                                             <div className={styles.dropdownMenu}>
-                                                <button className={styles.dropdownItem}>All Status</button>
-                                                <button className={styles.dropdownItem}>Cleared</button>
-                                                <button className={styles.dropdownItem}>Pending</button>
+                                                <button className={styles.dropdownItem}
+                                                    onClick={() => {
+                                                        setStatusFilter('Clear');
+                                                        setStatusDropdownOpen(false);
+                                                    }}
+                                                >Cleared</button>
+
+                                                <button className={styles.dropdownItem}
+                                                    onClick={() => {
+                                                        setStatusFilter('Pending');
+                                                        setStatusDropdownOpen(false);
+                                                    }}
+                                                >Pending</button>
                                             </div>
                                         )}
                                     </div>
@@ -316,7 +419,7 @@ const Transactions = () => {
                                             className={styles.sortButton}
                                             onClick={() => setSortDropdownOpen(!sortDropdownOpen)}
                                         >
-                                            Newest First
+                                            Order By
                                             <Image
                                                 src='/assets/icons/chevronDown.svg'
                                                 width={16}
@@ -326,10 +429,33 @@ const Transactions = () => {
                                         </button>
                                         {sortDropdownOpen && (
                                             <div className={styles.dropdownMenu}>
-                                                <button className={styles.dropdownItem}>Newest First</button>
-                                                <button className={styles.dropdownItem}>Oldest First</button>
-                                                <button className={styles.dropdownItem}>Highest Amount</button>
-                                                <button className={styles.dropdownItem}>Lowest Amount</button>
+                                                <button className={styles.dropdownItem}
+                                                    onClick={() => {
+                                                        setDateFilter('newest');
+                                                        setSortDropdownOpen(false);
+                                                    }}
+                                                >Newest First</button>
+
+                                                <button className={styles.dropdownItem}
+                                                    onClick={() => {
+                                                        setDateFilter('oldest');
+                                                        setSortDropdownOpen(false);
+                                                    }}
+                                                >Oldest First</button>
+
+                                                <button className={styles.dropdownItem}
+                                                    onClick={() => {
+                                                        setAmountFilter('highest');
+                                                        setSortDropdownOpen(false);
+                                                    }}
+                                                >Highest Amount</button>
+
+                                                <button className={styles.dropdownItem}
+                                                    onClick={() => {
+                                                        setAmountFilter('lowest');
+                                                        setSortDropdownOpen(false);
+                                                    }}
+                                                >Lowest Amount</button>
                                             </div>
                                         )}
                                     </div>
@@ -337,7 +463,7 @@ const Transactions = () => {
 
                                 {/* Transactions List */}
                                 <div className={styles.transactionsList}>
-                                    {transactions.map((transaction) => (
+                                    {filteredTransactions.map((transaction) => (
                                         <div key={transaction.id} className={styles.transactionCard}>
                                             <div className={styles.transactionLeft}>
                                                 <div
@@ -396,13 +522,6 @@ const Transactions = () => {
                                     {/* Cash Flow Analysis */}
                                     <div className={styles.cashFlowBreakdown}>
                                         <div className={styles.breakdownHeader}>
-                                            <Image
-                                                src='/assets/icons/trendingupIcon.svg'
-                                                width={16}
-                                                height={16}
-                                                alt='activity'
-                                                style={{ filter: 'brightness(0) saturate(100%) invert(58%) sepia(94%) saturate(451%) hue-rotate(76deg) brightness(95%) contrast(92%)' }}
-                                            />
                                             <h4 className={styles.breakdownTitle}>Cash Flow Analysis</h4>
                                         </div>
 
@@ -425,6 +544,27 @@ const Transactions = () => {
                                             <div className={styles.savingsAmountSection}>
                                                 <p className={styles.savingsAmountLabel}>You're saving</p>
                                                 <p className={styles.savingsAmountValue}>${globalNet > 0 ? globalNet : 0}</p>
+                                            </div>
+                                        </div>
+
+                                        {/* Safe to Spend Box */}
+                                        <div className={`${styles.safeToSpendBox} ${!weeklySafeToSpend.isPositive ? styles.safeToSpendWarning : ''}`}>
+                                            <div className={styles.safeToSpendIconCircle}>
+                                                <Image
+                                                    src='/assets/icons/walletIcon.svg'
+                                                    width={24}
+                                                    height={24}
+                                                    alt='safe to spend'
+                                                />
+                                            </div>
+                                            <div className={styles.safeToSpendContent}>
+                                                <p className={styles.safeToSpendLabel}>Safe to Spend This Week</p>
+                                                <h3 className={styles.safeToSpendAmount}>
+                                                    ${Math.abs(weeklySafeToSpend.amount).toFixed(2)}
+                                                </h3>
+                                                <p className={styles.safeToSpendSubtext}>
+                                                    Based on this week's cash flow
+                                                </p>
                                             </div>
                                         </div>
 
@@ -483,18 +623,19 @@ const Transactions = () => {
                                             </div>
                                             Add Transaction
                                         </button>
-                                        <button className={styles.actionButton}>
-                                            <div className={styles.actionIconBlue}>
-                                                <span>↓</span>
-                                            </div>
-                                            Export CSV
-                                        </button>
-                                        <button className={styles.actionButton}>
-                                            <div className={styles.actionIconOrange}>
-                                                <span>↑</span>
-                                            </div>
-                                            Import CSV
-                                        </button>
+                                        <Link href="/budget" style={{ textDecoration: 'none', display: 'block' }}>
+                                            <button className={styles.actionButton} style={{ width: '100%' }}>
+                                                <div className={styles.actionIconBlue}>
+                                                    <Image
+                                                        src='/assets/icons/clipboardIcon.svg'
+                                                        width={20}
+                                                        height={20}
+                                                        alt='manage bills'
+                                                    />
+                                                </div>
+                                                Manage Bills & Budget
+                                            </button>
+                                        </Link>
                                     </div>
                                 </div>
 

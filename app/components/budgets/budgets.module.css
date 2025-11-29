@@ -1,0 +1,418 @@
+/* Budget Page Container */
+.budgetPage {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+/* Page Header */
+.pageHeader {
+    margin-bottom: 32px;
+}
+
+.pageHeader h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: 8px;
+}
+
+.pageHeader p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6B7280;
+}
+
+/* Card Header (reusable) */
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.cardHeader h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.headerIconCircle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Safe to Spend Card */
+.safeToSpendCard {
+    background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+    border: 1px solid #BAE6FD;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.breakdownList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.breakdownItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+}
+
+.breakdownIconCircle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(56, 189, 248, 0.15);
+    flex-shrink: 0;
+}
+
+.breakdownIconCircle img {
+    filter: brightness(0) saturate(100%) invert(57%) sepia(89%) saturate(1820%) hue-rotate(173deg) brightness(100%) contrast(98%);
+}
+
+.breakdownContent {
+    flex: 1;
+}
+
+.breakdownLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1F2937;
+    margin-bottom: 2px;
+}
+
+.breakdownSubtext {
+    font-size: 11px;
+    color: #6B7280;
+}
+
+.breakdownAmount {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.breakdownDivider {
+    height: 1px;
+    background: #BAE6FD;
+    margin: 16px 0;
+}
+
+.safeToSpendResult {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 8px;
+}
+
+.resultLabel p:first-child {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 2px;
+}
+
+.resultFormula {
+    font-size: 11px;
+    color: #6B7280;
+}
+
+.resultAmount {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Recurring Bills Card */
+.recurringBillsCard {
+    background: linear-gradient(135deg, #F5F3FF 0%, #FFF0F8 100%);
+    border: 1px solid #E9D5FF;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.recurringBillsCard .headerIconCircle {
+    background: rgba(168, 85, 247, 0.15);
+}
+
+.recurringBillsCard .headerIconCircle img {
+    filter: brightness(0) saturate(100%) invert(47%) sepia(85%) saturate(3058%) hue-rotate(256deg) brightness(97%) contrast(96%);
+}
+
+.addBillButton {
+    width: 100%;
+    padding: 12px;
+    background: #A855F7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    transition: background 0.2s;
+}
+
+.addBillButton:hover {
+    background: #9333EA;
+}
+
+.addBillButton span {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.billSectionHeader {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+    margin: 16px 0 8px 0;
+}
+
+.billsList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.billItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+}
+
+.billIconCircle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(168, 85, 247, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.billIconCircle img {
+    filter: brightness(0) saturate(100%) invert(47%) sepia(85%) saturate(3058%) hue-rotate(256deg) brightness(97%) contrast(96%);
+}
+
+.billInfo {
+    flex: 1;
+}
+
+.billName {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 2px;
+}
+
+.billMeta {
+    font-size: 12px;
+    color: #6B7280;
+}
+
+.billAmount {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1F2937;
+    margin-right: 8px;
+}
+
+.billActions {
+    display: flex;
+    gap: 8px;
+}
+
+.editButton,
+.deleteButton {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #E5E7EB;
+    background: white;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.editButton img {
+    filter: brightness(0) saturate(100%) invert(47%) sepia(85%) saturate(3058%) hue-rotate(256deg) brightness(97%) contrast(96%);
+}
+
+.editButton:hover {
+    background: #F3F4F6;
+}
+
+.deleteButton {
+    color: #DC2626;
+    border-color: #FCA5A5;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.deleteButton:hover {
+    background: #FEE2E2;
+}
+
+/* Budget Settings Card */
+.budgetSettingsCard {
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.budgetSettingsCard .headerIconCircle {
+    background: rgba(107, 114, 128, 0.1);
+}
+
+.settingsForm {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.settingGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.settingLabel {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.settingHint {
+    font-size: 12px;
+    font-weight: 400;
+    color: #6B7280;
+}
+
+.sliderContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.slider {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: #E5E7EB;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #38BDF8;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #38BDF8;
+    cursor: pointer;
+    border: none;
+}
+
+.sliderValue {
+    font-size: 16px;
+    font-weight: 600;
+    color: #38BDF8;
+    min-width: 45px;
+    text-align: right;
+}
+
+.budgetInput {
+    padding: 10px 12px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.budgetInput:focus {
+    outline: none;
+    border-color: #38BDF8;
+}
+
+.saveButton {
+    padding: 12px;
+    background: #38BDF8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.saveButton:hover {
+    background: #0EA5E9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .budgetPage {
+        padding: 12px;
+    }
+
+    .pageHeader h1 {
+        font-size: 20px;
+    }
+
+    .cardHeader h2 {
+        font-size: 16px;
+    }
+
+    .breakdownItem {
+        flex-wrap: wrap;
+    }
+
+    .billItem {
+        flex-wrap: wrap;
+    }
+}
