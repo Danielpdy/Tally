@@ -78,35 +78,6 @@ const Transactions = () => {
         isPositive: true
     };
 
-    /*function calculateGlobals (data) {
-        const totalIncome = data.reduce((sum, t) => (
-            t.type === "Income" ? sum + t.amount : sum
-        ), 0);
-
-        const totalExpenses = data.reduce((sum, t) => (
-            t.type === "Expense" ? sum + t.amount : sum
-        ), 0);
-
-        const totalNet = totalIncome - totalExpenses;
-
-        setGlobalIncome(totalIncome);
-        setGlobalExpenses(totalExpenses);
-        setGlobalNet(totalNet);
-    }*/
-
-    /*async function submitTransaction(newTransaction) {
-        try {
-            const result = await Addtransaction(newTransaction);
-            //setIsAdded(true);
-            console.log("Transaction added:", result);
-        } catch (error) {
-            console.error("Failed to add transaction: ",error);
-        }
-
-        return result;
-        
-    }*/
-
     const filterCount = useMemo(() => {
         return transactions.reduce((sum, transaction) => {
             sum[transaction.type] = (sum[transaction.type] || 0) + 1;
@@ -128,7 +99,7 @@ const Transactions = () => {
         setWeeklyOverview(response);
     };
 
-    const filterBySearch = () => {
+    /*const filterBySearch = () => {
         if (!searchQuery) return transactions;
 
         const query = searchQuery.toLowerCase();
@@ -180,10 +151,52 @@ const Transactions = () => {
         if (!statusFilter) return transactions;
 
         return transactions.filter(t => t.status === statusFilter);
-    }
+    }*/
 
     const filteredTransactions = useMemo(() => {
-        if (searchQuery) return filterBySearch();
+
+        let result = [...transactions];
+
+        if(searchQuery){
+
+            const query = searchQuery.toLocaleLowerCase();
+
+            result = result.filter(t => t.description.toLowerCase().includes(query)
+            || t.category.toLocaleLowerCase().includes(query));
+        }
+
+        if(selectedFilter){
+            result = result.filter(t => t.type === selectedFilter);
+        }
+
+        if(dateFilter){
+            result.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+
+                return dateFilter === 'newest' ? dateB - dateA : dateA - dateB;
+            })
+        }
+
+        if(statusFilter){
+            result = result.filter(t => t.status === statusFilter);
+        }
+
+        if(amountFilter){
+            result.sort((a, b) => {
+                return amountFilter === 'lowest' ? a.amount - b.amount : b.amount - a.amount;
+            })
+        }
+
+        return result;
+        
+        
+        
+        
+        
+        
+        
+        /*if (searchQuery) return filterBySearch();
 
         if (selectedFilter) return filterByButton();
 
@@ -193,7 +206,7 @@ const Transactions = () => {
 
         if(amountFilter) return filterByAmount();
 
-        return transactions;
+        return transactions;*/
     }, [transactions, selectedFilter, searchQuery, dateFilter, statusFilter, amountFilter]);
 
     const clearButtonFilters = () => {
@@ -204,9 +217,9 @@ const Transactions = () => {
         setAmountFilter(null);
     };
 
-    const filterButton = useMemo(() => {
+    /*const filterButton = useMemo(() => {
         if (!setSelectedFilter) return transactions;
-    })
+    })*/
     // Get icon based on transaction type (main category)
     const getCategoryIcon = (type) => {
         const icons = {
