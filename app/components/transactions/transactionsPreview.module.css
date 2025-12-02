@@ -558,6 +558,64 @@
   background-color: #9ca3af;
 }
 
+/* No Results Container */
+.noResultsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  background: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%);
+  border: 1px dashed #d1d5db;
+  border-radius: 16px;
+  text-align: center;
+  gap: 16px;
+}
+
+.noResultsIcon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.noResultsTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.noResultsText {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+.clearFiltersButton {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #FF8042 0%, #FF6B42 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.clearFiltersButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 128, 66, 0.4);
+}
+
 /* Transaction Card */
 .transactionCard {
   display: grid;

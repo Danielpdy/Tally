@@ -476,38 +476,63 @@ const Transactions = () => {
 
                                 {/* Transactions List */}
                                 <div className={styles.transactionsList}>
-                                    {filteredTransactions.map((transaction) => (
-                                        <div key={transaction.id} className={styles.transactionCard}>
-                                            <div className={styles.transactionLeft}>
-                                                <div
-                                                    className={styles.transactionIcon}
-                                                    style={{ backgroundColor: getCategoryBgColor(transaction.type) }}
+                                    {filteredTransactions.length === 0 ? (
+                                        <div className={styles.noResultsContainer}>
+                                            <div className={styles.noResultsIcon}>
+                                                <Image
+                                                    src='/assets/icons/searchIcon.svg'
+                                                    width={32}
+                                                    height={32}
+                                                    alt='no results'
+                                                />
+                                            </div>
+                                            <h3 className={styles.noResultsTitle}>No transactions found</h3>
+                                            <p className={styles.noResultsText}>
+                                                We couldn't find any transactions matching your current filters. Try adjusting your search criteria or clear the filters to see all transactions.
+                                            </p>
+                                            {(selectedFilter || dateFilter || statusFilter || searchQuery || amountFilter) && (
+                                                <button
+                                                    className={styles.clearFiltersButton}
+                                                    onClick={() => clearButtonFilters()}
                                                 >
-                                                    <Image
-                                                        src={getCategoryIcon(transaction.type)}
-                                                        width={24}
-                                                        height={24}
-                                                        alt={`${transaction.type} icon`}
-                                                    />
-                                                </div>
-                                                <div className={styles.transactionInfo}>
-                                                    <h4 className={styles.transactionName}>{transaction.description}</h4>
-                                                    <p className={styles.transactionDetails}>
-                                                        {transaction.date} • {transaction.category}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className={styles.transactionRight}>
-                                                <h4 className={`${styles.transactionAmount} ${transaction.type === 'Income' ? styles.incomeAmount : styles.expenseAmount}`}>
-                                                    {transaction.type === 'Income' ? '+' : '-'}${transaction.amount}
-                                                </h4>
-                                            </div>
-                                            <div className={styles.transactionBottom}>
-                                                <p className={styles.accountLabel}>{transaction.account}</p>
-                                                <span className={styles.statusBadge}>{transaction.status}</span>
-                                            </div>
+                                                    Clear all filters
+                                                </button>
+                                            )}
                                         </div>
-                                    ))}
+                                    ) : (
+                                        filteredTransactions.map((transaction) => (
+                                            <div key={transaction.id} className={styles.transactionCard}>
+                                                <div className={styles.transactionLeft}>
+                                                    <div
+                                                        className={styles.transactionIcon}
+                                                        style={{ backgroundColor: getCategoryBgColor(transaction.type) }}
+                                                    >
+                                                        <Image
+                                                            src={getCategoryIcon(transaction.type)}
+                                                            width={24}
+                                                            height={24}
+                                                            alt={`${transaction.type} icon`}
+                                                        />
+                                                    </div>
+                                                    <div className={styles.transactionInfo}>
+                                                        <h4 className={styles.transactionName}>{transaction.description}</h4>
+                                                        <p className={styles.transactionDetails}>
+                                                            {transaction.date} • {transaction.category}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className={styles.transactionRight}>
+                                                    <h4 className={`${styles.transactionAmount} ${transaction.type === 'Income' ? styles.incomeAmount : styles.expenseAmount}`}>
+                                                        {transaction.type === 'Income' ? '+' : '-'}${transaction.amount}
+                                                    </h4>
+                                                </div>
+                                                <div className={styles.transactionBottom}>
+                                                    <p className={styles.accountLabel}>{transaction.account}</p>
+                                                    <span className={styles.statusBadge}>{transaction.status}</span>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
                                 </div>
                             </div>
 

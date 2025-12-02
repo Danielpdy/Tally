@@ -549,7 +549,111 @@ function calculateNextDueDate(currentDueDate, frequency) {
 
 ---
 
-## 📝 Implementation Steps
+## 📝 Implementation Steps - Quick Reference
+
+### Phase 1: Backend Setup (C# .NET)
+
+**Step 1: Database Models**
+- Create `RecurringBill.cs` model with fields: Description, Amount, Category, Type, Frequency, NextDueDate, Account, Status, IsActive
+- Create `BudgetSettings.cs` model with fields: MonthlyBudget, WeeklyBudget, SafetyBufferPercentage
+- Update `Transaction.cs` model - add `RecurringBillId` field (nullable integer)
+
+**Step 2: Database Context**
+- Add `DbSet<RecurringBill>` and `DbSet<BudgetSettings>` to ApplicationDbContext
+- Configure indexes on UserId and NextDueDate for RecurringBill
+- Configure unique index on UserId for BudgetSettings
+
+**Step 3: Database Migration**
+- Run command: `dotnet ef migrations add AddRecurringBillsAndBudgetSettings`
+- Run command: `dotnet ef database update`
+
+**Step 4: Create Services**
+- **RecurringBillService**: Methods for GetUserRecurringBills, CreateRecurringBill, UpdateRecurringBill, DeleteRecurringBill (soft delete), GenerateDueBills
+- **BudgetCalculationService**: Methods for CalculateWeeklySafeToSpend, CalculateFourWeekSummary
+
+**Step 5: Create DTOs (for calculated data only)**
+- Create `WeeklySafeToSpendDto` with calculated fields
+- Create `FourWeekSummaryDto` and `WeekSummary` for aggregated data
+- Note: RecurringBill and BudgetSettings return models directly (no DTOs needed)
+
+**Step 6: Create Controllers**
+- **RecurringBillsController**: Endpoints for GET, POST, PUT, DELETE bills + POST generate-due
+- **BudgetController**: Endpoints for GET safe-to-spend and GET four-week-summary
+- Add [Authorize] attribute to all controllers
+
+**Step 7: Register Services**
+- Add services to dependency injection in Program.cs: `AddScoped<RecurringBillService>()` and `AddScoped<BudgetCalculationService>()`
+
+---
+
+### Phase 2: Frontend Setup (React/Next.js)
+
+**Step 1: Create Service Layer**
+- Create `RecurringBillService.js` with functions: GetRecurringBills, CreateRecurringBill, UpdateRecurringBill, DeleteRecurringBill, GenerateDueBills
+- Create `BudgetService.js` with functions: GetSafeToSpend, GetFourWeekSummary
+
+**Step 2: Update Transactions Page**
+- Add state for `safeToSpend` data
+- Add `fetchSafeToSpend()` function to load data from API
+- Add `generateDueBills()` function to auto-generate due bills on page load
+- Add "Safe to Spend This Week" box in Cash Flow Analysis section
+- Update Quick Actions - replace CSV buttons with "Manage Bills & Budget" button linking to /budget
+
+**Step 3: Create Budget Page Structure**
+- Create `/app/budget/page.jsx` as main budget page
+- Add state for safeToSpend, fourWeekSummary, and recurringBills
+- Fetch all three datasets on page load using Promise.all
+- Create two-column layout (Left: Safe to Spend + 4-Week Overview, Right: Recurring Bills)
+
+**Step 4: Create Budget Components**
+- **SafeToSpendCard.jsx**: Shows detailed breakdown with Income - Outflow - Bills - Buffer = Safe to Spend
+- **FourWeekOverview.jsx**: Displays 4 weeks of data with income/spent/net per week + monthly total
+- **RecurringBillsList.jsx**: Lists all bills with edit/delete actions + "Add Bill" button
+- **AddBillModal.jsx**: Modal form for creating/editing recurring bills with fields: Description, Amount, Category, Type, Frequency, NextDueDate
+
+**Step 5: Add Styling**
+- Create CSS modules for each component
+- Add Safe to Spend box styling to transactionsPreview.module.css
+- Style budget page with proper grid layout, cards, and responsive design
+
+**Step 6: Add Navigation**
+- Ensure "Manage Bills & Budget" button navigates to `/budget`
+- Update any main navigation if needed
+
+---
+
+### Testing Checklist
+
+**Backend Testing:**
+- [ ] Create a recurring bill via POST /api/recurringbills
+- [ ] Retrieve bills via GET /api/recurringbills
+- [ ] Update a bill via PUT /api/recurringbills/{id}
+- [ ] Soft delete a bill via DELETE /api/recurringbills/{id}
+- [ ] Generate due bills via POST /api/recurringbills/generate-due
+- [ ] Verify transaction created with recurring_bill_id
+- [ ] Test safe-to-spend calculation via GET /api/budget/safe-to-spend
+- [ ] Test four-week summary via GET /api/budget/four-week-summary
+
+**Frontend Testing:**
+- [ ] Safe to Spend box shows on Transactions page
+- [ ] Clicking "Manage Bills & Budget" navigates to /budget
+- [ ] Budget page loads all three datasets
+- [ ] Can add a new recurring bill via modal
+- [ ] Can edit an existing bill
+- [ ] Can delete a bill
+- [ ] Safe to Spend breakdown shows correct calculations
+- [ ] Four-Week Overview displays all 4 weeks + monthly total
+- [ ] Bills auto-generate as transactions when due
+
+**Edge Cases:**
+- [ ] User with no income this week shows $0 safe to spend
+- [ ] User with expenses > income shows negative amount with warning
+- [ ] Bills with past due dates auto-generate immediately
+- [ ] Deleting a generated transaction doesn't affect recurring bill
+
+---
+
+## 📝 Implementation Steps - Full Details
 
 ### Phase 1: Backend Setup (C# .NET)
 

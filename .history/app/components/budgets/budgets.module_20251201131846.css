@@ -1,0 +1,656 @@
+/* Budget Page Container */
+.budgetPage {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    min-height: calc(98h - 200px);
+}
+
+/* Two Column Layout */
+.twoColumnLayout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.leftColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.rightColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Page Header */
+.pageHeader {
+    margin-bottom: 32px;
+}
+
+.pageHeader h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: 8px;
+}
+
+.pageHeader p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6B7280;
+}
+
+/* Card Header (reusable) */
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.cardHeader h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.headerIconCircle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Safe to Spend Card */
+.safeToSpendCard {
+    background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+    border: 1px solid #BAE6FD;
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.safeToSpendCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15);
+}
+
+.breakdownList {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.breakdownItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid transparent;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.breakdownItem:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.breakdownItem.income {
+    border-left-color: #059669;
+}
+
+.breakdownItem.spending {
+    border-left-color: #FF8042;
+}
+
+.breakdownItem.bills {
+    border-left-color: #8B4FFF;
+}
+
+.breakdownItem.buffer {
+    border-left-color: #38BDF8;
+}
+
+.breakdownIconCircle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(56, 189, 248, 0.15);
+    flex-shrink: 0;
+}
+
+.breakdownIconCircle img {
+    filter: brightness(0) saturate(100%) invert(57%) sepia(89%) saturate(1820%) hue-rotate(173deg) brightness(100%) contrast(98%);
+}
+
+/* Income - Green */
+.breakdownItem.income .breakdownIconCircle {
+    background: rgba(5, 150, 105, 0.15);
+}
+
+.breakdownItem.income .breakdownIconCircle img {
+    filter: brightness(0) saturate(100%) invert(47%) sepia(58%) saturate(1574%) hue-rotate(113deg) brightness(91%) contrast(95%);
+}
+
+/* Spending - Orange */
+.breakdownItem.spending .breakdownIconCircle {
+    background: rgba(255, 128, 66, 0.15);
+}
+
+.breakdownItem.spending .breakdownIconCircle img {
+    filter: brightness(0) saturate(100%) invert(58%) sepia(84%) saturate(1509%) hue-rotate(338deg) brightness(101%) contrast(101%);
+}
+
+/* Bills - Purple */
+.breakdownItem.bills .breakdownIconCircle {
+    background: rgba(139, 79, 255, 0.15);
+}
+
+.breakdownItem.bills .breakdownIconCircle img {
+    filter: brightness(0) saturate(100%) invert(42%) sepia(88%) saturate(4733%) hue-rotate(251deg) brightness(102%) contrast(101%);
+}
+
+/* Buffer - Blue */
+.breakdownItem.buffer .breakdownIconCircle {
+    background: rgba(56, 189, 248, 0.15);
+}
+
+.breakdownItem.buffer .breakdownIconCircle img {
+    filter: brightness(0) saturate(100%) invert(57%) sepia(89%) saturate(1820%) hue-rotate(173deg) brightness(100%) contrast(98%);
+}
+
+.breakdownContent {
+    flex: 1;
+}
+
+.breakdownLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1F2937;
+    margin-bottom: 2px;
+}
+
+.breakdownSubtext {
+    font-size: 11px;
+    color: #6B7280;
+}
+
+.breakdownAmount {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.breakdownDivider {
+    height: 1px;
+    background: #BAE6FD;
+    margin: 16px 0;
+}
+
+.safeToSpendResult {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 8px;
+}
+
+.resultLabel p:first-child {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 2px;
+}
+
+.resultFormula {
+    font-size: 11px;
+    color: #6B7280;
+}
+
+.resultAmount {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+.resultAmount.positive {
+    color: #059669;
+}
+
+.resultAmount.warning {
+    color: #F59E0B;
+}
+
+.resultAmount.negative {
+    color: #DC2626;
+}
+
+/* Recurring Bills Card */
+.recurringBillsCard {
+    background: linear-gradient(135deg, #F5F3FF 0%, #FFF0F8 100%);
+    border: 1px solid #E9D5FF;
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.recurringBillsCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 79, 255, 0.2);
+}
+
+.recurringBillsCard .headerIconCircle {
+    background: rgba(139, 79, 255, 0.15);
+}
+
+.recurringBillsCard .headerIconCircle img {
+    filter: brightness(0) saturate(100%) invert(42%) sepia(88%) saturate(4733%) hue-rotate(251deg) brightness(102%) contrast(101%);
+}
+
+.addBillButton {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #8B4FFF 0%, #6B5FFF 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    transition: all 0.2s;
+}
+
+.addBillButton:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 79, 255, 0.3);
+}
+
+.addBillButton span {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.billSectionHeader {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+    margin: 16px 0 8px 0;
+}
+
+.billsList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.billItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.billItem:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.billIconCircle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(139, 79, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.billIconCircle img {
+    filter: brightness(0) saturate(100%) invert(42%) sepia(88%) saturate(4733%) hue-rotate(251deg) brightness(102%) contrast(101%);
+}
+
+.billInfo {
+    flex: 1;
+}
+
+.billName {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 2px;
+}
+
+.billMeta {
+    font-size: 12px;
+    color: #6B7280;
+}
+
+.billAmount {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1F2937;
+    margin-right: 8px;
+}
+
+.billActions {
+    display: flex;
+    gap: 8px;
+}
+
+.editButton,
+.deleteButton {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #E5E7EB;
+    background: white;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.editButton {
+    border-color: rgba(139, 79, 255, 0.3);
+}
+
+.editButton img {
+    filter: brightness(0) saturate(100%) invert(42%) sepia(88%) saturate(4733%) hue-rotate(251deg) brightness(102%) contrast(101%);
+}
+
+.editButton:hover {
+    background: rgba(139, 79, 255, 0.1);
+    border-color: #8B4FFF;
+}
+
+.deleteButton {
+    color: #DC2626;
+    border-color: #FCA5A5;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.deleteButton:hover {
+    background: #FEE2E2;
+}
+
+/* Bill Status Badge */
+.billStatusBadge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+}
+
+.billStatusBadge.dueSoon {
+    background: #FEF3C7;
+    color: #F59E0B;
+}
+
+.billStatusBadge.paid {
+    background: #D1FAE5;
+    color: #059669;
+}
+
+.billStatusBadge.overdue {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+/* Bills Total */
+.billsTotal {
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.billsTotalLabel {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.billsTotalAmount {
+    font-size: 18px;
+    font-weight: 700;
+    color: #8B4FFF;
+}
+
+/* Budget Settings Card */
+.budgetSettingsCard {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.budgetSettingsCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.budgetSettingsCard .headerIconCircle {
+    background: rgba(107, 114, 128, 0.1);
+}
+
+.settingsForm {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.settingGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.settingLabel {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.settingHint {
+    font-size: 12px;
+    font-weight: 400;
+    color: #6B7280;
+}
+
+.sliderContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.slider {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: #E5E7EB;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #38BDF8;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #38BDF8;
+    cursor: pointer;
+    border: none;
+}
+
+.sliderValue {
+    font-size: 16px;
+    font-weight: 600;
+    color: #38BDF8;
+    min-width: 80px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.sliderPercentage {
+    font-size: 16px;
+    font-weight: 600;
+    color: #38BDF8;
+}
+
+.sliderDollarAmount {
+    font-size: 12px;
+    font-weight: 500;
+    color: #6B7280;
+    margin-top: 2px;
+}
+
+.budgetInput {
+    padding: 10px 12px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.budgetInput:focus {
+    outline: none;
+    border-color: #38BDF8;
+}
+
+.saveButton {
+    padding: 12px;
+    background: #38BDF8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.saveButton:hover {
+    background: #0EA5E9;
+}
+
+/* Stats Card */
+.statsCard {
+    background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.statsCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(107, 114, 128, 0.1);
+}
+
+.statItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.statItem:last-child {
+    margin-bottom: 0;
+}
+
+.statLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1F2937;
+}
+
+.statValue {
+    font-size: 16px;
+    font-weight: 600;
+    color: #6B7280;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .twoColumnLayout {
+        grid-template-columns: 1fr;
+    }
+
+    .breakdownList {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .budgetPage {
+        padding: 12px;
+    }
+
+    .pageHeader h1 {
+        font-size: 20px;
+    }
+
+    .cardHeader h2 {
+        font-size: 16px;
+    }
+
+    .breakdownItem {
+        flex-wrap: wrap;
+    }
+
+    .billItem {
+        flex-wrap: wrap;
+    }
+
+    .breakdownList {
+        grid-template-columns: 1fr;
+    }
+}

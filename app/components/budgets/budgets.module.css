@@ -3,6 +3,7 @@
     max-width: 1400px;
     margin: 0 auto;
     padding: 24px 16px;
+    min-height: calc(100vh - 228px);
 }
 
 /* Two Column Layout */
@@ -510,7 +511,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #38BDF8;
+    background: #00D4FF;
     cursor: pointer;
 }
 
@@ -518,15 +519,78 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
+    background: #00D4FF;
+    cursor: pointer;
+    border: none;
+}
+
+.bufferSlider {
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(to right, #00D4FF 0%, #00D4FF 0%, #E5E7EB 0%, #E5E7EB 100%);
+    outline: none;
+    -webkit-appearance: none;
+    width: 100%;
+    position: relative;
+}
+
+.bufferSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #38BDF8;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: -4px;
+}
+
+.bufferSlider::-webkit-slider-thumb:hover {
+    background: #0EA5E9;
+    transform: scale(1.15);
+}
+
+.bufferSlider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
     background: #38BDF8;
     cursor: pointer;
     border: none;
+    transition: all 0.2s;
+}
+
+.bufferSlider::-moz-range-thumb:hover {
+    background: #0EA5E9;
+    transform: scale(1.15);
+}
+
+.bufferSlider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: transparent;
+}
+
+.bufferSlider::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: #E5E7EB;
+}
+
+.bufferSlider::-moz-range-progress {
+    background: #38BDF8;
+    height: 8px;
+    border-radius: 4px;
 }
 
 .sliderValue {
     font-size: 16px;
     font-weight: 600;
-    color: #38BDF8;
+    color: #00D4FF;
     min-width: 80px;
     text-align: right;
     display: flex;
@@ -537,7 +601,7 @@
 .sliderPercentage {
     font-size: 16px;
     font-weight: 600;
-    color: #38BDF8;
+    color: #00D4FF;
 }
 
 .sliderDollarAmount {
@@ -631,6 +695,7 @@
 @media (max-width: 768px) {
     .budgetPage {
         padding: 12px;
+        min-height: calc(100vh - 140px);
     }
 
     .pageHeader h1 {
@@ -652,4 +717,568 @@
     .breakdownList {
         grid-template-columns: 1fr;
     }
+}
+
+@media (max-width: 640px) {
+    .budgetPage {
+        min-height: calc(100vh - 120px);
+    }
+}
+
+/* Loading State */
+.loadingContainer {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    gap: 16px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(56, 189, 248, 0.2);
+    border-top-color: #38BDF8;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loadingText {
+    font-size: 14px;
+    font-weight: 500;
+    color: #6B7280;
+    margin: 0;
+}
+
+/* Error State */
+.errorContainer {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+    background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    gap: 16px;
+}
+
+.errorIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748B;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.errorText {
+    font-size: 14px;
+    font-weight: 500;
+    color: #475569;
+    margin: 0;
+    text-align: center;
+}
+
+.retryButton {
+    padding: 10px 20px;
+    background: #64748B;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.retryButton:hover {
+    background: #475569;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3);
+}
+
+.retryButton:active {
+    transform: translateY(0);
+}
+
+/* Modal Styles */
+.modalBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modalBox {
+    background: white;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: modalSlideIn 0.2s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 24px 16px 24px;
+    border-bottom: 1px solid #F3F4F6;
+}
+
+.modalTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1F2937;
+    margin: 0;
+}
+
+.modalCloseButton {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #F3F4F6;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 20px;
+    font-weight: 300;
+    color: #6B7280;
+}
+
+.modalCloseButton:hover {
+    background: #E5E7EB;
+    color: #1F2937;
+}
+
+.modalContent {
+    padding: 24px;
+}
+
+.modalFormGroup {
+    margin-bottom: 20px;
+}
+
+.modalFormGroup:last-of-type {
+    margin-bottom: 24px;
+}
+
+.modalLabel {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 8px;
+}
+
+.modalInput {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1F2937;
+    transition: all 0.2s;
+}
+
+.modalInput:focus {
+    outline: none;
+    border-color: #00D4FF;
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+.modalInput::placeholder {
+    color: #9CA3AF;
+}
+
+.modalHintText {
+    font-size: 12px;
+    color: #6B7280;
+    margin-top: 6px;
+    font-weight: 500;
+}
+
+.modalActions {
+    display: flex;
+    gap: 12px;
+    padding: 0 24px 24px 24px;
+}
+
+.modalCancelButton {
+    flex: 1;
+    padding: 12px 20px;
+    background: white;
+    color: #6B7280;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modalCancelButton:hover {
+    background: #F9FAFB;
+    border-color: #9CA3AF;
+    color: #1F2937;
+}
+
+.modalAddButton {
+    flex: 1;
+    padding: 12px 20px;
+    background: #00D4FF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modalAddButton:hover {
+    background: #00BFEA;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+.modalAddButton:active {
+    transform: translateY(0);
+}
+
+/* Empty State for Recurring Bills */
+.emptyBillsState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    text-align: center;
+    background: white;
+    border-radius: 12px;
+    margin-top: 16px;
+}
+
+.emptyBillsIcon {
+    width: 64px;
+    height: 64px;
+    background: rgba(139, 79, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.emptyBillsIcon svg {
+    color: #8B4FFF;
+    stroke: #8B4FFF;
+}
+
+.emptyBillsTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+    margin: 0 0 8px 0;
+}
+
+.emptyBillsSubtitle {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6B7280;
+    margin: 0;
+}
+
+/* Budget Settings Redesign */
+.settingLabelRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.bufferPercentDisplay {
+    font-size: 24px;
+    font-weight: 700;
+    color: #38BDF8;
+    min-width: 60px;
+    text-align: right;
+}
+
+.quickSelectButtons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.quickSelectBtn {
+    flex: 1;
+    min-width: 80px;
+    padding: 10px 16px;
+    background: white;
+    color: #6B7280;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quickSelectBtn:hover {
+    border-color: #38BDF8;
+    color: #38BDF8;
+    background: rgba(56, 189, 248, 0.05);
+}
+
+.quickSelectBtn.active {
+    background: #38BDF8;
+    color: white;
+    border-color: #38BDF8;
+}
+
+.budgetInputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dollarSign {
+    position: absolute;
+    left: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #6B7280;
+    pointer-events: none;
+}
+
+.budgetInputLarge {
+    width: 100%;
+    padding: 10px 75px 10px 32px;
+    border: 1.5px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+    color: #1F2937;
+    transition: all 0.2s;
+}
+
+.budgetInputLarge:focus {
+    outline: none;
+    border-color: #38BDF8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+}
+
+.budgetInputLarge::placeholder {
+    color: #D1D5DB;
+}
+
+.perWeek {
+    position: absolute;
+    right: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #9CA3AF;
+    pointer-events: none;
+}
+
+.spendingProgress {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.spendingHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.spendingLabel {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.spendingAmount {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6B7280;
+}
+
+.progressBar {
+    width: 100%;
+    height: 12px;
+    background: #E5E7EB;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+    border-radius: 6px;
+    transition: width 0.3s ease;
+}
+
+.budgetInsights {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.insightBox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    transition: all 0.2s;
+}
+
+.insightBox:hover {
+    border-color: #38BDF8;
+    box-shadow: 0 2px 8px rgba(56, 189, 248, 0.1);
+}
+
+.insightIcon {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.insightContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.insightLabel {
+    font-size: 10px;
+    font-weight: 600;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.insightValue {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1F2937;
+    line-height: 1;
+}
+
+.insightSubtext {
+    font-size: 12px;
+    font-weight: 500;
+    color: #6B7280;
+}
+
+.budgetStatusMessage {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 12px;
+}
+
+.statusIcon {
+    font-size: 24px;
+    line-height: 1;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.statusContent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.statusTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #059669;
+}
+
+.statusText {
+    font-size: 13px;
+    font-weight: 500;
+    color: #047857;
+}
+
+.conversionText {
+    font-size: 13px;
+    font-weight: 500;
+    color: #6B7280;
+    text-align: center;
+    padding: 12px;
+    background: #F9FAFB;
+    border-radius: 8px;
+}
+
+.saveSettingsButton {
+    width: 100%;
+    padding: 14px;
+    background: #38BDF8;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.saveSettingsButton:hover {
+    background: #0EA5E9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+.saveSettingsButton:active {
+    transform: translateY(0);
 }
