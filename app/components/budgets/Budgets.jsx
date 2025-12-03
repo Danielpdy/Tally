@@ -11,6 +11,7 @@ const Budgets = () => {
   const [recurringBills, setRecurringBills] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [transactions, setTransactions] = useState([]);
+  const [showBudget, setShowBudget] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(null);
   const { data: session } = useSession();
@@ -54,6 +55,10 @@ const Budgets = () => {
       0
     );
   }, [transactions]);
+
+  const openWeeklyBudget = () => {
+    setShowBudget(!showBudget);
+  };
 
   return (
     <>
@@ -219,12 +224,16 @@ const Budgets = () => {
                 <div className={styles.settingGroup}>
                   <div className={styles.settingLabelRow}>
                     <div>
-                      <label className={styles.settingLabel}>Safety Buffer Percentage</label>
+                      <label className={styles.settingLabel}>
+                        Safety Buffer Percentage
+                      </label>
                       <span className={styles.settingHint}>
                         Portion of income to set aside for unexpected expenses
                       </span>
                     </div>
-                    <span className={styles.bufferPercentDisplay}>{bufferPercent}%</span>
+                    <span className={styles.bufferPercentDisplay}>
+                      {bufferPercent}%
+                    </span>
                   </div>
                   <input
                     type="range"
@@ -235,12 +244,17 @@ const Budgets = () => {
                     onChange={(e) => setBufferPercent(Number(e.target.value))}
                     className={styles.bufferSlider}
                     style={{
-                      background: `linear-gradient(to right, #38BDF8 0%, #38BDF8 ${(bufferPercent / 30) * 100}%, #E5E7EB ${(bufferPercent / 30) * 100}%, #E5E7EB 100%)`
+                      background: `linear-gradient(to right, #38BDF8 0%, #38BDF8 ${
+                        (bufferPercent / 30) * 100
+                      }%, #E5E7EB ${
+                        (bufferPercent / 30) * 100
+                      }%, #E5E7EB 100%)`,
                     }}
                   />
                 </div>
 
                 {/* Weekly Budget Goal */}
+
                 <div className={styles.settingGroup}>
                   <div className={styles.settingLabelWithSwitch}>
                     <div className={styles.settingLabel}>
@@ -253,103 +267,168 @@ const Budgets = () => {
                       </span>
                     </div>
                     <label className={styles.switch}>
-                      <input type="checkbox" />
+                      <input
+                        type="checkbox"
+                        value={showBudget}
+                        onChange={openWeeklyBudget}
+                      />
                       <span className={styles.switchSlider}></span>
                     </label>
                   </div>
 
                   {/* Quick Select Buttons */}
-                  <div className={styles.quickSelectButtons}>
-                    <button className={styles.quickSelectBtn}>$300</button>
-                    <button className={`${styles.quickSelectBtn} ${styles.active}`}>$500</button>
-                    <button className={styles.quickSelectBtn}>$750</button>
-                    <button className={styles.quickSelectBtn}>$1000</button>
-                    <button className={styles.quickSelectBtn}>Custom</button>
-                  </div>
-
-                  {/* Budget Input */}
-                  <div className={styles.budgetInputWrapper}>
-                    <span className={styles.dollarSign}>$</span>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={weeklyBudget}
-                      onChange={(e) => setWeeklyBudget(e.target.value)}
-                      className={styles.budgetInputLarge}
-                      placeholder="500"
-                    />
-                    <span className={styles.perWeek}>/week</span>
-                  </div>
-
-                  {/* Current Spending Progress */}
-                  <div className={styles.spendingProgress}>
-                    <div className={styles.spendingHeader}>
-                      <span className={styles.spendingLabel}>Current Spending</span>
-                      <span className={styles.spendingAmount}>$320.00 of $500.00 (64%)</span>
-                    </div>
-                    <div className={styles.progressBar}>
-                      <div className={styles.progressFill} style={{width: '64%'}}></div>
-                    </div>
-                  </div>
-
-                  {/* Days Left and Daily Limit */}
-                  <div className={styles.budgetInsights}>
-                    <div className={styles.insightBox}>
-                      <div className={styles.insightIcon}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M8 2v4"/>
-                          <path d="M16 2v4"/>
-                          <rect width="18" height="18" x="3" y="4" rx="2"/>
-                          <path d="M3 10h18"/>
-                        </svg>
+                  {showBudget && (
+                    <>
+                      <div className={styles.quickSelectButtons}>
+                        <button className={styles.quickSelectBtn}>$300</button>
+                        <button
+                          className={`${styles.quickSelectBtn} ${styles.active}`}
+                        >
+                          $500
+                        </button>
+                        <button className={styles.quickSelectBtn}>$750</button>
+                        <button className={styles.quickSelectBtn}>$1000</button>
+                        <button className={styles.quickSelectBtn}>
+                          Custom
+                        </button>
                       </div>
-                      <div className={styles.insightContent}>
-                        <span className={styles.insightLabel}>DAYS LEFT</span>
-                        <span className={styles.insightValue}>4</span>
-                        <span className={styles.insightSubtext}>until week ends</span>
-                      </div>
-                    </div>
-                    <div className={styles.insightBox}>
-                      <div className={styles.insightIcon}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="12" cy="12" r="10"/>
-                          <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
-                          <path d="M12 18V6"/>
-                        </svg>
-                      </div>
-                      <div className={styles.insightContent}>
-                        <span className={styles.insightLabel}>DAILY LIMIT</span>
-                        <span className={styles.insightValue}>$45.00</span>
-                        <span className={styles.insightSubtext}>remaining per day</span>
-                      </div>
-                    </div>
-                  </div>
 
-                  {/* Success Message */}
-                  <div className={styles.budgetStatusMessage}>
-                    <div className={styles.statusIcon}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M12 16v5"/>
-                        <path d="M16 14v7"/>
-                        <path d="M20 10v11"/>
-                        <path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/>
-                        <path d="M4 18v3"/>
-                        <path d="M8 14v7"/>
-                      </svg>
-                    </div>
-                    <div className={styles.statusContent}>
-                      <span className={styles.statusTitle}>You're on track!</span>
-                      <span className={styles.statusText}>Keep spending under $45.00/day to stay within budget</span>
-                    </div>
-                  </div>
+                      {/* Budget Input */}
+                      <div className={styles.budgetInputWrapper}>
+                        <span className={styles.dollarSign}>$</span>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={weeklyBudget}
+                          onChange={(e) => setWeeklyBudget(e.target.value)}
+                          className={styles.budgetInputLarge}
+                          placeholder="500"
+                        />
+                        <span className={styles.perWeek}>/week</span>
+                      </div>
 
-                  {/* Weekly to Daily Conversion */}
-                  <div className={styles.conversionText}>
-                    Weekly: $500.00 → Daily: $71.43
-                  </div>
+                      {/* Current Spending Progress */}
+                      <div className={styles.spendingProgress}>
+                        <div className={styles.spendingHeader}>
+                          <span className={styles.spendingLabel}>
+                            Current Spending
+                          </span>
+                          <span className={styles.spendingAmount}>
+                            $320.00 of $500.00 (64%)
+                          </span>
+                        </div>
+                        <div className={styles.progressBar}>
+                          <div
+                            className={styles.progressFill}
+                            style={{ width: "64%" }}
+                          ></div>
+                        </div>
+                      </div>
+
+                      {/* Days Left and Daily Limit */}
+                      <div className={styles.budgetInsights}>
+                        <div className={styles.insightBox}>
+                          <div className={styles.insightIcon}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="#38BDF8"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M8 2v4" />
+                              <path d="M16 2v4" />
+                              <rect width="18" height="18" x="3" y="4" rx="2" />
+                              <path d="M3 10h18" />
+                            </svg>
+                          </div>
+                          <div className={styles.insightContent}>
+                            <span className={styles.insightLabel}>
+                              DAYS LEFT
+                            </span>
+                            <span className={styles.insightValue}>4</span>
+                            <span className={styles.insightSubtext}>
+                              until week ends
+                            </span>
+                          </div>
+                        </div>
+                        <div className={styles.insightBox}>
+                          <div className={styles.insightIcon}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="#38BDF8"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <circle cx="12" cy="12" r="10" />
+                              <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
+                              <path d="M12 18V6" />
+                            </svg>
+                          </div>
+                          <div className={styles.insightContent}>
+                            <span className={styles.insightLabel}>
+                              DAILY LIMIT
+                            </span>
+                            <span className={styles.insightValue}>$45.00</span>
+                            <span className={styles.insightSubtext}>
+                              remaining per day
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Success Message */}
+                      <div className={styles.budgetStatusMessage}>
+                        <div className={styles.statusIcon}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#10B981"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M12 16v5" />
+                            <path d="M16 14v7" />
+                            <path d="M20 10v11" />
+                            <path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15" />
+                            <path d="M4 18v3" />
+                            <path d="M8 14v7" />
+                          </svg>
+                        </div>
+                        <div className={styles.statusContent}>
+                          <span className={styles.statusTitle}>
+                            You're on track!
+                          </span>
+                          <span className={styles.statusText}>
+                            Keep spending under $45.00/day to stay within budget
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Weekly to Daily Conversion */}
+                      <div className={styles.conversionText}>
+                        Weekly: $500.00 → Daily: $71.43
+                      </div>
+                    </>
+                  )}
                 </div>
 
-                <button className={styles.saveSettingsButton}>Save Settings</button>
+                <button className={styles.saveSettingsButton}>
+                  Save Settings
+                </button>
               </div>
             </div>
           </div>
@@ -396,8 +475,12 @@ const Budgets = () => {
                       <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
                     </svg>
                   </div>
-                  <p className={styles.emptyBillsTitle}>No recurring bills yet</p>
-                  <p className={styles.emptyBillsSubtitle}>Add your first bill to get started</p>
+                  <p className={styles.emptyBillsTitle}>
+                    No recurring bills yet
+                  </p>
+                  <p className={styles.emptyBillsSubtitle}>
+                    Add your first bill to get started
+                  </p>
                 </div>
               )}
 
