@@ -242,12 +242,21 @@ const Budgets = () => {
 
                 {/* Weekly Budget Goal */}
                 <div className={styles.settingGroup}>
-                  <label className={styles.settingLabel}>
-                    Weekly Budget Goal
-                    <span className={styles.settingHint}>
-                      Target spending limit per week
-                    </span>
-                  </label>
+                  <div className={styles.settingLabelWithSwitch}>
+                    <div className={styles.settingLabel}>
+                      <div className={styles.labelTitleRow}>
+                        <span>Weekly Budget Goal</span>
+                        <span className={styles.optionalText}>(optional)</span>
+                      </div>
+                      <span className={styles.settingHint}>
+                        Target spending limit per week
+                      </span>
+                    </div>
+                    <label className={styles.switch}>
+                      <input type="checkbox" />
+                      <span className={styles.switchSlider}></span>
+                    </label>
+                  </div>
 
                   {/* Quick Select Buttons */}
                   <div className={styles.quickSelectButtons}>
