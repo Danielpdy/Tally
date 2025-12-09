@@ -4,29 +4,41 @@ import Image from "next/image";
 import styles from "./budgets.module.css";
 import { GetTransactions } from "@services/TransactionService";
 import { useSession } from "@node_modules/next-auth/react";
-import { GetRecurringBills } from "@services/RecurringBillsService";
+import { GetRecurringBills, AddRecurringBill } from "@services/RecurringBillsService";
 
 const Budgets = () => {
   const [bufferPercent, setBufferPercent] = useState(10);
   const [weeklyBudget, setWeeklyBudget] = useState("");
-  const [recurringBills, setRecurringBills] = useState(null);
+  const [recurringBills, setRecurringBills] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [showBudget, setShowBudget] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(null);
+  const [isLoadingSafe, setIsLoadingSafe] = useState(false);
+  const [isErrorSafe, setIsErrorSafe] = useState(null);
+  const [isLoadingBill, setIsLoadingBill] = useState(false);
+  const [isErrorBill, setIsErrorBill] = useState(null);
+  const [billAdded, setBillAdded] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState();
+  const [billForm, setBillForm] = useState({
+    name: "",
+    amount: "",
+    dayOfMonth: "",
+    category: ""
+  });
   const { data: session } = useSession();
 
   useEffect(() => {
     if (session?.accessToken) {
       getTransactions();
+      fetchRecurringBills();
     }
   }, [session?.accessToken]);
 
   const getTransactions = async () => {
     try {
-      setIsLoading(true);
-      setIsError(null);
+      setIsLoadingSafe(true);
+      setIsErrorSafe(null);
       const result = await GetTransactions(session.accessToken);
       if (Array.isArray(result)) {
         setTransactions(result);
@@ -35,20 +47,29 @@ const Budgets = () => {
       }
     } catch (error) {
       console.error(error);
-      setIsError(error);
+      setIsErrorSafe(error);
     } finally {
-      setIsLoading(false);
+      setIsLoadingSafe(false);
     }
   };
 
-  const getRecurringBills = async () => {
+  const fetchRecurringBills = async () => {
     try{
+      setIsLoadingBill(true);
+      setIsErrorBill(null);
       const result = await GetRecurringBills(session.accessToken);
-      setRecurringBills(result);
+      if(Array.isArray(result)){
+        setRecurringBills(result);
+      } else{
+        throw new Error("Invalid data format");
+      }
     } catch(error){
       console.error(error);
+      setIsErrorBill(error);
+    } finally{
+      setIsLoadingBill(false);
     }
-  }
+  };
 
   const weeklyEarnings = useMemo(() => {
     return transactions.reduce(
@@ -69,6 +90,61 @@ const Budgets = () => {
   const openWeeklyBudget = () => {
     setShowBudget(!showBudget);
   };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setBillForm(prev => ({...prev, [name]: value}));
+  };
+
+  const handleAddBill = async (e) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+    if (!billForm.name || !billForm.amount || !billForm.dayOfMonth) return;
+
+    const tempId = Date.now();
+
+    const billData = {
+      name: billForm.name,
+      amount: parseFloat(billForm.amount),
+      dayOfMonth: parseInt(billForm.dayOfMonth),
+      category: billForm.category
+    }
+
+    if (!billData.amount || billData.amount < 0) {
+      alert("Amount must be a positive number");
+      return;
+    };
+
+    if (!billData.dayOfMonth || billData.dayOfMonth < 1 || billData.dayOfMonth > 31){
+      alert("Day must be be between 1 and 31");
+      return;
+    }
+
+    setRecurringBills(prev => [...(prev || []), {...billData, id: tempId}]);
+
+    try {
+      setIsSubmitting(true);
+      setSubmitError(null)
+      const result = await AddRecurringBill(billData, session.accessToken);
+      setRecurringBills(prev => prev.map(b => b.id === tempId ? result : b));
+      setBillAdded(true);
+    } catch (error) {
+      console.error("Failed to add bill:", error);
+      setSubmitError("Failed to add bill. Please try again");
+      setRecurringBills(prev => prev.filter(b => b.id !== tempId));
+    }
+    finally{
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setBillAdded(false);
+    setSubmitError(null);
+    setBillForm({ name: "", amount: "", dayOfMonth: "", category: "" });
+  };
+
 
   return (
     <>
@@ -98,7 +174,7 @@ const Budgets = () => {
               </div>
 
               <div className={styles.breakdownList}>
-                {isLoading && (
+                {isLoadingSafe && (
                   <div className={styles.loadingContainer}>
                     <div className={styles.spinner}></div>
                     <p className={styles.loadingText}>
@@ -106,11 +182,11 @@ const Budgets = () => {
                     </p>
                   </div>
                 )}
-                {isError && (
+                {isErrorSafe && (
                   <div className={styles.errorContainer}>
                     <div className={styles.errorIcon}>!</div>
                     <p className={styles.errorText}>
-                      {isError?.message || "Failed to load transactions"}
+                      {isErrorSafe?.message || "Failed to load transactions"}
                     </p>
                     <button
                       className={styles.retryButton}
@@ -121,7 +197,7 @@ const Budgets = () => {
                   </div>
                 )}
 
-                {!isLoading && !isError && (
+                {!isLoadingSafe && !isErrorSafe && (
                   <>
                     <div className={`${styles.breakdownItem} ${styles.income}`}>
                       <div className={styles.breakdownIconCircle}>
@@ -467,7 +543,31 @@ const Budgets = () => {
                 Add Recurring Bill
               </button>
 
-              {!recurringBills && (
+              {isLoadingBill && (
+                <div className={styles.loadingBillsContainer}>
+                  <div className={styles.spinnerPurple}></div>
+                  <p className={styles.loadingBillsText}>
+                    Loading your recurring bills...
+                  </p>
+                </div>
+              )}
+
+              {isErrorBill && (
+                <div className={styles.errorBillsContainer}>
+                  <div className={styles.errorBillsIcon}>!</div>
+                  <p className={styles.errorBillsText}>
+                    {isErrorBill?.message || "Failed to load recurring bills"}
+                  </p>
+                  <button
+                    className={styles.retryBillsButton}
+                    onClick={fetchRecurringBills}
+                  >
+                    Retry
+                  </button>
+                </div>
+              )}
+
+              {!isLoadingBill && !isErrorBill && recurringBills && recurringBills.length === 0 && (
                 <div className={styles.emptyBillsState}>
                   <div className={styles.emptyBillsIcon}>
                     <svg
@@ -494,7 +594,7 @@ const Budgets = () => {
                 </div>
               )}
 
-              {recurringBills && (
+              {!isLoadingBill && !isErrorBill && recurringBills.length > 0 && (
                 <>
                   <h3 className={styles.billSectionHeader}>
                     All Recurring Bills:
@@ -504,12 +604,20 @@ const Budgets = () => {
                     {recurringBills.map((bill) => (
                       <div key={bill.id} className={styles.billItem}>
                         <div className={styles.billIconCircle}>
-                          <Image
-                            src="/assets/icons/creditCardIcon.svg"
-                            width={20}
-                            height={20}
-                            alt="bill"
-                          />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/>
+                            <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>
+                          </svg>
                         </div>
                         <div className={styles.billInfo}>
                           <p className={styles.billName}>
@@ -535,18 +643,42 @@ const Budgets = () => {
                         </p>
                         <div className={styles.billActions}>
                           <button className={styles.editButton}>
-                            <Image
-                              src="/assets/icons/editIcon.svg"
-                              width={16}
-                              height={16}
-                              alt="edit"
-                            />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                              <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/>
+                            </svg>
                           </button>
                           <button
                             className={styles.deleteButton}
                             onClick={() => handleDeleteBill(bill.id)}
                           >
-                            &times;
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M10 11v6"/>
+                              <path d="M14 11v6"/>
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                              <path d="M3 6h18"/>
+                              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
                           </button>
                         </div>
                       </div>
@@ -594,79 +726,172 @@ const Budgets = () => {
 
       {/*Add recurring bill*/}
       {showModal && (
-        <div action="submit" className={styles.modalBackdrop}>
+        <div className={styles.modalBackdrop}>
           <div className={styles.modalBox}>
-            <div className={styles.modalHeader}>
-              <h4 className={styles.modalTitle}>Add Recurring Bill</h4>
-              <button
-                className={styles.modalCloseButton}
-                onClick={() => setShowModal(false)}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+            {!billAdded ? (
+              <form onSubmit={handleAddBill}>
+                <div className={styles.modalHeader}>
+                  <h4 className={styles.modalTitle}>Add Recurring Bill</h4>
+                  <button
+                    type="button"
+                    className={styles.modalCloseButton}
+                    onClick={handleCloseModal}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <div className={styles.modalContent}>
+                  <div className={styles.modalFormGroup}>
+                    <label htmlFor="BillName" className={styles.modalLabel}>
+                      Bill Name
+                    </label>
+                    <input
+                      name="name"
+                      type="text"
+                      value={billForm.name}
+                      onChange={handleInputChange}
+                      className={styles.modalInput}
+                      placeholder="e.g., Netflix"
+                      required
+                    />
+                  </div>
+                  <div className={styles.modalFormGroup}>
+                    <label htmlFor="Amount" className={styles.modalLabel}>
+                      Amount
+                    </label>
+                    <input
+                      type="number"
+                      name="amount"
+                      value={billForm.amount}
+                      onChange={handleInputChange}
+                      className={styles.modalInput}
+                      placeholder="0.00"
+                      required
+                    />
+                  </div>
+                  <div className={styles.modalFormGroup}>
+                    <label htmlFor="DueDate" className={styles.modalLabel}>
+                      Day of Month (1-31)
+                    </label>
+                    <input
+                      type="number"
+                      name="dayOfMonth"
+                      value={billForm.dayOfMonth}
+                      onChange={handleInputChange}
+                      className={styles.modalInput}
+                      placeholder="15"
+                      required
+                    />
+                    <p className={styles.modalHintText}>
+                      The day each month when this bill is due
+                    </p>
+                  </div>
+                  <div className={styles.modalFormGroup}>
+                    <label htmlFor="Category" className={styles.modalLabel}>
+                      Category (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      name="category"
+                      value={billForm.category}
+                      onChange={handleInputChange}
+                      className={styles.modalInput}
+                      placeholder="e.g., Entertainment, Utilities"
+                    />
+                  </div>
+                </div>
+                <div className={styles.modalActions}>
+                  <button
+                    type="button"
+                    className={styles.modalCancelButton}
+                    onClick={handleCloseModal}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className={styles.modalAddButton}
+                    type="submit"
+                    disabled={isSubmitting}
+                  >
+                    Add Bill
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className={styles.successContent}>
+                <button
+                  type="button"
+                  className={styles.modalCloseButton}
+                  onClick={handleCloseModal}
+                  style={{ position: 'absolute', top: '24px', right: '24px' }}
                 >
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className={styles.modalContent}>
-              <div className={styles.modalFormGroup}>
-                <label htmlFor="BillName" className={styles.modalLabel}>
-                  Bill Name
-                </label>
-                <input
-                  type="text"
-                  className={styles.modalInput}
-                  placeholder="e.g., Netflix"
-                />
-              </div>
-              <div className={styles.modalFormGroup}>
-                <label htmlFor="Amount" className={styles.modalLabel}>
-                  Amount
-                </label>
-                <input
-                  type="number"
-                  className={styles.modalInput}
-                  placeholder="0.00"
-                />
-              </div>
-              <div className={styles.modalFormGroup}>
-                <label htmlFor="DueDate" className={styles.modalLabel}>
-                  Day of Month (1-31)
-                </label>
-                <input
-                  type="text"
-                  className={styles.modalInput}
-                  placeholder="15"
-                />
-                <p className={styles.modalHintText}>
-                  The day each month when this bill is due
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                  </svg>
+                </button>
+                <div className={styles.successIconWrapper}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="48"
+                    height="48"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={styles.successIcon}
+                  >
+                    <path d="M20 6 9 17l-5-5"/>
+                  </svg>
+                </div>
+                <h4 className={styles.successTitle}>Bill Added Successfully!</h4>
+                <p className={styles.successText}>
+                  Your recurring bill has been added to your budget.
                 </p>
+                <div className={styles.successButtonGroup}>
+                  <button
+                    className={styles.addAnotherBillButton}
+                    onClick={() => {
+                      setBillAdded(false);
+                      setBillForm({ name: "", amount: "", dayOfMonth: "", category: "" });
+                    }}
+                  >
+                    Add Another Bill
+                  </button>
+                  <button
+                    className={styles.viewBillsButton}
+                    onClick={handleCloseModal}
+                  >
+                    Done
+                  </button>
+                </div>
               </div>
-              <div className={styles.modalFormGroup}>
-                <label htmlFor="Category" className={styles.modalLabel}>
-                  Category (Optional)
-                </label>
-                <input
-                  type="text"
-                  className={styles.modalInput}
-                  placeholder="e.g., Entertainment, Utilities"
-                />
-              </div>
-            </div>
-            <div className={styles.modalActions}>
-              <button className={styles.modalCancelButton}>Cancel</button>
-              <button className={styles.modalAddButton}>Add Bill</button>
-            </div>
+            )}
           </div>
         </div>
       )}

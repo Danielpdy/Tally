@@ -327,8 +327,9 @@
     flex-shrink: 0;
 }
 
-.billIconCircle img {
-    filter: brightness(0) saturate(100%) invert(42%) sepia(88%) saturate(4733%) hue-rotate(251deg) brightness(102%) contrast(101%);
+.billIconCircle svg {
+    color: #8B4FFF;
+    stroke: #8B4FFF;
 }
 
 .billInfo {
@@ -363,8 +364,8 @@
 .deleteButton {
     width: 32px;
     height: 32px;
-    border: 1px solid #E5E7EB;
-    background: white;
+    border: none;
+    background: transparent;
     border-radius: 6px;
     font-size: 12px;
     cursor: pointer;
@@ -374,28 +375,27 @@
     justify-content: center;
 }
 
-.editButton {
-    border-color: rgba(139, 79, 255, 0.3);
+.editButton svg {
+    color: #8B4FFF;
+    stroke: #8B4FFF;
 }
 
-.editButton img {
-    filter: brightness(0) saturate(100%) invert(42%) sepia(88%) saturate(4733%) hue-rotate(251deg) brightness(102%) contrast(101%);
-}
-
-.editButton:hover {
-    background: rgba(139, 79, 255, 0.1);
-    border-color: #8B4FFF;
+.editButton:hover svg {
+    color: #6B3FDD;
+    stroke: #6B3FDD;
 }
 
 .deleteButton {
     color: #DC2626;
-    border-color: #FCA5A5;
+    border: none;
+    background: transparent;
     font-size: 20px;
     font-weight: 300;
 }
 
 .deleteButton:hover {
-    background: #FEE2E2;
+    color: #EF4444;
+    background: transparent;
 }
 
 /* Bill Status Badge */
@@ -993,6 +993,116 @@
 }
 
 .modalAddButton:active {
+    transform: translateY(0);
+}
+
+/* Success Confirmation */
+.successContent {
+    padding: 48px 32px;
+    text-align: center;
+    position: relative;
+}
+
+.successIconWrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    background: linear-gradient(135deg, #8B4FFF 0%, #6B5FFF 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: successPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes successPop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.successIcon {
+    color: white;
+    animation: checkDraw 0.5s ease-in-out 0.3s both;
+}
+
+@keyframes checkDraw {
+    0% {
+        stroke-dasharray: 50;
+        stroke-dashoffset: 50;
+    }
+    100% {
+        stroke-dasharray: 50;
+        stroke-dashoffset: 0;
+    }
+}
+
+.successTitle {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1F2937;
+    margin: 0 0 12px 0;
+}
+
+.successText {
+    font-size: 14px;
+    color: #6B7280;
+    margin: 0 0 32px 0;
+    line-height: 1.6;
+}
+
+.successButtonGroup {
+    display: flex;
+    gap: 12px;
+}
+
+.addAnotherBillButton {
+    flex: 1;
+    padding: 12px 20px;
+    background: white;
+    color: #6B7280;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.addAnotherBillButton:hover {
+    background: #F9FAFB;
+    border-color: #9CA3AF;
+    color: #1F2937;
+}
+
+.viewBillsButton {
+    flex: 1;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #8B4FFF 0%, #6B5FFF 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.viewBillsButton:hover {
+    background: linear-gradient(135deg, #6B3FDD 0%, #5B4FDD 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 79, 255, 0.3);
+}
+
+.viewBillsButton:active {
     transform: translateY(0);
 }
 
