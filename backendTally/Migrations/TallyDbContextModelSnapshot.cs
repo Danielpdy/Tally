@@ -77,6 +77,10 @@ namespace backendTally.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("NormalizedName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("NumberofBills")
                         .HasColumnType("integer");
 

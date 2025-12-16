@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "./budgets.module.css";
 import { GetTransactions } from "@services/TransactionService";
 import { useSession } from "@node_modules/next-auth/react";
-import { GetRecurringBills, AddRecurringBill, DeleteBillById } from "@services/RecurringBillsService";
+import { GetRecurringBills, AddRecurringBill, DeleteBillById, GetBillsDueThisWeek } from "@services/RecurringBillsService";
 
 const Budgets = () => {
   const [bufferPercent, setBufferPercent] = useState(10);
@@ -12,6 +12,7 @@ const Budgets = () => {
   const [recurringBills, setRecurringBills] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [transactions, setTransactions] = useState([]);
+  const [totalBillsDue, setTotalBillsDue] = useState();
   const [showBudget, setShowBudget] = useState(false);
   const [isLoadingSafe, setIsLoadingSafe] = useState(true);
   const [isErrorSafe, setIsErrorSafe] = useState(null);
@@ -32,6 +33,7 @@ const Budgets = () => {
     if (session?.accessToken) {
       getTransactions();
       fetchRecurringBills();
+      fetchBillsDueThisWeek();
     }
   }, [session?.accessToken]);
 
@@ -70,6 +72,15 @@ const Budgets = () => {
       setIsLoadingBill(false);
     }
   };
+
+  const fetchBillsDueThisWeek = async () => {
+    try{
+      const data = await GetBillsDueThisWeek(session.accessToken);
+      setTotalBillsDue(data.total);
+    } catch(error){
+      console.error(error);
+    }
+  }
 
   const weeklyEarnings = useMemo(() => {
     return transactions.reduce(
@@ -128,6 +139,7 @@ const Budgets = () => {
       const result = await AddRecurringBill(billData, session.accessToken);
       setRecurringBills(prev => prev.map(b => b.id === tempId ? result : b));
       setBillAdded(true);
+      await fetchBillsDueThisWeek();
     } catch (error) {
       console.error("Failed to add bill:", error);
       setSubmitError(error.message );
@@ -147,6 +159,7 @@ const Budgets = () => {
 
     try{
       await DeleteBillById(billId, session.accessToken);
+      await fetchBillsDueThisWeek();
     } catch(error){
       console.error(error);
       alert('Failed to delete bill. Please try again.')
@@ -276,7 +289,7 @@ const Budgets = () => {
                         <p className={styles.breakdownLabel}>Upcoming Bills</p>
                         <p className={styles.breakdownSubtext}>Due this week</p>
                       </div>
-                      <p className={styles.breakdownAmount}>${}</p>
+                      <p className={styles.breakdownAmount}>${totalBillsDue}</p>
                     </div>
 
                     <div className={`${styles.breakdownItem} ${styles.buffer}`}>
@@ -658,7 +671,7 @@ const Budgets = () => {
                               </span>
                             )}
                           </p>
-                          <p className={styles.billMeta}>Every</p>
+                          <p className={styles.billMeta}>Every {bill.dayOfMonth}</p>
                         </div>
                         <p className={styles.billAmount}>
                           ${bill.amount.toFixed(2)}
@@ -776,13 +789,30 @@ const Budgets = () => {
                   </button>
                 </div>
                 <div className={styles.modalContent}>
-                  <div className={styles.modalFormGroup}>
-                    {submitError && (
-                      <div>
-                        <span>{submitError}</span>
+                  {submitError && (
+                    <div className={styles.modalErrorAlert}>
+                      <div className={styles.modalErrorIcon}>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10"/>
+                          <line x1="12" y1="8" x2="12" y2="12"/>
+                          <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
                       </div>
-                    )}
+                      <p className={styles.modalErrorText}>{submitError}</p>
+                    </div>
+                  )}
 
+                  <div className={styles.modalFormGroup}>
                     <label htmlFor="BillName" className={styles.modalLabel}>
                       Bill Name
                     </label>
