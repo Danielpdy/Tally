@@ -400,6 +400,10 @@
 
 /* Bill Status Badge */
 .billStatusBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
     font-size: 11px;
     font-weight: 600;
     padding: 4px 8px;
@@ -409,7 +413,8 @@
 
 .billStatusBadge.dueSoon {
     background: #FEF3C7;
-    color: #F59E0B;
+    color: #6B7280;
+    border: 1px solid #D1D5DB;
 }
 
 .billStatusBadge.paid {

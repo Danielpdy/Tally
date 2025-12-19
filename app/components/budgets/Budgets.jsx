@@ -8,11 +8,16 @@ import { GetRecurringBills, AddRecurringBill, DeleteBillById, GetBillsDueThisWee
 
 const Budgets = () => {
   const [bufferPercent, setBufferPercent] = useState(10);
+  const [safetyBuffer, setSafetyBuffer] = useState(0);
+  const [safeToSpendAmount, setSafeToSpendAmount] = useState(0);
   const [weeklyBudget, setWeeklyBudget] = useState("");
   const [recurringBills, setRecurringBills] = useState([]);
+  const [billsDueThisWeekIds, setBillsDueThisWeekIds] = useState([]);
+  const [earnings, setEarnings] = useState(0);
+  const [spendings, setSpendings] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [transactions, setTransactions] = useState([]);
-  const [totalBillsDue, setTotalBillsDue] = useState();
+  const [totalBillsDue, setTotalBillsDue] = useState(0);
   const [showBudget, setShowBudget] = useState(false);
   const [isLoadingSafe, setIsLoadingSafe] = useState(true);
   const [isErrorSafe, setIsErrorSafe] = useState(null);
@@ -36,6 +41,23 @@ const Budgets = () => {
       fetchBillsDueThisWeek();
     }
   }, [session?.accessToken]);
+
+  useEffect(() => {
+    if (totalBillsDue !== undefined && transactions.length >= 0){
+      calculateSafeToSpend();
+    }
+  }, [transactions, totalBillsDue, bufferPercent]);
+
+  useEffect(() => {
+    if(recurringBills.length > 0 && billsDueThisWeekIds.length > 0){
+      const updatedBills = recurringBills.map(bill => ({
+        ...bill,
+        status: billsDueThisWeekIds.includes(bill.id) ? 'dueSoon' : undefined
+      }));
+      setRecurringBills(updatedBills);
+    }
+  }, [billsDueThisWeekIds, recurringBills.length]);
+
 
   const getTransactions = async () => {
     try {
@@ -77,26 +99,13 @@ const Budgets = () => {
     try{
       const data = await GetBillsDueThisWeek(session.accessToken);
       setTotalBillsDue(data.total);
+      const dueIds = data.upcomingBills.map(b => b.id);
+      setBillsDueThisWeekIds(dueIds);
+
     } catch(error){
       console.error(error);
     }
   }
-
-  const weeklyEarnings = useMemo(() => {
-    return transactions.reduce(
-      (sum, transaction) =>
-        transaction.type === "Income" ? sum + transaction.amount : sum,
-      0
-    );
-  }, [transactions]);
-
-  const weeklySpendings = useMemo(() => {
-    return transactions.reduce(
-      (sum, transaction) =>
-        transaction.type === "Expense" ? sum + transaction.amount : sum,
-      0
-    );
-  }, [transactions]);
 
   const openWeeklyBudget = () => {
     setShowBudget(!showBudget);
@@ -180,6 +189,35 @@ const Budgets = () => {
     setBillForm({ name: "", amount: "", dayOfMonth: "", category: "" });
   };
 
+  const calculateSafeToSpend = () => {
+    if (totalBillsDue === undefined) return;
+
+    const totalEarnings = transactions.reduce(
+      (sum, transaction) =>
+        transaction.type === "Income" ? sum + transaction.amount : sum,
+      0
+    );
+
+    const buffer = (bufferPercent / 100) * totalEarnings;
+    setSafetyBuffer(buffer);
+    setEarnings(totalEarnings);
+
+    const totalSpendings = transactions.reduce(
+      (sum, transaction) =>
+        transaction.type === "Expense" ? sum + transaction.amount : sum,
+      0
+    );
+    setSpendings(totalSpendings);
+
+    setSafeToSpendAmount(totalEarnings - totalSpendings - totalBillsDue - buffer);
+  };
+
+  const percentageIncomeAvailable = useMemo(() => {
+    if (!earnings || earnings === 0) return 0;
+
+    return ((safeToSpendAmount / earnings) * 100).toFixed(1);
+  }, [safeToSpendAmount, earnings]);
+
 
   return (
     <>
@@ -250,7 +288,7 @@ const Budgets = () => {
                         <p className={styles.breakdownSubtext}>Dec 9-15</p>
                       </div>
                       <p className={styles.breakdownAmount}>
-                        ${weeklyEarnings}
+                        ${earnings.toFixed(2)}
                       </p>
                     </div>
 
@@ -272,7 +310,7 @@ const Budgets = () => {
                         <p className={styles.breakdownSubtext}>Dec 9-15</p>
                       </div>
                       <p className={styles.breakdownAmount}>
-                        ${weeklySpendings}
+                        ${spendings.toFixed(2)}
                       </p>
                     </div>
 
@@ -289,7 +327,7 @@ const Budgets = () => {
                         <p className={styles.breakdownLabel}>Upcoming Bills</p>
                         <p className={styles.breakdownSubtext}>Due this week</p>
                       </div>
-                      <p className={styles.breakdownAmount}>${totalBillsDue}</p>
+                      <p className={styles.breakdownAmount}>${totalBillsDue.toFixed(2)}</p>
                     </div>
 
                     <div className={`${styles.breakdownItem} ${styles.buffer}`}>
@@ -307,7 +345,7 @@ const Budgets = () => {
                         </p>
                         <p className={styles.breakdownSubtext}>Reserved</p>
                       </div>
-                      <p className={styles.breakdownAmount}>${}</p>
+                      <p className={styles.breakdownAmount}>${safetyBuffer.toFixed(2)}</p>
                     </div>
                   </>
                 )}
@@ -322,7 +360,7 @@ const Budgets = () => {
                     (Income - Spending - Bills - Buffer)
                   </p>
                 </div>
-                <h3 className={`${styles.resultAmount}`}>${}</h3>
+                <h3 className={`${styles.resultAmount}`}>${safeToSpendAmount.toFixed(2)}</h3>
               </div>
             </div>
 
@@ -658,16 +696,13 @@ const Budgets = () => {
                           <p className={styles.billName}>
                             {bill.name}
                             {bill.status && (
-                              <span
-                                className={`${styles.billStatusBadge} ${
-                                  styles[bill.status]
-                                }`}
-                              >
-                                {bill.status === "dueSoon"
-                                  ? "Due Soon"
-                                  : bill.status === "paid"
-                                  ? "Paid"
-                                  : "Overdue"}
+                              <span className={`${styles.billStatusBadge} ${styles.dueSoon}`}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+                                  <path d="M12 8v4"/>
+                                  <path d="M12 16h.01"/>
+                                </svg>
+                                Due Soon
                               </span>
                             )}
                           </p>
@@ -747,7 +782,7 @@ const Budgets = () => {
 
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>% of Income Available</span>
-                <span className={styles.statValue}>{}%</span>
+                <span className={styles.statValue}>{percentageIncomeAvailable}%</span>
               </div>
 
               <div className={styles.statItem}>
