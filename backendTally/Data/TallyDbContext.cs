@@ -13,6 +13,7 @@ namespace backendTally.Data
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<DailyAggregate> DailyAggregates { get; set; }
         public DbSet<RecurringBill> RecurringBills { get; set; }
+        public DbSet<BudgetGoal> BudgetGoals { get; set; }
         
     }
 }

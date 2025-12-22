@@ -1399,6 +1399,17 @@
     color: #6B7280;
 }
 
+.noLimitMessage {
+    margin-top: 4px;
+}
+
+.noLimitMessage span {
+    font-size: 13px;
+    font-weight: 500;
+    color: #9CA3AF;
+    font-style: italic;
+}
+
 .budgetStatusMessage {
     display: flex;
     align-items: center;

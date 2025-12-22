@@ -4,17 +4,28 @@ import Image from "next/image";
 import styles from "./budgets.module.css";
 import { GetTransactions } from "@services/TransactionService";
 import { useSession } from "@node_modules/next-auth/react";
-import { GetRecurringBills, AddRecurringBill, DeleteBillById, GetBillsDueThisWeek } from "@services/RecurringBillsService";
+import {
+  GetRecurringBills,
+  AddRecurringBill,
+  DeleteBillById,
+  GetBillsDueThisWeek,
+} from "@services/RecurringBillsService";
+import { AddBudgetGoal, GetBudgetGoals } from "@services/BudgetGoalService";
 
 const Budgets = () => {
   const [bufferPercent, setBufferPercent] = useState(10);
   const [safetyBuffer, setSafetyBuffer] = useState(0);
   const [safeToSpendAmount, setSafeToSpendAmount] = useState(0);
-  const [weeklyBudget, setWeeklyBudget] = useState("");
   const [recurringBills, setRecurringBills] = useState([]);
   const [billsDueThisWeekIds, setBillsDueThisWeekIds] = useState([]);
   const [earnings, setEarnings] = useState(0);
   const [spendings, setSpendings] = useState(0);
+  const [isCustomBudget, setIsCustomBudget] = useState(false);
+  const [isBudgetGoal, setIsBudgetGoal] = useState(false);
+  const [dailyLimit, setDailyLimit] = useState(0);
+  const [daysLeft, setDaysLeft] = useState(0);
+  const [budgetAmount, setBudgetAmount] = useState(0);
+  const [currentSpendingPercent, setCurrentSpendingPercent] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [totalBillsDue, setTotalBillsDue] = useState(0);
@@ -30,7 +41,7 @@ const Budgets = () => {
     name: "",
     amount: "",
     dayOfMonth: "",
-    category: ""
+    category: "",
   });
   const { data: session } = useSession();
 
@@ -43,21 +54,24 @@ const Budgets = () => {
   }, [session?.accessToken]);
 
   useEffect(() => {
-    if (totalBillsDue !== undefined && transactions.length >= 0){
+    if (totalBillsDue !== undefined && transactions.length >= 0) {
       calculateSafeToSpend();
     }
   }, [transactions, totalBillsDue, bufferPercent]);
 
   useEffect(() => {
-    if(recurringBills.length > 0 && billsDueThisWeekIds.length > 0){
-      const updatedBills = recurringBills.map(bill => ({
+    if (recurringBills.length > 0 && billsDueThisWeekIds.length > 0) {
+      const updatedBills = recurringBills.map((bill) => ({
         ...bill,
-        status: billsDueThisWeekIds.includes(bill.id) ? 'dueSoon' : undefined
+        status: billsDueThisWeekIds.includes(bill.id) ? "dueSoon" : undefined,
       }));
       setRecurringBills(updatedBills);
     }
   }, [billsDueThisWeekIds, recurringBills.length]);
 
+  useEffect(() => {
+    fetchBudgetGoal();
+  }, [session?.accessToken, isBudgetGoal]);
 
   const getTransactions = async () => {
     try {
@@ -78,31 +92,45 @@ const Budgets = () => {
   };
 
   const fetchRecurringBills = async () => {
-    try{
+    try {
       setIsLoadingBill(true);
       setIsErrorBill(null);
       const result = await GetRecurringBills(session.accessToken);
-      if(Array.isArray(result)){
+      if (Array.isArray(result)) {
         setRecurringBills(result);
-      } else{
+      } else {
         throw new Error("Invalid data format");
       }
-    } catch(error){
+    } catch (error) {
       console.error(error);
       setIsErrorBill(error);
-    } finally{
+    } finally {
       setIsLoadingBill(false);
     }
   };
 
   const fetchBillsDueThisWeek = async () => {
-    try{
+    try {
       const data = await GetBillsDueThisWeek(session.accessToken);
       setTotalBillsDue(data.total);
-      const dueIds = data.upcomingBills.map(b => b.id);
+      const dueIds = data.upcomingBills.map((b) => b.id);
       setBillsDueThisWeekIds(dueIds);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    } catch(error){
+  const fetchBudgetGoal = async () => {
+    try {
+      const data = await GetBudgetGoals(session.accessToken);
+
+      if (!data) return;
+
+      setBudgetAmount(data.budgetGoal.targetAmount);
+      setDailyLimit((data.budgetGoal.targetAmount / data.daysLeft).toFixed(2));
+      setDaysLeft(data.daysLeft);
+      setIsBudgetGoal(true);
+    } catch (error) {
       console.error(error);
     }
   }
@@ -113,7 +141,7 @@ const Budgets = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setBillForm(prev => ({...prev, [name]: value}));
+    setBillForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleAddBill = async (e) => {
@@ -127,51 +155,74 @@ const Budgets = () => {
       name: billForm.name,
       amount: parseFloat(billForm.amount),
       dayOfMonth: parseInt(billForm.dayOfMonth),
-      category: billForm.category
-    }
+      category: billForm.category,
+    };
 
     if (!billData.amount || billData.amount < 0) {
       alert("Amount must be a positive number");
       return;
-    };
+    }
 
-    if (!billData.dayOfMonth || billData.dayOfMonth < 1 || billData.dayOfMonth > 31){
+    if (
+      !billData.dayOfMonth ||
+      billData.dayOfMonth < 1 ||
+      billData.dayOfMonth > 31
+    ) {
       alert("Day must be be between 1 and 31");
       return;
     }
 
-    setRecurringBills(prev => [...(prev || []), {...billData, id: tempId}]);
+    setRecurringBills((prev) => [...(prev || []), { ...billData, id: tempId }]);
 
     try {
       setIsSubmitting(true);
-      setSubmitError(null)
+      setSubmitError(null);
       const result = await AddRecurringBill(billData, session.accessToken);
-      setRecurringBills(prev => prev.map(b => b.id === tempId ? result : b));
+      setRecurringBills((prev) =>
+        prev.map((b) => (b.id === tempId ? result : b))
+      );
       setBillAdded(true);
       await fetchBillsDueThisWeek();
     } catch (error) {
       console.error("Failed to add bill:", error);
-      setSubmitError(error.message );
-      setRecurringBills(prev => prev.filter(b => b.id !== tempId));
-    }
-    finally{
+      setSubmitError(error.message);
+      setRecurringBills((prev) => prev.filter((b) => b.id !== tempId));
+    } finally {
       setIsSubmitting(false);
     }
   };
-  
+
+  const handleAddBudgetGoal = async (e) => {
+    e.preventDefault();
+
+    if(!budgetAmount || budgetAmount <= 0) return;
+
+    const budgetGoalData = {
+      targetAmount: parseFloat(budgetAmount),
+    };
+
+    try {
+      const data = await AddBudgetGoal(budgetGoalData, session.accessToken);
+      setIsBudgetGoal(true);
+      setDaysLeft(data.daysLeft);
+      setDailyLimit((budgetAmount / data.daysLeft).toFixed(2));
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const handleDeleteBill = async (billId) => {
     if (!billId) return;
 
     const previousBills = recurringBills;
-    setRecurringBills(prev => prev.filter(b => b.id !== billId));
+    setRecurringBills((prev) => prev.filter((b) => b.id !== billId));
 
-    try{
+    try {
       await DeleteBillById(billId, session.accessToken);
       await fetchBillsDueThisWeek();
-    } catch(error){
+    } catch (error) {
       console.error(error);
-      alert('Failed to delete bill. Please try again.')
+      alert("Failed to delete bill. Please try again.");
       setRecurringBills(previousBills);
     }
   };
@@ -209,7 +260,9 @@ const Budgets = () => {
     );
     setSpendings(totalSpendings);
 
-    setSafeToSpendAmount(totalEarnings - totalSpendings - totalBillsDue - buffer);
+    setSafeToSpendAmount(
+      totalEarnings - totalSpendings - totalBillsDue - buffer
+    );
   };
 
   const percentageIncomeAvailable = useMemo(() => {
@@ -218,6 +271,7 @@ const Budgets = () => {
     return ((safeToSpendAmount / earnings) * 100).toFixed(1);
   }, [safeToSpendAmount, earnings]);
 
+  
 
   return (
     <>
@@ -327,7 +381,9 @@ const Budgets = () => {
                         <p className={styles.breakdownLabel}>Upcoming Bills</p>
                         <p className={styles.breakdownSubtext}>Due this week</p>
                       </div>
-                      <p className={styles.breakdownAmount}>${totalBillsDue.toFixed(2)}</p>
+                      <p className={styles.breakdownAmount}>
+                        ${totalBillsDue.toFixed(2)}
+                      </p>
                     </div>
 
                     <div className={`${styles.breakdownItem} ${styles.buffer}`}>
@@ -345,7 +401,9 @@ const Budgets = () => {
                         </p>
                         <p className={styles.breakdownSubtext}>Reserved</p>
                       </div>
-                      <p className={styles.breakdownAmount}>${safetyBuffer.toFixed(2)}</p>
+                      <p className={styles.breakdownAmount}>
+                        ${safetyBuffer.toFixed(2)}
+                      </p>
                     </div>
                   </>
                 )}
@@ -360,7 +418,9 @@ const Budgets = () => {
                     (Income - Spending - Bills - Buffer)
                   </p>
                 </div>
-                <h3 className={`${styles.resultAmount}`}>${safeToSpendAmount.toFixed(2)}</h3>
+                <h3 className={`${styles.resultAmount}`}>
+                  ${safeToSpendAmount.toFixed(2)}
+                </h3>
               </div>
             </div>
 
@@ -413,8 +473,7 @@ const Budgets = () => {
                 </div>
 
                 {/* Weekly Budget Goal */}
-
-                <div className={styles.settingGroup}>
+                <form onSubmit={handleAddBudgetGoal} className={styles.settingGroup}>
                   <div className={styles.settingLabelWithSwitch}>
                     <div className={styles.settingLabel}>
                       <div className={styles.labelTitleRow}>
@@ -439,32 +498,46 @@ const Budgets = () => {
                   {showBudget && (
                     <>
                       <div className={styles.quickSelectButtons}>
-                        <button className={styles.quickSelectBtn}>$300</button>
+                        <button className={styles.quickSelectBtn}
+                          type="button"
+                          onClick={() => setBudgetAmount(300)}
+                        >$300</button>
+                        <button className={styles.quickSelectBtn}
+                          type="button"
+                          onClick={() => setBudgetAmount(500)}
+                        >$500</button>
+                        <button className={styles.quickSelectBtn}
+                          type="button"
+                          onClick={() => setBudgetAmount(750)}
+                        >$750</button>
+                        <button className={styles.quickSelectBtn}
+                          type="button"
+                          onClick={() => setBudgetAmount(1000)}
+                        >$1000</button>
                         <button
-                          className={`${styles.quickSelectBtn} ${styles.active}`}
+                          type="button"
+                          className={styles.quickSelectBtn}
+                          onClick={() => setIsCustomBudget(!isCustomBudget)}
                         >
-                          $500
-                        </button>
-                        <button className={styles.quickSelectBtn}>$750</button>
-                        <button className={styles.quickSelectBtn}>$1000</button>
-                        <button className={styles.quickSelectBtn}>
                           Custom
                         </button>
                       </div>
 
                       {/* Budget Input */}
-                      <div className={styles.budgetInputWrapper}>
-                        <span className={styles.dollarSign}>$</span>
-                        <input
-                          type="number"
-                          step="0.01"
-                          value={weeklyBudget}
-                          onChange={(e) => setWeeklyBudget(e.target.value)}
-                          className={styles.budgetInputLarge}
-                          placeholder="500"
-                        />
-                        <span className={styles.perWeek}>/week</span>
-                      </div>
+                      {isCustomBudget && (
+                        <div className={styles.budgetInputWrapper}>
+                          <span className={styles.dollarSign}>$</span>
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={budgetAmount}
+                            onChange={(e) => setBudgetAmount(e.target.value)}
+                            className={styles.budgetInputLarge}
+                            placeholder="500"
+                          />
+                          <span className={styles.perWeek}>/week</span>
+                        </div>
+                      )}
 
                       {/* Current Spending Progress */}
                       <div className={styles.spendingProgress}>
@@ -473,13 +546,13 @@ const Budgets = () => {
                             Current Spending
                           </span>
                           <span className={styles.spendingAmount}>
-                            $320.00 of $500.00 (64%)
+                              ${spendings} of ${budgetAmount} ({currentSpendingPercent}%)
                           </span>
                         </div>
                         <div className={styles.progressBar}>
                           <div
                             className={styles.progressFill}
-                            style={{ width: "64%" }}
+                            style={{ width: `${currentSpendingPercent}%` }}
                           ></div>
                         </div>
                       </div>
@@ -509,10 +582,21 @@ const Budgets = () => {
                             <span className={styles.insightLabel}>
                               DAYS LEFT
                             </span>
-                            <span className={styles.insightValue}>4</span>
-                            <span className={styles.insightSubtext}>
-                              until week ends
-                            </span>
+
+                            {!isBudgetGoal && (
+                              <div className={styles.noLimitMessage}>
+                                <span>No budget goal set</span>
+                              </div>
+                            )}
+
+                            {isBudgetGoal && (
+                              <>
+                                <span className={styles.insightValue}>{daysLeft}</span>
+                                <span className={styles.insightSubtext}>
+                                  until week ends
+                                </span>
+                              </>
+                            )}
                           </div>
                         </div>
                         <div className={styles.insightBox}>
@@ -537,57 +621,37 @@ const Budgets = () => {
                             <span className={styles.insightLabel}>
                               DAILY LIMIT
                             </span>
-                            <span className={styles.insightValue}>$45.00</span>
-                            <span className={styles.insightSubtext}>
-                              remaining per day
-                            </span>
-                          </div>
-                        </div>
-                      </div>
 
-                      {/* Success Message */}
-                      <div className={styles.budgetStatusMessage}>
-                        <div className={styles.statusIcon}>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#10B981"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M12 16v5" />
-                            <path d="M16 14v7" />
-                            <path d="M20 10v11" />
-                            <path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15" />
-                            <path d="M4 18v3" />
-                            <path d="M8 14v7" />
-                          </svg>
-                        </div>
-                        <div className={styles.statusContent}>
-                          <span className={styles.statusTitle}>
-                            You're on track!
-                          </span>
-                          <span className={styles.statusText}>
-                            Keep spending under $45.00/day to stay within budget
-                          </span>
+                            {!isBudgetGoal && (
+                              <div className={styles.noLimitMessage}>
+                                <span>No budget goal set</span>
+                              </div>
+                            )}
+
+                            {isBudgetGoal && (
+                              <>
+                                <span className={styles.insightValue}>
+                                  ${dailyLimit}
+                                </span>
+                                <span className={styles.insightSubtext}>
+                                  remaining per day
+                                </span>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
 
                       {/* Weekly to Daily Conversion */}
                       <div className={styles.conversionText}>
-                        Weekly: $500.00 → Daily: $71.43
+                        Weekly: ${budgetAmount} → Daily: ${dailyLimit}
                       </div>
+                      <button type="submit" className={styles.saveSettingsButton}>
+                        {isBudgetGoal ? "Update Budget Goal" : "Set Budget Goal"}
+                      </button>
                     </>
                   )}
-                </div>
-
-                <button className={styles.saveSettingsButton}>
-                  Save Settings
-                </button>
+                </form>
               </div>
             </div>
           </div>
@@ -640,32 +704,35 @@ const Budgets = () => {
                 </div>
               )}
 
-              {!isLoadingBill && !isErrorBill && recurringBills && recurringBills.length === 0 && (
-                <div className={styles.emptyBillsState}>
-                  <div className={styles.emptyBillsIcon}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="32"
-                      height="32"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
-                      <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
-                    </svg>
+              {!isLoadingBill &&
+                !isErrorBill &&
+                recurringBills &&
+                recurringBills.length === 0 && (
+                  <div className={styles.emptyBillsState}>
+                    <div className={styles.emptyBillsIcon}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="32"
+                        height="32"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
+                        <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
+                      </svg>
+                    </div>
+                    <p className={styles.emptyBillsTitle}>
+                      No recurring bills yet
+                    </p>
+                    <p className={styles.emptyBillsSubtitle}>
+                      Add your first bill to get started
+                    </p>
                   </div>
-                  <p className={styles.emptyBillsTitle}>
-                    No recurring bills yet
-                  </p>
-                  <p className={styles.emptyBillsSubtitle}>
-                    Add your first bill to get started
-                  </p>
-                </div>
-              )}
+                )}
 
               {!isLoadingBill && !isErrorBill && recurringBills.length > 0 && (
                 <>
@@ -688,25 +755,39 @@ const Budgets = () => {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                           >
-                            <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/>
-                            <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>
+                            <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
+                            <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
                           </svg>
                         </div>
                         <div className={styles.billInfo}>
                           <p className={styles.billName}>
                             {bill.name}
                             {bill.status && (
-                              <span className={`${styles.billStatusBadge} ${styles.dueSoon}`}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
-                                  <path d="M12 8v4"/>
-                                  <path d="M12 16h.01"/>
+                              <span
+                                className={`${styles.billStatusBadge} ${styles.dueSoon}`}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="14"
+                                  height="14"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                                  <path d="M12 8v4" />
+                                  <path d="M12 16h.01" />
                                 </svg>
                                 Due Soon
                               </span>
                             )}
                           </p>
-                          <p className={styles.billMeta}>Every {bill.dayOfMonth}</p>
+                          <p className={styles.billMeta}>
+                            Every {bill.dayOfMonth}
+                          </p>
                         </div>
                         <p className={styles.billAmount}>
                           ${bill.amount.toFixed(2)}
@@ -724,8 +805,8 @@ const Budgets = () => {
                               strokeLinecap="round"
                               strokeLinejoin="round"
                             >
-                              <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                              <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/>
+                              <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                              <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
                             </svg>
                           </button>
                           <button
@@ -743,11 +824,11 @@ const Budgets = () => {
                               strokeLinecap="round"
                               strokeLinejoin="round"
                             >
-                              <path d="M10 11v6"/>
-                              <path d="M14 11v6"/>
-                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
-                              <path d="M3 6h18"/>
-                              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                              <path d="M10 11v6" />
+                              <path d="M14 11v6" />
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                              <path d="M3 6h18" />
+                              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                             </svg>
                           </button>
                         </div>
@@ -760,7 +841,9 @@ const Budgets = () => {
                     <span className={styles.billsTotalLabel}>
                       Total Monthly Bills
                     </span>
-                    <span className={styles.billsTotalAmount}>${calculateTotalBills.toFixed(2)}</span>
+                    <span className={styles.billsTotalAmount}>
+                      ${calculateTotalBills.toFixed(2)}
+                    </span>
                   </div>
                 </>
               )}
@@ -782,7 +865,9 @@ const Budgets = () => {
 
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>% of Income Available</span>
-                <span className={styles.statValue}>{percentageIncomeAvailable}%</span>
+                <span className={styles.statValue}>
+                  {percentageIncomeAvailable}%
+                </span>
               </div>
 
               <div className={styles.statItem}>
@@ -838,9 +923,9 @@ const Budgets = () => {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         >
-                          <circle cx="12" cy="12" r="10"/>
-                          <line x1="12" y1="8" x2="12" y2="12"/>
-                          <line x1="12" y1="16" x2="12.01" y2="16"/>
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="12" y1="8" x2="12" y2="12" />
+                          <line x1="12" y1="16" x2="12.01" y2="16" />
                         </svg>
                       </div>
                       <p className={styles.modalErrorText}>{submitError}</p>
@@ -929,7 +1014,7 @@ const Budgets = () => {
                   type="button"
                   className={styles.modalCloseButton}
                   onClick={handleCloseModal}
-                  style={{ position: 'absolute', top: '24px', right: '24px' }}
+                  style={{ position: "absolute", top: "24px", right: "24px" }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -959,10 +1044,12 @@ const Budgets = () => {
                     strokeLinejoin="round"
                     className={styles.successIcon}
                   >
-                    <path d="M20 6 9 17l-5-5"/>
+                    <path d="M20 6 9 17l-5-5" />
                   </svg>
                 </div>
-                <h4 className={styles.successTitle}>Bill Added Successfully!</h4>
+                <h4 className={styles.successTitle}>
+                  Bill Added Successfully!
+                </h4>
                 <p className={styles.successText}>
                   Your recurring bill has been added to your budget.
                 </p>
@@ -971,7 +1058,12 @@ const Budgets = () => {
                     className={styles.addAnotherBillButton}
                     onClick={() => {
                       setBillAdded(false);
-                      setBillForm({ name: "", amount: "", dayOfMonth: "", category: "" });
+                      setBillForm({
+                        name: "",
+                        amount: "",
+                        dayOfMonth: "",
+                        category: "",
+                      });
                     }}
                   >
                     Add Another Bill
