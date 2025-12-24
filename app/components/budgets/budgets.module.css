@@ -1260,6 +1260,45 @@
     border-color: #38BDF8;
 }
 
+.clearBudgetLink {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6B7280;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.2s;
+    margin-top: 8px;
+    display: block;
+    text-align: right;
+}
+
+.clearBudgetLink:hover {
+    color: #38BDF8;
+}
+
+.deleteBudgetLink {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6B7280;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.2s;
+    margin-top: 12px;
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+.deleteBudgetLink:hover {
+    color: #DC2626;
+}
+
 .budgetInputWrapper {
     position: relative;
     display: flex;

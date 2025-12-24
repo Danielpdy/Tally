@@ -10,7 +10,7 @@ import {
   DeleteBillById,
   GetBillsDueThisWeek,
 } from "@services/RecurringBillsService";
-import { AddBudgetGoal, GetBudgetGoals } from "@services/BudgetGoalService";
+import { AddBudgetGoal, GetBudgetGoals, UpdateBudgetGoal } from "@services/BudgetGoalService";
 
 const Budgets = () => {
   const [bufferPercent, setBufferPercent] = useState(10);
@@ -25,7 +25,7 @@ const Budgets = () => {
   const [dailyLimit, setDailyLimit] = useState(0);
   const [daysLeft, setDaysLeft] = useState(0);
   const [budgetAmount, setBudgetAmount] = useState(0);
-  const [currentSpendingPercent, setCurrentSpendingPercent] = useState(0);
+  const [budgetGoal, setBudgetGoal] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [totalBillsDue, setTotalBillsDue] = useState(0);
@@ -72,6 +72,7 @@ const Budgets = () => {
   useEffect(() => {
     fetchBudgetGoal();
   }, [session?.accessToken, isBudgetGoal]);
+
 
   const getTransactions = async () => {
     try {
@@ -126,10 +127,11 @@ const Budgets = () => {
 
       if (!data) return;
 
-      setBudgetAmount(data.budgetGoal.targetAmount);
+      setBudgetGoal(data.budgetGoal.targetAmount);
       setDailyLimit((data.budgetGoal.targetAmount / data.daysLeft).toFixed(2));
       setDaysLeft(data.daysLeft);
       setIsBudgetGoal(true);
+      setShowBudget(true);
     } catch (error) {
       console.error(error);
     }
@@ -195,20 +197,70 @@ const Budgets = () => {
   const handleAddBudgetGoal = async (e) => {
     e.preventDefault();
 
-    if(!budgetAmount || budgetAmount <= 0) return;
+    if(!budgetAmount || budgetAmount <= 0) {
+      return alert('Invalid budget amount')
+    }
+
+    if(isBudgetGoal) {
+      return alert('There is already a budget for this week');
+    };
+
+    if (budgetAmount > earnings) {
+      return alert('your budget goal amount must greater than you current weeekly earnings');
+    };
+
+    if (budgetAmount < spendings) {
+      return alert('Your current spendings for this week are already higher than your budget goal');
+    }
 
     const budgetGoalData = {
-      targetAmount: parseFloat(budgetAmount),
+      targetAmount : parseFloat(budgetAmount),
     };
+
 
     try {
       const data = await AddBudgetGoal(budgetGoalData, session.accessToken);
       setIsBudgetGoal(true);
+      setBudgetGoal(data.targetAmount);
       setDaysLeft(data.daysLeft);
       setDailyLimit((budgetAmount / data.daysLeft).toFixed(2));
+      setBudgetAmount(0);
+      setIsCustomBudget(false);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const updateBudgetGoal = async (e) => {
+    e.preventDefault();
+
+    if (!budgetAmount || budgetAmount <= 0){
+      return alert('Invalid budget amount');
+    }
+
+    if (budgetAmount > earnings) {
+      return alert('your budget goal amount must greater than you current weeekly earnings');
+    };
+
+    if (budgetAmount < spendings) {
+      return alert('Your current spendings for this week are already higher than your budget goal');
+    }
+
+    const budgetGoalData = {
+      targetAmount: parseFloat(budgetAmount)
+    }
+
+    try{
+      const data = await UpdateBudgetGoal(budgetGoalData, session.accessToken);
+      setBudgetGoal(data.targetAmount);
+      setDaysLeft(data.daysLeft)
+      setDailyLimit((budgetAmount / data.daysLeft).toFixed(2));
+      setBudgetAmount(0);
+      setIsCustomBudget(false);
+    } catch (error){
+      console.error(error);
+    }
+    
   }
 
   const handleDeleteBill = async (billId) => {
@@ -270,6 +322,12 @@ const Budgets = () => {
 
     return ((safeToSpendAmount / earnings) * 100).toFixed(1);
   }, [safeToSpendAmount, earnings]);
+
+  const currentSpendingPercent = useMemo(() => {
+    if (budgetGoal <= 0) return 0;
+
+    return ((spendings / budgetGoal) * 100).toFixed(0);
+  }, [spendings, budgetGoal]);
 
   
 
@@ -473,7 +531,7 @@ const Budgets = () => {
                 </div>
 
                 {/* Weekly Budget Goal */}
-                <form onSubmit={handleAddBudgetGoal} className={styles.settingGroup}>
+                <form onSubmit={ isBudgetGoal ? updateBudgetGoal : handleAddBudgetGoal} className={styles.settingGroup}>
                   <div className={styles.settingLabelWithSwitch}>
                     <div className={styles.settingLabel}>
                       <div className={styles.labelTitleRow}>
@@ -487,36 +545,61 @@ const Budgets = () => {
                     <label className={styles.switch}>
                       <input
                         type="checkbox"
-                        value={showBudget}
+                        checked={showBudget}
                         onChange={openWeeklyBudget}
                       />
                       <span className={styles.switchSlider}></span>
                     </label>
                   </div>
 
+                  {(budgetAmount > 0 || isCustomBudget) && showBudget && (
+                    <button
+                      type="button"
+                      className={styles.clearBudgetLink}
+                      onClick={() => {
+                        setBudgetAmount(0)
+                        setIsCustomBudget(false)
+                      }}
+                    >
+                      Clear selection
+                    </button>
+                  )}
+
                   {/* Quick Select Buttons */}
                   {showBudget && (
                     <>
                       <div className={styles.quickSelectButtons}>
-                        <button className={styles.quickSelectBtn}
+                        <button className={`${styles.quickSelectBtn} ${budgetAmount === 300 && !isCustomBudget ? styles.active : ''}`}
                           type="button"
-                          onClick={() => setBudgetAmount(300)}
+                          onClick={() => {
+                            setBudgetAmount(300)
+                            setIsCustomBudget(false)
+                          }}
                         >$300</button>
-                        <button className={styles.quickSelectBtn}
+                        <button className={`${styles.quickSelectBtn} ${budgetAmount === 500 && !isCustomBudget ? styles.active : ''}`}
                           type="button"
-                          onClick={() => setBudgetAmount(500)}
+                          onClick={() => {
+                            setBudgetAmount(500)
+                            setIsCustomBudget(false)
+                          }}
                         >$500</button>
-                        <button className={styles.quickSelectBtn}
+                        <button className={`${styles.quickSelectBtn} ${budgetAmount === 750 && !isCustomBudget ? styles.active : ''}`}
                           type="button"
-                          onClick={() => setBudgetAmount(750)}
+                          onClick={() => {
+                            setBudgetAmount(750)
+                            setIsCustomBudget(false)
+                          }}
                         >$750</button>
-                        <button className={styles.quickSelectBtn}
+                        <button className={`${styles.quickSelectBtn} ${budgetAmount === 1000 && !isCustomBudget ? styles.active : ''}`}
                           type="button"
-                          onClick={() => setBudgetAmount(1000)}
+                          onClick={() => {
+                            setBudgetAmount(1000)
+                            setIsCustomBudget(false)
+                          }}
                         >$1000</button>
                         <button
                           type="button"
-                          className={styles.quickSelectBtn}
+                          className={`${styles.quickSelectBtn} ${isCustomBudget ? styles.active : ''}`}
                           onClick={() => setIsCustomBudget(!isCustomBudget)}
                         >
                           Custom
@@ -546,7 +629,7 @@ const Budgets = () => {
                             Current Spending
                           </span>
                           <span className={styles.spendingAmount}>
-                              ${spendings} of ${budgetAmount} ({currentSpendingPercent}%)
+                              ${spendings} of ${budgetGoal} ({currentSpendingPercent}%)
                           </span>
                         </div>
                         <div className={styles.progressBar}>
@@ -644,11 +727,26 @@ const Budgets = () => {
 
                       {/* Weekly to Daily Conversion */}
                       <div className={styles.conversionText}>
-                        Weekly: ${budgetAmount} → Daily: ${dailyLimit}
+                        Weekly: ${budgetGoal} → Daily: ${dailyLimit}
                       </div>
                       <button type="submit" className={styles.saveSettingsButton}>
                         {isBudgetGoal ? "Update Budget Goal" : "Set Budget Goal"}
                       </button>
+
+                      {isBudgetGoal && (
+                        <button
+                          type="button"
+                          className={styles.deleteBudgetLink}
+                          onClick={() => {
+                            if (window.confirm('Are you sure you want to delete your budget goal?')) {
+                              // TODO: Call delete API
+                              alert('Delete functionality to be implemented');
+                            }
+                          }}
+                        >
+                          Delete budget goal
+                        </button>
+                      )}
                     </>
                   )}
                 </form>
