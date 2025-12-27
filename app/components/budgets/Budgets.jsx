@@ -9,8 +9,9 @@ import {
   AddRecurringBill,
   DeleteBillById,
   GetBillsDueThisWeek,
+  GetBillsOverdueThisWeek,
 } from "@services/RecurringBillsService";
-import { AddBudgetGoal, GetBudgetGoals, UpdateBudgetGoal } from "@services/BudgetGoalService";
+import { AddBudgetGoal, DeleteBudgetGoal, GetBudgetGoals, UpdateBudgetGoal } from "@services/BudgetGoalService";
 
 const Budgets = () => {
   const [bufferPercent, setBufferPercent] = useState(10);
@@ -18,6 +19,7 @@ const Budgets = () => {
   const [safeToSpendAmount, setSafeToSpendAmount] = useState(0);
   const [recurringBills, setRecurringBills] = useState([]);
   const [billsDueThisWeekIds, setBillsDueThisWeekIds] = useState([]);
+  const [billsOverdueThisWeekIds, setBillsOverdueThisWeekIds] = useState([]);
   const [earnings, setEarnings] = useState(0);
   const [spendings, setSpendings] = useState(0);
   const [isCustomBudget, setIsCustomBudget] = useState(false);
@@ -50,6 +52,7 @@ const Budgets = () => {
       getTransactions();
       fetchRecurringBills();
       fetchBillsDueThisWeek();
+      fetchBillsOverdueThisWeek();
     }
   }, [session?.accessToken]);
 
@@ -60,14 +63,14 @@ const Budgets = () => {
   }, [transactions, totalBillsDue, bufferPercent]);
 
   useEffect(() => {
-    if (recurringBills.length > 0 && billsDueThisWeekIds.length > 0) {
+    if (recurringBills.length < 0 && !billsDueThisWeekIds && !billsOverdueThisWeekIds) return;
       const updatedBills = recurringBills.map((bill) => ({
         ...bill,
-        status: billsDueThisWeekIds.includes(bill.id) ? "dueSoon" : undefined,
+        status: getBillStatus(bill.id)
       }));
+
       setRecurringBills(updatedBills);
-    }
-  }, [billsDueThisWeekIds, recurringBills.length]);
+  }, [billsDueThisWeekIds, billsOverdueThisWeekIds]);
 
   useEffect(() => {
     fetchBudgetGoal();
@@ -117,6 +120,16 @@ const Budgets = () => {
       const dueIds = data.upcomingBills.map((b) => b.id);
       setBillsDueThisWeekIds(dueIds);
     } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchBillsOverdueThisWeek = async () => {
+    try {
+      const data = await GetBillsOverdueThisWeek(session.accessToken);
+      console.log(data.overdueBills);
+      setBillsOverdueThisWeekIds(data.overdueBills);
+    } catch (error){
       console.error(error);
     }
   };
@@ -185,6 +198,7 @@ const Budgets = () => {
       );
       setBillAdded(true);
       await fetchBillsDueThisWeek();
+      await fetchBillsOverdueThisWeek();
     } catch (error) {
       console.error("Failed to add bill:", error);
       setSubmitError(error.message);
@@ -279,6 +293,17 @@ const Budgets = () => {
     }
   };
 
+  const handleDeleteBudgetGoal = async () => {
+    if (!isBudgetGoal) return;
+
+    try{
+      await DeleteBudgetGoal(session.accessToken);
+      setIsBudgetGoal(false);
+    }catch(error){
+      console.error(error);
+    }
+  }
+
   const calculateTotalBills = useMemo(() => {
     if (!recurringBills || recurringBills.length === 0) return 0;
 
@@ -328,6 +353,39 @@ const Budgets = () => {
 
     return ((spendings / budgetGoal) * 100).toFixed(0);
   }, [spendings, budgetGoal]);
+
+  const percentageBillsCoverage = useMemo(() => {
+    if (earnings == null || totalBillsDue == null || spendings == null) return 0;
+
+    return ((totalBillsDue + spendings) / earnings) * 100;
+  }, [earnings, spendings, totalBillsDue]);
+
+
+  const getWeekRange = () => {
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+
+    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - daysFromMonday);
+
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+
+    const formatDate = (date) => {
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric'});
+    };
+    return `${formatDate(weekStart)} - ${formatDate(weekEnd)}`;
+  };
+
+
+  const getBillStatus = (billId) => {
+    if (billsOverdueThisWeekIds.includes(billId)) return "Overdue this week";
+    if (billsDueThisWeekIds.includes(billId)) return "Due this week"
+
+    return undefined;
+  }
 
   
 
@@ -397,7 +455,7 @@ const Budgets = () => {
                         <p className={styles.breakdownLabel}>
                           This Week's Income
                         </p>
-                        <p className={styles.breakdownSubtext}>Dec 9-15</p>
+                        <p className={styles.breakdownSubtext}>{getWeekRange()}</p>
                       </div>
                       <p className={styles.breakdownAmount}>
                         ${earnings.toFixed(2)}
@@ -419,7 +477,7 @@ const Budgets = () => {
                         <p className={styles.breakdownLabel}>
                           This Week's Spending
                         </p>
-                        <p className={styles.breakdownSubtext}>Dec 9-15</p>
+                        <p className={styles.breakdownSubtext}>{getWeekRange()}</p>
                       </div>
                       <p className={styles.breakdownAmount}>
                         ${spendings.toFixed(2)}
@@ -737,12 +795,7 @@ const Budgets = () => {
                         <button
                           type="button"
                           className={styles.deleteBudgetLink}
-                          onClick={() => {
-                            if (window.confirm('Are you sure you want to delete your budget goal?')) {
-                              // TODO: Call delete API
-                              alert('Delete functionality to be implemented');
-                            }
-                          }}
+                          onClick={() => handleDeleteBudgetGoal()}
                         >
                           Delete budget goal
                         </button>
@@ -862,7 +915,11 @@ const Budgets = () => {
                             {bill.name}
                             {bill.status && (
                               <span
-                                className={`${styles.billStatusBadge} ${styles.dueSoon}`}
+                                className={`${styles.billStatusBadge} ${
+                                  bill.status === "Overdue this week"
+                                    ? styles.overdue
+                                    : styles.dueSoon
+                                }`}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -879,7 +936,7 @@ const Budgets = () => {
                                   <path d="M12 8v4" />
                                   <path d="M12 16h.01" />
                                 </svg>
-                                Due Soon
+                                {bill.status}
                               </span>
                             )}
                           </p>
@@ -969,8 +1026,8 @@ const Budgets = () => {
               </div>
 
               <div className={styles.statItem}>
-                <span className={styles.statLabel}>Bills Coverage</span>
-                <span className={styles.statValue}>{}%</span>
+                <span className={styles.statLabel}>Bills Percentage</span>
+                <span className={styles.statValue}>{percentageBillsCoverage.toFixed(0)}%</span>
               </div>
             </div>
           </div>

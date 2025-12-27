@@ -28,4 +28,13 @@ export const UpdateBudgetGoal = (updatedBudgetGoal, accessToken) => {
         method: "PATCH",
         body: JSON.stringify(updatedBudgetGoal)
     })
-}
+};
+
+export const DeleteBudgetGoal = (accessToken) => {
+    return apiRequest("/budgetgoals", {
+        headers: {
+            "Authorization": `Bearer ${accessToken}`
+        },
+        method: "DELETE"
+    });
+};

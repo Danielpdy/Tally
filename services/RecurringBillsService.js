@@ -37,3 +37,12 @@ export const GetBillsDueThisWeek = (accessToken) => {
         method: "GET"
     });
 };
+
+export const GetBillsOverdueThisWeek = (accessToken) => {
+    return apiRequest("/recurringbill/overdueThisWeek", {
+        headers: {
+            "Authorization": `Bearer ${accessToken}`
+        },
+        method: "GET"
+    });
+};

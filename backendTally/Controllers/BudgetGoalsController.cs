@@ -5,6 +5,7 @@ using backendTally.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using backendTally.Utils;
 
 namespace backendTally.Controllers
 {
@@ -33,7 +34,7 @@ namespace backendTally.Controllers
 
             int authenticatedUserId = int.Parse(userIdClaim);
 
-            var daysLeft = CalculateDaysLeft();
+            var daysLeft = WeekCalculator.CalculateDaysLeft();
 
             var budgetGoals = await _context.BudgetGoals
                 .Where(bg => bg.UserId == authenticatedUserId)
@@ -95,7 +96,7 @@ namespace backendTally.Controllers
                 return NotFound();
             }
 
-            var daysLeft = CalculateDaysLeft();
+            var daysLeft = WeekCalculator.CalculateDaysLeft();
 
             budgetGoal.TargetAmount = dto.TargetAmount;
 
@@ -108,7 +109,34 @@ namespace backendTally.Controllers
             });
         }
 
-        private DateTime GetCurrentWeekStart()
+        [HttpDelete]
+        public async Task<IActionResult> DeleteBudgetGoal()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            var authenticatedUserId = int.Parse(userIdClaim);
+
+            var budgetGoal = await _context.BudgetGoals
+                .Where(bg => bg.UserId == authenticatedUserId)
+                .FirstOrDefaultAsync();
+
+            if (budgetGoal == null)
+            {
+                return NotFound();
+            }
+
+            _context.BudgetGoals.Remove(budgetGoal);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        /*private DateTime GetCurrentWeekStart()
         {
             var today = DateTime.UtcNow.Date;
             int daysFromMonday = ((int)today.DayOfWeek - (int)DayOfWeek.Monday + 7) % 7;
@@ -126,6 +154,6 @@ namespace backendTally.Controllers
             var endOfWeek = GetCurrentWeekEnd();
             var daysLeft = (endOfWeek - today).Days;
             return Math.Max(0, daysLeft);
-        }
+        }*/
     }
 }

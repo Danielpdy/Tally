@@ -1,6 +1,7 @@
 
 using System.Security.Claims;
 using backendTally.Data;
+using backendTally.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -88,9 +89,6 @@ namespace backendTally.Models
             }
 
             var authenticatedUserId = int.Parse(userIdClaim);
-            Console.WriteLine($"Authenticated UserId: {authenticatedUserId}");
-            Console.WriteLine($"Looking for bill Id: {id}");
-
 
             var billDeleted = await _context.RecurringBills
                 .FirstOrDefaultAsync( b => b.Id == id && b.UserId == authenticatedUserId);
@@ -121,8 +119,10 @@ namespace backendTally.Models
                 .Select(b => new { b.Id, b.Name, b.Amount, b.DayOfMonth })
                 .ToListAsync();
 
-            var today = DateTime.Today;
-            var endOfWeek = GetEndOfWeek(today);
+            var today = DateTime.UtcNow.Date;
+            var endOfWeek = WeekCalculator.GetCurrentWeekEnd();
+
+
             var upcomingBills = recurringBills
                 .Where(bill => IsBillInRange(bill.DayOfMonth, today, endOfWeek))
                 .ToList();
@@ -137,11 +137,40 @@ namespace backendTally.Models
                 
         }
 
-        
-        private DateTime GetEndOfWeek(DateTime date)
+        [HttpGet("overdueThisWeek")]
+        public async Task<ActionResult<RecurringBill>> GetBillsOverdueThisWeek()
         {
-            int daysUntilSunday = (7 - (int)date.DayOfWeek) % 7;
-            return date.AddDays(daysUntilSunday);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            int authenticatedUserId = int.Parse(userIdClaim);
+
+
+            var startOfWeek = WeekCalculator.GetCurrentWeekStart();
+            var endOfWeek = WeekCalculator.GetCurrentWeekEnd();
+            var recurringBills = await _context.RecurringBills
+                .Where(rb => rb.UserId == authenticatedUserId)
+                .Select(rb => new { rb.Id, rb.Name, rb.Amount, rb.DayOfMonth})
+                .ToListAsync();
+
+            var upcomingBills = recurringBills
+                .Where(rb => IsBillInRange(rb.DayOfMonth, startOfWeek, endOfWeek))
+                .ToList();
+
+            var today = DateTime.UtcNow.Date;
+            var overdueBills = upcomingBills
+                .Where(rb => rb.DayOfMonth < today.Day)
+                .Select(rb => rb.Id)
+                .ToList();
+
+            return Ok(new
+            {
+                OverdueBills = overdueBills
+            });   
         }
 
         private bool IsBillInRange(int dayOfMonth, DateTime start, DateTime end)
@@ -159,6 +188,5 @@ namespace backendTally.Models
 
             return false;
         }
-
     }
 }

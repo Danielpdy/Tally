@@ -81,27 +81,6 @@ namespace backendTally.Controllers
             });
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, User updatedUser)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            user.Id = updatedUser.Id;
-            user.Name = updatedUser.Name;
-            user.Email = updatedUser.Email;
-            user.PasswordHash = updatedUser.PasswordHash;
-            user.PhoneNumber = updatedUser.PhoneNumber;
-            user.CreatedAt = updatedUser.CreatedAt;
-
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
