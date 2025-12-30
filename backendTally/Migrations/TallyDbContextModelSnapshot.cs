@@ -198,6 +198,31 @@ namespace backendTally.Migrations
 
                     b.ToTable("Users");
                 });
+
+            modelBuilder.Entity("backendTally.Models.BillPayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("PaidDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("RecurringBillId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BillPayments");
+                });
 #pragma warning restore 612, 618
         }
     }

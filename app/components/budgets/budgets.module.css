@@ -299,6 +299,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    overflow: visible;
 }
 
 .billItem {
@@ -309,6 +310,8 @@
     background: white;
     border-radius: 8px;
     transition: transform 0.2s, box-shadow 0.2s;
+    overflow: visible;
+    position: relative;
 }
 
 .billItem:hover {
@@ -358,6 +361,8 @@
 .billActions {
     display: flex;
     gap: 8px;
+    overflow: visible;
+    position: relative;
 }
 
 .editButton,
@@ -396,6 +401,26 @@
 .deleteButton:hover {
     color: #EF4444;
     background: transparent;
+}
+
+.checkButton {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    overflow: visible;
+    position: relative;
+}
+
+.checkButton:hover {
+    background: rgba(139, 79, 255, 0.1);
 }
 
 /* Bill Status Badge */
