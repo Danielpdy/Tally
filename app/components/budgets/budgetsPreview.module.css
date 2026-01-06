@@ -1,0 +1,1024 @@
+/* Preview Page Container */
+.previewPage {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    min-height: calc(100vh - 228px);
+}
+
+/* Hero Banner */
+.heroBanner {
+    background: linear-gradient(135deg, rgba(237, 233, 254, 0.5) 0%, rgba(224, 242, 254, 0.5) 100%);
+    border: 1px solid #C4B5FD;
+    border-radius: 12px;
+    padding: 28px 40px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.bannerContent {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
+
+.bannerContent h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1F2937;
+    margin: 0;
+}
+
+.bannerContent p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6B7280;
+    margin: 0;
+}
+
+.signUpButton {
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #7C3AED 0%, #8B4FFF 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.signUpButton:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+/* Page Header */
+.pageHeader {
+    margin-bottom: 32px;
+}
+
+.pageHeader h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: 8px;
+}
+
+.pageHeader p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6B7280;
+}
+
+/* Two Column Layout */
+.twoColumnLayout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.leftColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.rightColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Locked Section Wrapper */
+.lockedSection {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.lockedSection:hover {
+    transform: translateY(-2px);
+}
+
+/* Lock Overlay */
+.lockOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(2px);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.lockedSection:hover .lockOverlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.lockContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 24px;
+}
+
+.lockIconLarge {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7C3AED 0%, #8B4FFF 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 16px rgba(124, 58, 237, 0.3);
+}
+
+.lockIconLarge svg {
+    color: white;
+    stroke: white;
+}
+
+.lockMessage {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+    text-align: center;
+    margin: 0;
+}
+
+.getStartedButton {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #7C3AED 0%, #8B4FFF 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.getStartedButton:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+}
+
+/* Card Header */
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.cardHeader h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.headerIconCircle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Safe to Spend Card */
+.safeToSpendCard {
+    background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+    border: 1px solid #BAE6FD;
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.safeToSpendCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15);
+}
+
+.previewBadge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    padding: 6px 12px;
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid #38BDF8;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0EA5E9;
+}
+
+.breakdownList {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.breakdownItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid transparent;
+}
+
+.breakdownItem.income {
+    border-left-color: #059669;
+}
+
+.breakdownItem.spending {
+    border-left-color: #FF8042;
+}
+
+.breakdownItem.bills {
+    border-left-color: #8B4FFF;
+}
+
+.breakdownItem.buffer {
+    border-left-color: #38BDF8;
+}
+
+.breakdownIconCircle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(56, 189, 248, 0.15);
+    flex-shrink: 0;
+}
+
+.breakdownItem.income .breakdownIconCircle {
+    background: rgba(5, 150, 105, 0.15);
+}
+
+.breakdownItem.spending .breakdownIconCircle {
+    background: rgba(255, 128, 66, 0.15);
+}
+
+.breakdownItem.bills .breakdownIconCircle {
+    background: rgba(139, 79, 255, 0.15);
+}
+
+.breakdownItem.buffer .breakdownIconCircle {
+    background: rgba(56, 189, 248, 0.15);
+}
+
+.breakdownContent {
+    flex: 1;
+}
+
+.breakdownLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1F2937;
+    margin-bottom: 2px;
+}
+
+.breakdownSubtext {
+    font-size: 11px;
+    color: #6B7280;
+}
+
+.breakdownAmount {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.breakdownDivider {
+    height: 1px;
+    background: #BAE6FD;
+    margin: 16px 0;
+}
+
+.safeToSpendResult {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 8px;
+}
+
+.resultLabel p:first-child {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 2px;
+}
+
+.resultFormula {
+    font-size: 11px;
+    color: #6B7280;
+}
+
+.resultAmount {
+    font-size: 32px;
+    font-weight: 700;
+    color: #059669;
+    margin: 0;
+}
+
+/* Budget Settings Card */
+.budgetSettingsCard {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.budgetSettingsCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.budgetSettingsCard .headerIconCircle {
+    background: rgba(107, 114, 128, 0.1);
+}
+
+.settingsForm {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.settingGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.settingLabel {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.budgetInputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dollarSign {
+    position: absolute;
+    left: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #9CA3AF;
+    pointer-events: none;
+}
+
+.budgetInput {
+    width: 100%;
+    padding: 10px 75px 10px 32px;
+    border: 1.5px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+    color: #9CA3AF;
+    background: #F9FAFB;
+    cursor: not-allowed;
+}
+
+.perWeek {
+    position: absolute;
+    right: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #9CA3AF;
+    pointer-events: none;
+}
+
+.sliderContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bufferSlider {
+    flex: 1;
+    height: 3px;
+    border-radius: 10px;
+    background: linear-gradient(to right, #38BDF8 0%, #38BDF8 33.33%, #E5E7EB 33.33%, #E5E7EB 100%);
+    outline: none;
+    -webkit-appearance: none;
+    cursor: not-allowed;
+}
+
+.bufferSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #38BDF8;
+    cursor: not-allowed;
+    box-shadow: 0 2px 4px rgba(56, 189, 248, 0.3);
+    border: 3px solid white;
+}
+
+.bufferSlider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #38BDF8;
+    cursor: not-allowed;
+    border: 3px solid white;
+    box-shadow: 0 2px 4px rgba(56, 189, 248, 0.3);
+}
+
+.bufferPercentDisplay {
+    font-size: 24px;
+    font-weight: 700;
+    color: #38BDF8;
+    min-width: 60px;
+    text-align: right;
+}
+
+.saveButton {
+    padding: 12px;
+    background: #D1D5DB;
+    color: #9CA3AF;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: not-allowed;
+}
+
+/* Recurring Bills Card */
+.recurringBillsCard {
+    background: linear-gradient(135deg, #F5F3FF 0%, #FFF0F8 100%);
+    border: 1px solid #E9D5FF;
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.recurringBillsCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 79, 255, 0.2);
+}
+
+.recurringBillsCard .headerIconCircle {
+    background: rgba(139, 79, 255, 0.15);
+}
+
+.addBillButton {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #8B4FFF 0%, #6B5FFF 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: not-allowed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.billsList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.billItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+}
+
+.billIconCircle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(139, 79, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.billIconCircle svg {
+    color: #8B4FFF;
+    stroke: #8B4FFF;
+}
+
+.billInfo {
+    flex: 1;
+}
+
+.billName {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 2px;
+}
+
+.billMeta {
+    font-size: 12px;
+    color: #6B7280;
+}
+
+.billAmount {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1F2937;
+}
+
+.billStatusBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    background: #FEF3C7;
+    color: #6B7280;
+    border: 1px solid #D1D5DB;
+}
+
+.billsTotal {
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.billsTotalLabel {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.billsTotalAmount {
+    font-size: 18px;
+    font-weight: 700;
+    color: #8B4FFF;
+}
+
+/* Stats Card (Quick Insights) */
+.statsCard {
+    background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.statsCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(107, 114, 128, 0.1);
+}
+
+.statItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.statItem:last-child {
+    margin-bottom: 0;
+}
+
+.statLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1F2937;
+}
+
+.statValue {
+    font-size: 16px;
+    font-weight: 600;
+    color: #6B7280;
+}
+
+/* Lock Icon in Header */
+.lockIcon {
+    color: #9CA3AF;
+    stroke: #9CA3AF;
+    margin-left: auto;
+}
+
+/* Banner Icon and Text */
+.bannerIcon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.bannerIcon svg {
+    color: white;
+}
+
+.bannerText {
+    flex: 1;
+}
+
+.bannerText h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1F2937;
+    margin: 0 0 4px 0;
+}
+
+.bannerText p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6B7280;
+    margin: 0;
+}
+
+/* Setting Label Variations */
+.settingLabelRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.settingHint {
+    font-size: 12px;
+    font-weight: 400;
+    color: #6B7280;
+    display: block;
+    margin-top: 4px;
+}
+
+.settingLabelWithSwitch {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.labelTitleRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.optionalText {
+    font-size: 14px;
+    font-weight: 400;
+    color: #9CA3AF;
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switchSlider {
+    position: absolute;
+    cursor: not-allowed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #D1D5DB;
+    transition: 0.3s;
+    border-radius: 34px;
+    opacity: 0.5;
+}
+
+.switchSlider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.switch input:checked + .switchSlider {
+    background-color: #9CA3AF;
+}
+
+.switch input:checked + .switchSlider:before {
+    transform: translateX(22px);
+}
+
+/* Quick Select Buttons */
+.quickSelectButtons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.quickSelectBtn {
+    flex: 1;
+    min-width: 80px;
+    padding: 10px 16px;
+    background: white;
+    color: #9CA3AF;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: not-allowed;
+    transition: all 0.2s;
+}
+
+.quickSelectBtn:hover {
+    background: #38BDF8;
+    color: white;
+    border-color: #38BDF8;
+}
+
+.quickSelectBtn.active {
+    background: #38BDF8;
+    color: white;
+    border-color: #38BDF8;
+}
+
+/* Spending Progress */
+.spendingProgress {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.spendingHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.spendingLabel {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.spendingAmount {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6B7280;
+}
+
+.progressBar {
+    width: 100%;
+    height: 12px;
+    background: #E5E7EB;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+    border-radius: 6px;
+    transition: width 0.3s ease;
+}
+
+/* Budget Insights */
+.budgetInsights {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.insightBox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+}
+
+.insightIcon {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.insightContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.insightLabel {
+    font-size: 10px;
+    font-weight: 600;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.insightValue {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1F2937;
+    line-height: 1;
+}
+
+.insightSubtext {
+    font-size: 12px;
+    font-weight: 500;
+    color: #6B7280;
+}
+
+/* Conversion Text */
+.conversionText {
+    font-size: 13px;
+    font-weight: 500;
+    color: #6B7280;
+    text-align: center;
+    padding: 12px;
+    background: #F9FAFB;
+    border-radius: 8px;
+}
+
+/* Save Settings Button */
+.saveSettingsButton {
+    width: 100%;
+    padding: 14px;
+    background: #38BDF8;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: not-allowed;
+}
+
+/* Delete Budget Link */
+.deleteBudgetLink {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #9CA3AF;
+    text-decoration: underline;
+    cursor: not-allowed;
+    margin-top: 12px;
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+/* Bill Section Header */
+.billSectionHeader {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+    margin: 16px 0 8px 0;
+}
+
+/* Bill Actions */
+.billActions {
+    display: flex;
+    gap: 8px;
+}
+
+.editButton,
+.deleteButton {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: not-allowed;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+}
+
+.editButton svg {
+    color: #8B4FFF;
+    stroke: #8B4FFF;
+}
+
+.deleteButton svg {
+    color: #DC2626;
+    stroke: #DC2626;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .twoColumnLayout {
+        grid-template-columns: 1fr;
+    }
+
+    .breakdownList {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .previewPage {
+        padding: 12px;
+        min-height: calc(100vh - 140px);
+    }
+
+    .heroBanner {
+        padding: 32px 24px;
+    }
+
+    .bannerContent h1 {
+        font-size: 24px;
+    }
+
+    .bannerContent p {
+        font-size: 14px;
+    }
+
+    .pageHeader h1 {
+        font-size: 20px;
+    }
+
+    .cardHeader h2 {
+        font-size: 16px;
+    }
+
+    .breakdownList {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .previewPage {
+        min-height: calc(100vh - 120px);
+    }
+
+    .heroBanner {
+        padding: 24px 16px;
+    }
+}

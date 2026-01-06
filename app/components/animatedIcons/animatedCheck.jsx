@@ -1,5 +1,5 @@
 import { motion, useAnimation } from 'framer-motion';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
 const PATH_VARIANTS = {
   normal: {
@@ -37,6 +37,10 @@ const CircleCheckIcon = ({ className, size = 28, onClick, isPaid = false, ...pro
   const controls = useAnimation();
   const containerControls = useAnimation();
   const [isChecked, setIsChecked] = useState(isPaid);
+
+  useEffect(() => {
+    setIsChecked(isPaid);
+  }, [isPaid]);
 
   const handleClick = useCallback(
     (e) => {

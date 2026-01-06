@@ -1,3 +1,122 @@
+/* Notification Banner */
+.notification {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    margin-left: -250px;
+    z-index: 9999;
+    width: 500px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05);
+    animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -30px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        opacity: 0;
+        transform: translate3d(0, -30px, 0);
+    }
+}
+
+.notification.exiting {
+    animation: slideUp 0.25s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.notification.error {
+    background: #FEF2F2;
+    border: 1px solid #FEE2E2;
+}
+
+.notification.success {
+    background: #F0FDF4;
+    border: 1px solid #D1FAE5;
+}
+
+.notificationContent {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.notificationIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.notification.error .notificationIcon svg {
+    stroke: #DC2626;
+}
+
+.notification.success .notificationIcon svg {
+    stroke: #059669;
+}
+
+.notificationMessage {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.notification.error .notificationMessage {
+    color: #991B1B;
+}
+
+.notification.success .notificationMessage {
+    color: #065F46;
+}
+
+.notificationClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+}
+
+.notification.error .notificationClose:hover {
+    background: #FEE2E2;
+}
+
+.notification.success .notificationClose:hover {
+    background: #D1FAE5;
+}
+
+.notification.error .notificationClose svg {
+    stroke: #DC2626;
+}
+
+.notification.success .notificationClose svg {
+    stroke: #059669;
+}
+
 /* Budget Page Container */
 .budgetPage {
     max-width: 1400px;

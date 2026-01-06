@@ -11,7 +11,7 @@ namespace backendTally.Utils
 
         public static DateTime GetCurrentWeekEnd()
         {
-            return GetCurrentWeekStart().AddDays(6);
+            return GetCurrentWeekStart().AddDays(7).AddTicks(-1);
         }
 
         public static int CalculateDaysLeft()
