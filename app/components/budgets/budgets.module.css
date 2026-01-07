@@ -1663,6 +1663,142 @@
     transform: translateY(0);
 }
 
+/* Skeleton Loader */
+.skeleton {
+    background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeletonCircle {
+    border-radius: 50%;
+}
+
+.skeletonHeader {
+    width: 200px;
+    height: 24px;
+    margin-bottom: 8px;
+}
+
+.skeletonSubtext {
+    width: 300px;
+    height: 14px;
+}
+
+.skeletonIconCircle {
+    width: 40px;
+    height: 40px;
+}
+
+.skeletonBreakdownItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+}
+
+.skeletonBreakdownIcon {
+    width: 36px;
+    height: 36px;
+}
+
+.skeletonBreakdownContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.skeletonBreakdownLabel {
+    width: 120px;
+    height: 14px;
+}
+
+.skeletonBreakdownSubtext {
+    width: 80px;
+    height: 11px;
+}
+
+.skeletonBreakdownAmount {
+    width: 70px;
+    height: 16px;
+}
+
+.skeletonResult {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 8px;
+}
+
+.skeletonResultLabel {
+    width: 150px;
+    height: 14px;
+}
+
+.skeletonResultAmount {
+    width: 120px;
+    height: 32px;
+}
+
+.skeletonBillItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+}
+
+.skeletonBillIcon {
+    width: 40px;
+    height: 40px;
+}
+
+.skeletonBillInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.skeletonBillName {
+    width: 140px;
+    height: 14px;
+}
+
+.skeletonBillMeta {
+    width: 80px;
+    height: 12px;
+}
+
+.skeletonBillAmount {
+    width: 60px;
+    height: 16px;
+}
+
+.skeletonBillActions {
+    display: flex;
+    gap: 8px;
+}
+
+.skeletonButton {
+    width: 32px;
+    height: 32px;
+}
+
 /* Recurring Bills Loading State */
 .loadingBillsContainer {
     display: flex;
