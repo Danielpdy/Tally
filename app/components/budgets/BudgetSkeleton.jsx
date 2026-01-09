@@ -2,7 +2,13 @@ import styles from "./budgets.module.css";
 
 const BudgetSkeleton = () => {
   return (
-    <div className={styles.twoColumnLayout}>
+    <div className={styles.budgetPage}>
+      <div className={styles.pageHeader}>
+        <div className={`${styles.skeleton}`} style={{ width: '200px', height: '28px', marginBottom: '8px' }}></div>
+        <div className={`${styles.skeleton}`} style={{ width: '350px', height: '20px' }}></div>
+      </div>
+
+      <div className={styles.twoColumnLayout}>
       {/* Left Column Skeleton */}
       <div className={styles.leftColumn}>
         {/* Safe to Spend Card Skeleton */}
@@ -99,6 +105,7 @@ const BudgetSkeleton = () => {
             </div>
           ))}
         </div>
+      </div>
       </div>
     </div>
   );

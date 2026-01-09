@@ -893,7 +893,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px;
+    padding: 80px 60px;
+    min-height: 350px;
     background: rgba(255, 255, 255, 0.8);
     border-radius: 8px;
     gap: 16px;
@@ -1805,7 +1806,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 56px 24px;
+    padding: 100px 60px;
+    min-height: 400px;
     background: white;
     border-radius: 12px;
     margin-top: 16px;
