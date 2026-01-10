@@ -6,7 +6,7 @@ import { useClickOutside } from './hooks/useClickOutside';
 import TransactionsEmptyState from './TransactionsEmptyState';
 import TransactionsSidePannel from './TransactionsSidePannel';
 import SevendayOverview from '../SevendayOverview';
-import { Addtransaction, GetTransactions, TransactionService } from '@services/TransactionService';
+import { Addtransaction, DeleteTransaction, GetTransactions, TransactionService } from '@services/TransactionService';
 import { useSession } from '@node_modules/next-auth/react';
 import { GetWeeklySummary } from '@services/AggregationService';
 import { global } from 'styled-jsx/css';
@@ -48,6 +48,17 @@ const Transactions = () => {
         }
 
     };
+
+    const handleDeleteTransaction = async (id) => {
+        if (!id) return;
+
+        try{
+            await DeleteTransaction(id, session.accessToken);
+            setTransactions(prev => prev.filter(t => t.id !== id));
+        } catch(error){
+            console.error(error);
+        }
+    }
 
     async function fetchTransactions() {
         const data = await GetTransactions(session.accessToken);
@@ -525,6 +536,21 @@ const Transactions = () => {
                                                     <h4 className={`${styles.transactionAmount} ${transaction.type === 'Income' ? styles.incomeAmount : styles.expenseAmount}`}>
                                                         {transaction.type === 'Income' ? '+' : '-'}${transaction.amount}
                                                     </h4>
+                                                    <button
+                                                        className={styles.deleteButton}
+                                                        onClick={() => {
+                                                            handleDeleteTransaction(transaction.id);
+                                                        }}
+                                                        aria-label="Delete transaction"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <path d="M10 11v6"/>
+                                                            <path d="M14 11v6"/>
+                                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                                            <path d="M3 6h18"/>
+                                                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                        </svg>
+                                                    </button>
                                                 </div>
                                                 <div className={styles.transactionBottom}>
                                                     <p className={styles.accountLabel}>{transaction.account}</p>

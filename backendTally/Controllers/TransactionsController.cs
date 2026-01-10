@@ -67,6 +67,33 @@ namespace backendTally.Controllers
 
             return Ok(newTransaction);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTransactionById(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            int authenticatedUserId = int.Parse(userIdClaim);
+
+            var deletedTransaction = await _context.Transactions
+                .FirstOrDefaultAsync( dt => dt.Id == id && dt.UserId == authenticatedUserId);
+
+            if (deletedTransaction == null)
+            {
+                return NotFound();
+            }
+
+             _context.Transactions.Remove(deletedTransaction);
+             await _context.SaveChangesAsync();
+
+             return NoContent();
+
+        }
     }
 
 }

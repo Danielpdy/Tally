@@ -675,6 +675,7 @@
 .transactionRight {
   display: flex;
   align-items: center;
+  gap: 12px;
   grid-column: 2;
   grid-row: 1;
 }
@@ -716,6 +717,37 @@
   border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
+}
+
+.deleteButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  background-color: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
+  padding: 0;
+}
+
+.deleteButton:hover {
+  background-color: #FEE2E2;
+  border-color: #FCA5A5;
+  color: #DC2626;
+}
+
+.deleteButton:active {
+  transform: scale(0.95);
+}
+
+.deleteButton svg {
+  flex-shrink: 0;
 }
 
 /* Balance Card */

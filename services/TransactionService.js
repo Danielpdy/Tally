@@ -17,3 +17,12 @@ export const GetTransactions = (accessToken) => apiRequest("/transactions", {
         "Authorization": `Bearer ${accessToken}`
     }
 });
+
+export const DeleteTransaction = (id, accessToken) => {
+    return apiRequest(`/transactions/${id}`, {
+        headers: {
+            "Authorization": `Bearer ${accessToken}`
+        },
+        method: "DELETE"
+    })
+}
