@@ -1,731 +1,617 @@
-
-/*---- DASHBOARD PAGE ----- */
-
-.dashboardContent{
-  width: 100%;
-  background-color: #FAF8FF;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 80px;
+/* Page Wrapper */
+.pageWrapper {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #FAF8FF;
 }
 
-.dashSubtitle{
-  text-align: center;
-  font-size: 2.5rem;
-  color: #1a0b2e;
-  font-weight: 700;
-}
-.firstRowDash{
-  display: flex;
-  justify-content: space-between;
-  gap: 40px;
-  backdrop-filter: blur(22px);
-  width: 100%;
-  position: relative;
+/* Dashboard Container */
+.dashboardPage {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+    min-height: calc(100vh - 228px);
 }
 
-.firstrowBoxes{
-  width: 350px;
-  border-radius: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: start;
-  padding: 24px 24px 54px 24px;
-  background-color: white;
-  filter: blur(2px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e0e0e0;
+/* Page Header */
+.pageHeader {
+    margin-bottom: 32px;
 }
 
-.monthlyFlowNumbers{
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.pageHeader h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: 8px;
 }
 
-.monthlyData{
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.pageHeader p {
+    font-size: 16px;
+    color: #6B7280;
 }
 
-.financialFreedom{
-  display: flex;
-  justify-content: center;
-  background-color: #e4d8fc;
-  color: #8B4FFF;
-  font-weight: 500;
-  font-size: 14px;
-  padding: 5px 10px;
-  border-radius: 10px;
+/* Top Stats Row */
+.topStatsRow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
 }
 
-.mainMessage{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 100px;
-}
-.mainMessageContent{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 28px;
+.statCard {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #F3F4F6;
 }
 
-.purpleButtons{
-  background-color: #8B4FFF;
-  color: white;
-  border: none;
-  font-weight: 600;
-  font-size: 14px;
-  padding: 8px 12px;
-  border-radius: 10px;
+.statHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
 }
 
-.mainMessageBoxBtns{
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+.statLabel {
+    font-size: 14px;
+    color: #6B7280;
+    font-weight: 500;
 }
 
-.premiumOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(250, 248, 255, 0.64); 
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
+.statDot {
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(135deg, #8B5CF6 0%, #6B5FFF 100%);
+    border-radius: 50%;
 }
 
-.unlockMessage {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 10px;
-
+.statAmount {
+    font-size: 36px;
+    font-weight: 700;
+    color: #8B5CF6;
+    margin-bottom: 8px;
 }
 
-.chartCard {
-  background-color: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  padding: 40px 30px;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 40px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08)
+.statSubtext {
+    font-size: 12px;
+    color: #9CA3AF;
 }
 
-.chartWrap {
-  width: 100%;
-  height: 100%;
+.flowItems {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 12px;
 }
 
-.safeToSpendProgressBar{
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  border-radius: 20px;
-  width: 100%;
-  height: 100%;
-  gap: 40px;
-  padding: 40px 30px;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  align-items: center;
+.flowItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.graphsSectionOne{
-  display: flex;
-  gap: 28px;
-  width: 100%;
+.flowIcon {
+    font-size: 18px;
+    color: #10B981;
 }
 
-.dashboardMain{
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  padding: 40px 40px;
+.flowAmount {
+    font-size: 18px;
+    font-weight: 600;
+    color: #10B981;
 }
 
-.amountTitle{
-  font-size: 2rem;
-  font-weight: 700;
-  color: rgb(19, 47, 39)
+.flowLabel {
+    font-size: 12px;
+    color: #9CA3AF;
 }
 
-.safeToSpendData{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+.monthlyChange {
+    font-size: 13px;
+    color: #10B981;
+    font-weight: 500;
 }
 
-.cashFlowChartDash{
-  background-color: white;
-  border-radius: 20px;
-  width: 100%;
-  height: 600px;
-  padding: 40px 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08)
+.goalProgress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
-.cashFlowTitle, .goalsBarsTitle{
-  color: #8B4FFF; 
-  font-size: 18px; 
-  text-align: start;
-  font-weight: 600;
+.goalPercentage {
+    font-size: 28px;
+    font-weight: 700;
+    color: #8B5CF6;
+    min-width: 60px;
 }
 
-.spendingChartTitle, .debtPayoffTitle{
-  color: #8B4FFF;
-  font-size: 18px;
-  font-weight: 600;
+.progressBarHorizontal {
+    flex: 1;
+    height: 12px;
+    background: #E9D5FF;
+    border-radius: 20px;
+    overflow: hidden;
 }
 
-.safetoSpendTitle{
-  color: #8B4FFF;
-  font-size: 18px;
-  font-weight: 600;
-  text-align: start;
+.progressFillHorizontal {
+    height: 100%;
+    background: linear-gradient(90deg, #8B5CF6 0%, #F59E0B 100%);
+    border-radius: 20px;
+    transition: width 0.3s ease;
 }
 
-.cashFlowChart{
-  border: 1px solid #e0e0e0;
+.goalAmount {
+    font-size: 14px;
+    color: #6B7280;
 }
 
-.progressBar{
-  width: 140px;
-  height: 140px;
+/* Main Grid */
+.mainGrid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
 }
 
-.goalsBars{
-  background-color: white;
-  border-radius: 20px;
-  padding: 40px 30px;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
+.leftColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
-.goalsBarsData{
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.rightColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
-.goalsBarsBox{
-  width: 100%;
-  display: flex;
-  justify-content: space-evenly;
+/* Card Styles */
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #F3F4F6;
 }
 
-.goalsBarsDataContent{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+.cardTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #8B5CF6;
+    margin-bottom: 20px;
 }
 
-.myProgress .CircularProgressbar-text {
-  font-weight: 700;             
+.cardHeaderRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.fundTitle {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a1a1a;
-
+/* Pie Chart */
+.pieChartContainer {
+    display: flex;
+    gap: 40px;
+    align-items: center;
 }
 
-.fundAmount {
-  font-size: 14px;
-  font-weight: 400;
-  color: #4b5563;
-  margin-bottom: 4px;
-  line-height: 1.4;
+.donutChart {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
 }
 
-.fundDue {
-  font-size: 13px;
-  font-weight: 400;
-  color: #4b5563;
-  margin-bottom: 8px;
+.donutSvg {
+    width: 100%;
+    height: 100%;
 }
 
-.fundMessage {
-  font-size: 14px;
-  font-weight: 600;
-  color: #8B4FFF;
-  line-height: 1.4;
+.categoryLegend {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    flex: 1;
 }
 
-.debtChartandInsights {
-  display: flex;
-  gap: 28px;
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.debtChartandInsightsBoxes{
-  background-color: white;
-  border-radius: 20px;
-  padding: 40px 30px;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  width: 70%;
+.legendColor {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
 }
 
-.debtChartandInsightsBoxes2{
-  background-color: white;
-  border-radius: 20px;
-  padding: 40px 30px;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  width: 30%;
+.legendText {
+    font-size: 14px;
+    color: #4B5563;
 }
 
-.debtPayoffChartBox{
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
+/* Cash Flow Chart */
+.toggleButtons {
+    display: flex;
+    gap: 8px;
+    background: #F3F4F6;
+    padding: 4px;
+    border-radius: 8px;
 }
 
-.insightsTitleBox{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.toggleBtn {
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    color: #6B7280;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-.insightsBox{
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: #F5F3FF;
-  border-radius: 12px;
-  padding: 10px 12px;
+.toggleBtn.active {
+    background: #8B5CF6;
+    color: white;
 }
 
-.insightsText{
-  font-size: 14px;
-  color: #334155;
-}
-.flexColumn20{
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.chartPlaceholder {
+    margin-top: 20px;
 }
 
-.insightsIconsBoxOrange{
-  background-color: #FFE5E5;
-  padding: 8px 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
+.lineChart {
+    width: 100%;
+    height: 200px;
 }
 
-.insightsIconsBoxPurple{
-  background-color: #e0daffff;
-  padding: 8px 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
+.chartLabels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding: 0 20px;
 }
 
-.getStartedSection{
-  width: 100%;
-  background-color:  #E8E4F3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 80px;
-  padding: 40px 20px;
+.chartLabels span {
+    font-size: 12px;
+    color: #9CA3AF;
+    font-weight: 500;
 }
 
-.getStartedTitleSection{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+/* Debt Visualizer */
+.debtSubtitle {
+    font-size: 14px;
+    color: #6B7280;
+    margin-top: 4px;
 }
 
-.getStartedTitle{
-  font-size: 3rem;
-  text-align: center;
-  font-weight: 700;
-  max-width: 580px;
-  color: #1a0b2e;
+.debtDate {
+    color: #8B5CF6;
+    font-weight: 600;
 }
 
-.getStartedStatsBox{
-  display: flex;
-  justify-content: center;
-  gap: 100px;
-  padding: 20px 20px;
-  border-top: 2px solid #e0e0e0;
-  
+.debtToggle {
+    display: flex;
+    gap: 8px;
+    background: #F3F4F6;
+    padding: 4px;
+    border-radius: 8px;
 }
 
-.getStartedStatsText{
-  color: #8B4FFF;
-  font-size: 30px;
-  font-weight: 700;
+.debtToggleBtn {
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    color: #6B7280;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-.getStartedButtonBox{
-  display: flex;
-  gap: 10px;
+.debtToggleBtn.active {
+    background: #8B5CF6;
+    color: white;
 }
 
-.userRatingBox{
-  display: flex;
-  gap: 4px;
-  align-items: center;
+.debtBars {
+    margin-top: 24px;
 }
 
-.getStartedsubTitle{
-  font-size: 18px;
-  text-align: center;
-  max-width: 550px;
-  color: rgb(107, 131, 123);
+.debtItem {
+    margin-bottom: 24px;
 }
 
-.chartCardBox{
-  width: 70%;
-  height: auto;
+.debtLabel {
+    font-size: 14px;
+    color: #4B5563;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
 }
 
-.chartCardBox2{
-  width: 30%;
-  height: auto;
+.debtBar {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.debtPaid {
+    background: #8B5CF6;
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.debtRemaining {
+    background: #FF8042;
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.debtLegend {
+    display: flex;
+    gap: 24px;
+    margin-top: 16px;
+}
+
+.debtLegendItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.debtLegendColor {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+.debtLegendItem span {
+    font-size: 13px;
+    color: #6B7280;
+}
+
+/* Safe to Spend */
+.safeToSpendCircle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 32px 0;
+}
+
+.circularProgressWrapper {
+    width: 200px;
+    height: 200px;
+}
+
+.safeToSpendLabel {
+    text-align: center;
+    font-size: 14px;
+    color: #6B7280;
+    margin-bottom: 8px;
+}
+
+.safeToSpendSubtext {
+    text-align: center;
+    font-size: 13px;
+    color: #38BDF8;
+    font-weight: 600;
+}
+
+/* Financial Goals */
+.addGoalBtn {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    color: #6B7280;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.addGoalBtn:hover {
+    background: #F9FAFB;
+    border-color: #8B5CF6;
+    color: #8B5CF6;
+}
+
+.goalsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.goalCard {
+    background: linear-gradient(135deg, #F5F3FF 0%, #FFF0F8 100%);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #E9D5FF;
+}
+
+.goalCircle {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 16px;
+}
+
+.goalName {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 8px;
+}
+
+.goalAmount {
+    font-size: 13px;
+    color: #6B7280;
+    margin-bottom: 4px;
+}
+
+.goalDue {
+    font-size: 12px;
+    color: #9CA3AF;
+    margin-bottom: 8px;
+}
+
+.goalEncouragement {
+    font-size: 12px;
+    color: #8B5CF6;
+    font-weight: 600;
+}
+
+/* AI Insights */
+.insightsList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.insightItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: #F9FAFB;
+    border-radius: 12px;
+    border: 1px solid #F3F4F6;
+}
+
+.insightIcon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.insightText {
+    font-size: 14px;
+    color: #4B5563;
+    line-height: 1.5;
+}
+
+/* Achievements */
+.achievementsSection {
+    margin-bottom: 40px;
+}
+
+.sectionTitle {
+    font-size: 24px;
+    font-weight: 700;
+    color: #8B5CF6;
+    margin-bottom: 24px;
+}
+
+.achievementsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.achievementCard {
+    background: linear-gradient(135deg, #F5F3FF 0%, #E0F2FE 100%);
+    border-radius: 16px;
+    padding: 28px 20px;
+    text-align: center;
+    border: 1px solid #E9D5FF;
+    transition: transform 0.2s;
+}
+
+.achievementCard:hover {
+    transform: translateY(-4px);
+}
+
+.achievementCard.locked {
+    background: #F9FAFB;
+    border-color: #E5E7EB;
+    opacity: 0.6;
+}
+
+.achievementIcon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.achievementTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 8px;
+}
+
+.achievementDesc {
+    font-size: 13px;
+    color: #6B7280;
+    line-height: 1.4;
+}
+
+/* Footer */
+.dashboardFooter {
+    text-align: center;
+    padding: 24px 0;
+    color: #9CA3AF;
+    font-size: 14px;
+    border-top: 1px solid #E5E7EB;
+}
+
+.dashboardFooter p {
+    margin-bottom: 8px;
+}
+
+.footerLinks {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    align-items: center;
+}
+
+.footerLinks a {
+    color: #6B7280;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.footerLinks a:hover {
+    color: #8B5CF6;
+}
+
+.footerLinks span {
+    color: #D1D5DB;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .mainGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .achievementsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
-  .dashboardContent{
-    overflow-x: hidden;
-  }
+    .topStatsRow {
+        grid-template-columns: 1fr;
+    }
 
-  .dashboardMain{
-    padding: 20px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
+    .goalsGrid {
+        grid-template-columns: 1fr;
+    }
 
-  .getStartedTitle{
-    font-size: 2.2rem;
-    text-align: center;
-  }
+    .achievementsGrid {
+        grid-template-columns: 1fr;
+    }
 
-  .dashSubtitle{
-    font-size: 1.8rem;
-    max-width: 100%;
-    padding: 0 10px;
-  }
-  
-  .graphsSectionOne{
-    display: flex;
-    flex-wrap: wrap;
-  }
+    .pieChartContainer {
+        flex-direction: column;
+    }
 
-  .firstRowDash{
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .firstrowBoxes{
-    width: 100%;
-  }
-
-  .chartCard{
-    height: 440px;
-  }
-
-  .goalsBarsBox{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    gap: 40px;
-  }
-
-  .debtChartandInsights{
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0px 20px;
-  }
-
-  .debtChartandInsightsBoxes{
-    width: 100%;
-  }
-
-  .debtChartandInsightsBoxes2{
-    width: 100%;
-  }
-
-  .chartCardBox, .chartCardBox2{
-    width: 100%;
-  }
+    .categoryLegend {
+        grid-template-columns: 1fr;
+    }
 }
-
-
-/*--Mobile Navigation --*/
-@media (max-width: 640px){
-  .dashboardMain{
-    padding: 20px 16px;
-    overflow-x: hidden;
-    gap: 24px;
-  }
-
-  .financialFreedom{
-    font-size: 10px;
-  }
-
-  .dashSubtitle{
-    max-width: 300px;
-    font-size: 1.5rem;
-  }
-
-  .mainMessageBoxBtns{
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .purpleButtons{
-    padding: 6px 8px;
-    font-size: 12px;
-  }
-
-  .firstRowDash{
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 24px;
-    position: relative;
-    padding: 0 16px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  .firstrowBoxes{
-    width: 100%;
-    max-width: 100%;
-    padding: 20px 16px 40px 16px;
-    font-size: 14px;
-  }
-
-  .firstrowBoxes h2{
-    font-size: 1.5rem;
-  }
-
-  .firstrowBoxes p{
-    font-size: 12px;
-  }
-
-  .chartCard{
-    width: 100%;
-    max-width: 100%;
-    height: 450px;
-    padding: 24px 20px;
-    box-sizing: border-box;
-  }
-
-  .chartCardBox{
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-    height: 450px;
-    box-sizing: border-box;
-  }
-
-  .chartCardBox2{
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-    height: 450px;
-    box-sizing: border-box;
-  }
-
-  .chartWrap{
-    padding: 0;
-    width: 100%;
-    height: 350px;
-  }
-
-  .safeToSpendProgressBar{
-    width: 100%;
-    max-width: 100%;
-    padding: 24px 20px;
-    box-sizing: border-box;
-    height: auto;
-  }
-
-  .safeToSpendData{
-    text-align: center;
-  }
-
-  .cashFlowChartDash{
-    width: 100%;
-    max-width: 100%;
-    height: 450px;
-    padding: 24px 20px;
-    box-sizing: border-box;
-  }
-
-  .cashFlowCard{
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0 16px;
-    height: 450px;
-    box-sizing: border-box;
-  }
-
-  .graphsSectionOne{
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0 16px;
-    flex-direction: column;
-    gap: 24px;
-    box-sizing: border-box;
-  }
-
-  .goalsBars{
-    width: calc(100% - 32px);
-    max-width: 100%;
-    padding: 24px 20px;
-    flex-wrap: wrap;
-    margin: 0 16px;
-    box-sizing: border-box;
-  }
-
-  .goalsBarsBox{
-    width: 100%;
-    justify-content: center;
-    gap: 24px;
-  }
-
-  .debtChartandInsights{
-    width: 100%;
-    max-width: 100%;
-    padding: 0 16px;
-    flex-direction: column;
-    margin: 0;
-    gap: 24px;
-    box-sizing: border-box;
-  }
-
-  .debtChartandInsightsBoxes{
-    width: 100%;
-    max-width: 100%;
-    padding: 24px 20px;
-    box-sizing: border-box;
-  }
-
-  .debtChartandInsightsBoxes2{
-    width: 100%;
-    max-width: 100%;
-    padding: 24px 20px;
-    box-sizing: border-box;
-  }
-
-  .getStartedTitle{
-    font-size: 2.2rem;
-  }
-
-  .getStartedsubTitle{
-    font-size: 14px;
-  }
-
-  .getStartedStatsText{
-    font-size: 20px;
-  }
-
-  .getStartedStatsBox{
-   display: none;
-  }
-
-}
-
-/* Progress Bar Card Styles */
-.progressCardContent {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.progressHeader {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.progressIcon {
-  font-size: 20px;
-}
-
-.progressTitle {
-  font-size: 14px;
-  font-weight: 500;
-  color: #6b7280;
-}
-
-.progressPercentage {
-  font-size: 32px;
-  font-weight: 700;
-  color: #1a1a1a;
-}
-
-.progressBarWrapper {
-  width: 100%;
-}
-
-.progressBarTrack {
-  width: 100%;
-  height: 8px;
-  background-color: #e5e7eb;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.progressBarFillGradient {
-  height: 100%;
-  background: linear-gradient(to right, #8B4FFF, #FF6B35);
-  border-radius: 10px;
-  transition: width 0.3s ease;
-}
-
-.progressAmount {
-  font-size: 14px;
-  font-weight: 500;
-  color: #6b7280;
-}
-
-

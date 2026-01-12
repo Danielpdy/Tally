@@ -488,9 +488,10 @@ const Budgets = () => {
           </div>
         </div>
       )}
-      <div className={styles.budgetPage}>
-        {/* Page Header */}
-        <div className={styles.pageHeader}>
+      <div className={styles.pageWrapper}>
+        <div className={styles.budgetPage}>
+          {/* Page Header */}
+          <div className={styles.pageHeader}>
           <h1>Budget & Bills</h1>
           <p>Manage your weekly safe-to-spend and recurring bills</p>
         </div>
@@ -1158,6 +1159,7 @@ const Budgets = () => {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
 

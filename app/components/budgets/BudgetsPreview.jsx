@@ -20,9 +20,10 @@ const BudgetsPreview = () => {
   };
 
   return (
-    <div className={styles.previewPage}>
-      {/* Page Header */}
-      <div className={styles.pageHeader}>
+    <div className={styles.pageWrapper}>
+      <div className={styles.previewPage}>
+        {/* Page Header */}
+        <div className={styles.pageHeader}>
         <h1>Budget & Bills</h1>
         <p>Manage your weekly safe-to-spend and recurring bills</p>
       </div>
@@ -427,6 +428,7 @@ const BudgetsPreview = () => {
             )}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

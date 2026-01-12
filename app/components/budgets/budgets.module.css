@@ -117,6 +117,13 @@
     stroke: #059669;
 }
 
+/* Full Page Wrapper */
+.pageWrapper {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #FAF8FF;
+}
+
 /* Budget Page Container */
 .budgetPage {
     max-width: 1400px;
