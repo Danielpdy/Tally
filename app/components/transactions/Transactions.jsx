@@ -19,6 +19,8 @@ const Transactions = () => {
     const [selectedFilter, setSelectedFilter] = useState(null);
     const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
     const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
+    const [timeDropdownOpen, setTimeDropdownOpen] = useState(false);
+    const [selectedTimePeriod, setSelectedTimePeriod] = useState('This Month');
     const [isAdded, setIsAdded] = useState(false);
     const [isLoading, setIsloading] = useState(true);
     const [weeklyOverview, setWeeklyOverview] = useState();
@@ -33,7 +35,7 @@ const Transactions = () => {
     useEffect(() => {
         fetchTransactions();
         getChartData();
-    },[transactions.length]);
+    },[]);
 
 
     const handleAddTransaction = async (newTransaction) => {
@@ -44,6 +46,7 @@ const Transactions = () => {
             const data = await Addtransaction(newTransaction, session.accessToken);
             setTransactions(prev => prev.map(t => t.id === tempId ? data : t));
             setIsAdded(true);
+            await getChartData();
         } catch(error) {
             setTransactions(prev => prev.filter(t => t.id !== tempId));
             console.error("Failed to add transaction");
@@ -57,6 +60,7 @@ const Transactions = () => {
         try{
             await DeleteTransaction(id, session.accessToken);
             setTransactions(prev => prev.filter(t => t.id !== id));
+            await getChartData();
         } catch(error){
             console.error(error);
         }
@@ -88,10 +92,6 @@ const Transactions = () => {
         }
     }, [transactions]);
 
-    const weeklySafeToSpend = {
-        amount: 450.00,  // Hardcoded for now
-        isPositive: true
-    };
 
     const filterCount = useMemo(() => {
         return transactions.reduce((sum, transaction) => {
@@ -115,63 +115,36 @@ const Transactions = () => {
         setWeeklyOverview(response);
     };
 
-    /*const filterBySearch = () => {
-        if (!searchQuery) return transactions;
-
-        const query = searchQuery.toLowerCase();
-
-        return transactions.filter(t => t.description.toLowerCase().includes(query)
-        || t.category.toLowerCase().includes(query));
-    }
-
-    const filterByButton = () => {
-        return transactions.filter(t => t.type === selectedFilter)
-    };
-
-    const filterByDate = () => {
-        if (!dateFilter) return transactions;
-
-        const copy = [...transactions];
-
-        return copy.sort((a, b) => {
-            const dateA = new Date(a.date);
-            const dateB = new Date(b.date);
-
-            if (dateFilter === 'newest'){
-                return dateB - dateA;
-            }
-
-            if (dateFilter === 'oldest'){
-                return dateA - dateB;
-            }
-        })
-    };
-
-    const filterByAmount = () => {
-        if (!amountFilter) return transactions;
-
-        const copy = [...transactions];
-
-        return copy.sort((a, b) => {
-            if (amountFilter === 'lowest'){
-                return a.amount - b.amount;
-            }
-
-            if (amountFilter === 'highest'){
-                return b.amount - a.amount;
-            }
-        })
-    }
-
-    const filterByStatus = () => {
-        if (!statusFilter) return transactions;
-
-        return transactions.filter(t => t.status === statusFilter);
-    }*/
-
     const filteredTransactions = useMemo(() => {
 
         let result = [...transactions];
+
+        if(selectedTimePeriod !== 'All Time'){
+            const now = new Date();
+            let startDate;
+            let endDate = now;
+
+            switch(selectedTimePeriod){
+                case 'This Month':
+                    startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                    break;
+                case 'Last Month':
+                    startDate = new Date(now.getFullYear(), now.getMonth() -1, 1);
+                    endDate = new Date(now.getFullYear(), now.getMonth(), 0);
+                    break;
+                case 'Last 3 Months':
+                    startDate = new Date(now.getFullYear(), now.getMonth() -3, now.getDate());
+                    break;
+                case 'Last 6 Months':
+                    startDate = new Date(now.getFullYear(), now.getMonth() -6, now.getDate());;
+                    break;
+            }
+
+            result = result.filter(t => {
+                const transactionDate = new Date(t.date);
+                return transactionDate >= startDate && transactionDate <= endDate;
+            });
+        }
 
         if(searchQuery){
 
@@ -206,24 +179,7 @@ const Transactions = () => {
 
         return result;
         
-        
-        
-        
-        
-        
-        
-        /*if (searchQuery) return filterBySearch();
-
-        if (selectedFilter) return filterByButton();
-
-        if (dateFilter) return filterByDate();
-
-        if (statusFilter) return filterByStatus();
-
-        if(amountFilter) return filterByAmount();
-
-        return transactions;*/
-    }, [transactions, selectedFilter, searchQuery, dateFilter, statusFilter, amountFilter]);
+    }, [transactions, selectedFilter, searchQuery, dateFilter, statusFilter, amountFilter, selectedTimePeriod]);
 
     const clearButtonFilters = () => {
         setSelectedFilter(null);
@@ -231,11 +187,10 @@ const Transactions = () => {
         setStatusFilter(null);
         setSearchQuery(null);
         setAmountFilter(null);
+        setSelectedTimePeriod('This Month');
+        setTimeDropdownOpen(false);
     };
 
-    /*const filterButton = useMemo(() => {
-        if (!setSelectedFilter) return transactions;
-    })*/
     // Get icon based on transaction type (main category)
     const getCategoryIcon = (type) => {
         const icons = {
@@ -373,7 +328,7 @@ const Transactions = () => {
                                 <div className={styles.filtersSection}>
                                     <div className={styles.filterHeader}>
                                         <p className={styles.filterLabel}>Quick filters</p>
-                                        {(selectedFilter || dateFilter || statusFilter || searchQuery || amountFilter) && (
+                                        {(selectedFilter || dateFilter || statusFilter || searchQuery || amountFilter || selectedTimePeriod !== 'This Month') && (
                                             <button className={styles.clearFiltersBtn}
                                                 onClick={() => clearButtonFilters()}
                                             >
@@ -408,6 +363,60 @@ const Transactions = () => {
 
                                 {/* Sorting Bar */}
                                 <div className={styles.sortingBar}>
+                                    <div className={styles.timeDropdownWrapper}>
+                                        <button
+                                            className={styles.timeDropdown}
+                                            onClick={() => setTimeDropdownOpen(!timeDropdownOpen)}
+                                        >
+                                            <Image
+                                                src='/assets/icons/calendarIcon.svg'
+                                                width={16}
+                                                height={16}
+                                                alt='calendar'
+                                            />
+                                            {selectedTimePeriod}
+                                            <Image
+                                                src='/assets/icons/chevronDown.svg'
+                                                width={16}
+                                                height={16}
+                                                alt='chevron'
+                                            />
+                                        </button>
+                                        {timeDropdownOpen && (
+                                            <div className={styles.dropdownMenu}>
+                                                <button className={styles.dropdownItem}
+                                                    onClick={() => {
+                                                        setSelectedTimePeriod('This Month');
+                                                        setTimeDropdownOpen(false);
+                                                    }}
+                                                >This Month</button>
+                                                <button className={styles.dropdownItem}
+                                                    onClick={() => {
+                                                        setSelectedTimePeriod('Last Month');
+                                                        setTimeDropdownOpen(false);
+                                                    }}
+                                                >Last Month</button>
+                                                <button className={styles.dropdownItem}
+                                                    onClick={() => {
+                                                        setSelectedTimePeriod('Last 3 Months');
+                                                        setTimeDropdownOpen(false);
+                                                    }}
+                                                >Last 3 Months</button>
+                                                <button className={styles.dropdownItem}
+                                                    onClick={() => {
+                                                        setSelectedTimePeriod('Last 6 Months');
+                                                        setTimeDropdownOpen(false);
+                                                    }}
+                                                >Last 6 Months</button>
+                                                <button className={styles.dropdownItem}
+                                                    onClick={() => {
+                                                        setSelectedTimePeriod('All Time');
+                                                        setTimeDropdownOpen(false);
+                                                    }}
+                                                >All Time</button>
+                                            </div>
+                                        )}
+                                    </div>
                                     <div className={styles.statusDropdownWrapper}>
                                         <button
                                             className={styles.statusDropdown}
@@ -508,7 +517,7 @@ const Transactions = () => {
                                             <p className={styles.noResultsText}>
                                                 We couldn't find any transactions matching your current filters. Try adjusting your search criteria or clear the filters to see all transactions.
                                             </p>
-                                            {(selectedFilter || dateFilter || statusFilter || searchQuery || amountFilter) && (
+                                            {(selectedFilter || dateFilter || statusFilter || searchQuery || amountFilter || selectedTimePeriod !== 'This Month') && (
                                                 <button
                                                     className={styles.clearFiltersButton}
                                                     onClick={() => clearButtonFilters()}
@@ -540,8 +549,12 @@ const Transactions = () => {
                                                     </div>
                                                 </div>
                                                 <div className={styles.transactionRight}>
-                                                    <h4 className={`${styles.transactionAmount} ${transaction.type === 'Income' ? styles.incomeAmount : styles.expenseAmount}`}>
-                                                        {transaction.type === 'Income' ? '+' : '-'}${transaction.amount}
+                                                    <h4 className={`${styles.transactionAmount} ${
+                                                        transaction.type === 'Income' ? styles.incomeAmount :
+                                                        transaction.type === 'Expense' ? styles.expenseAmount :
+                                                        styles.neutralAmount
+                                                    }`}>
+                                                        {transaction.type === 'Income' ? '+' : transaction.type === 'Expense' ? '-' : ''}${transaction.amount}
                                                     </h4>
                                                     <button
                                                         className={styles.deleteButton}
@@ -615,27 +628,6 @@ const Transactions = () => {
                                             <div className={styles.savingsAmountSection}>
                                                 <p className={styles.savingsAmountLabel}>You're saving</p>
                                                 <p className={styles.savingsAmountValue}>${globalNet > 0 ? globalNet : 0}</p>
-                                            </div>
-                                        </div>
-
-                                        {/* Safe to Spend Box */}
-                                        <div className={`${styles.safeToSpendBox} ${!weeklySafeToSpend.isPositive ? styles.safeToSpendWarning : ''}`}>
-                                            <div className={styles.safeToSpendIconCircle}>
-                                                <Image
-                                                    src='/assets/icons/walletIcon.svg'
-                                                    width={24}
-                                                    height={24}
-                                                    alt='safe to spend'
-                                                />
-                                            </div>
-                                            <div className={styles.safeToSpendContent}>
-                                                <p className={styles.safeToSpendLabel}>Safe to Spend This Week</p>
-                                                <h3 className={styles.safeToSpendAmount}>
-                                                    ${Math.abs(weeklySafeToSpend.amount).toFixed(2)}
-                                                </h3>
-                                                <p className={styles.safeToSpendSubtext}>
-                                                    Based on this week's cash flow
-                                                </p>
                                             </div>
                                         </div>
 

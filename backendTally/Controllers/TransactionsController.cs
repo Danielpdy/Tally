@@ -23,7 +23,7 @@ namespace backendTally.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Transaction>> GetTransactions()
+        public async Task<ActionResult<Transaction>> GetTransactions(DateTime? startDate, DateTime? endDate)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -34,11 +34,24 @@ namespace backendTally.Controllers
 
             var userId = int.Parse(userIdClaim);
 
-            var transactions = await _context.Transactions
-                .Where(t => t.UserId == userId)
-                .ToListAsync();
+            var transactions = _context.Transactions
+                .Where(t => t.UserId == userId);
 
-            return Ok(transactions);
+            if (startDate.HasValue)
+            {
+                var startDateOnly = DateOnly.FromDateTime(startDate.Value);
+                transactions = transactions.Where(t => t.Date >= startDateOnly);
+            }
+
+            if (endDate.HasValue)
+            {
+                var endDateOnly = DateOnly.FromDateTime(endDate.Value);
+                transactions = transactions.Where(t => t.Date <= endDateOnly);
+            }
+
+            var result = await transactions.ToListAsync();
+                
+            return Ok(result);
         }
 
         [HttpPost]
@@ -88,10 +101,15 @@ namespace backendTally.Controllers
                 return NotFound();
             }
 
-             _context.Transactions.Remove(deletedTransaction);
-             await _context.SaveChangesAsync();
+            var transactionDate = deletedTransaction.Date;
+            var userId = deletedTransaction.UserId;
 
-             return NoContent();
+            _context.Transactions.Remove(deletedTransaction);
+            await _context.SaveChangesAsync();
+
+            await _aggregateService.UpdateDailyAggregate(userId, transactionDate);
+
+            return NoContent();
 
         }
     }

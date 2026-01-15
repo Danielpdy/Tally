@@ -12,7 +12,7 @@ export const Addtransaction = (transaction, accessToken) => {
     })
 }
 
-export const GetTransactions = (accessToken) => apiRequest("/transactions", {
+export const GetTransactions = (accessToken, startDate, endDate) => apiRequest("/transactions", {
     headers: {
         "Authorization": `Bearer ${accessToken}`
     }

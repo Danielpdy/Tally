@@ -458,15 +458,21 @@
   gap: 12px;
 }
 
+.timeDropdownWrapper,
 .statusDropdownWrapper,
 .sortDropdownWrapper {
   position: relative;
+}
+
+.timeDropdownWrapper {
+  flex: 1;
 }
 
 .statusDropdownWrapper {
   flex: 1;
 }
 
+.timeDropdown,
 .statusDropdown,
 .sortButton {
   display: flex;
@@ -485,11 +491,13 @@
   text-align: left;
 }
 
+.timeDropdown img:last-child,
 .statusDropdown img:last-child,
 .sortButton img:last-child {
   margin-left: auto;
 }
 
+.timeDropdown:hover,
 .statusDropdown:hover,
 .sortButton:hover {
   background-color: #f9fafb;
@@ -692,6 +700,10 @@
 
 .expenseAmount {
   color: #FF8042;
+}
+
+.neutralAmount {
+  color: #374151;
 }
 
 .transactionBottom {
@@ -1444,6 +1456,7 @@
     align-items: stretch;
   }
 
+  .timeDropdown,
   .statusDropdown,
   .sortButton {
     width: 100%;

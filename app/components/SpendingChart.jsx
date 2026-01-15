@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useEffect, useState } from 'react';
 import styles from './dashboard/dashboardPreview.module.css';
 import {
@@ -15,7 +15,7 @@ import {
 const SpendingChart = ({ preview, content = []}) => {
 
     const [isPreview, setIsPreview] = useState(preview);
-    
+
     const previewData = [
             { type: "Income", amount: 25},
             { type: "Expense", amount: 35 },
@@ -25,10 +25,52 @@ const SpendingChart = ({ preview, content = []}) => {
             { type: "Goal", amount: 5}
     ];
 
-    const data = isPreview ? previewData : content;
+    const groupedData = isPreview ? previewData : content.reduce((acc, transaction) => {
+        const existingType = acc.find(item => item.type === transaction.type);
+        if (existingType) {
+            existingType.amount += transaction.amount;
+        } else {
+            acc.push({ type: transaction.type, amount: transaction.amount });
+        }
+        return acc;
+    }, []);
 
+    const getWeekRange = () => {
+        const now = new Date();
+        const dayOfWeek = now.getDay();
 
-    const COLORS = ["#FF8042", "#8A2BE2", "#00C49F", "#00CFFF", "#A9A9A9", "#7DD87D"];
+        const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+        const weekStart = new Date(now);
+        weekStart.setDate(now.getDate() - daysFromMonday);
+        weekStart.setHours(0, 0, 0, 0);
+
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        weekEnd.setHours(23, 59, 59, 999);
+
+        return {weekStart, weekEnd}
+    }
+
+    const currentWeekData = useMemo(() => {
+        const { weekStart, weekEnd } = getWeekRange();
+        
+    })
+
+    const data = groupedData;
+
+    const TYPE_COLORS = {
+        "Income": "#00CFFF",
+        "Expense": "#FF8042",
+        "Transfer": "#8A2BE2",
+        "Loan": "#00C49F",
+        "Savings": "#7DD87D",
+        "Goal": "#FFD700"
+    };
+
+    const getColorForType = (type) => {
+        return TYPE_COLORS[type] || "#A9A9A9";
+    };
 
   return (
     <div className={styles.chartCard}>
@@ -64,8 +106,8 @@ const SpendingChart = ({ preview, content = []}) => {
                         outerRadius={100}
                         paddingAngle={5}
                     >
-                        {data.map((_, i) => (
-                            <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                        {data.map((entry, i) => (
+                            <Cell key={i} fill={getColorForType(entry.type)} />
                         ))}
                     </Pie>
                     <Tooltip />

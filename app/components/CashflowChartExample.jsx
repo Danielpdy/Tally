@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './dashboard/dashboardPreview.module.css';
 
 import { LineChart,
@@ -11,9 +11,10 @@ import { LineChart,
         ResponsiveContainer
         } from 'recharts';
 
-const cashflowChart = () => {
+const cashflowChart = ({ preview, content }) => {
 
-    const data = [
+    const [isPreview, setIsPreview] = useState(preview);
+    const previewData = [
         {
             name: "Week One",
             Spendings: 3034,
@@ -39,6 +40,8 @@ const cashflowChart = () => {
             Balance: 1250
         }
     ];
+
+    const data = isPreview ? previewData : content;
 
   return (
     <div className={styles.cashFlowChartDash}>

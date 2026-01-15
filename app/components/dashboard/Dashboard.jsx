@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,26 +7,23 @@ import styles from './dashboard.module.css';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import SpendingChart from '../SpendingChart';
+import CashflowChart from '../CashflowChartExample';
 import { GetTransactions } from '@services/TransactionService';
 import { useSession } from '@node_modules/next-auth/react';
 
 
 const Dashboard = () => {
     const [cashFlowPeriod, setCashFlowPeriod] = useState('7days');
-
-    const [totalBalance, setTotalBalance] = useState(0);
-    const [monthlyEarnings, setMonthlyEarnings] = useState(0);
-    const [monthlySpendings, setMonthlySpendings] = useState(0);
+    const [earnings, setEarnings] = useState(0);
+    const [spendings, setSpendings] = useState(0);
     const [transactionsData, setTransactionsData] = useState([]);
     const { data: session } = useSession();
 
     useEffect(() => {
-        fetchSpendingChartData();
+        fetchTransactions();
     }, [session.accessToken])
 
-    
-
-    const fetchSpendingChartData = async () => {
+    const fetchTransactions = async () => {
         const data = await GetTransactions(session.accessToken);
         setTransactionsData(data);
     }
@@ -38,7 +35,35 @@ const Dashboard = () => {
         { name: 'Home Deposit', current: 45000, target: 100000, percentage: 45, due: 'Dec 2027', emoji: '🏠' }
     ];
 
-    
+    const calulateBalance = useMemo(() => {
+        const result = [...transactionsData];
+        const now = new Date();
+        const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endDate = now;
+
+        const totalEarnings = result.filter(transaction => {
+            const transactionDate = new Date(transaction.date);
+            return transactionDate >= startDate && transactionDate <= endDate;
+        })
+        .reduce(
+            (sum, transaction) => transaction.type === "Income" ? sum + transaction.amount : sum,
+            0
+        );
+        setEarnings(totalEarnings);
+
+        const totalSpendings = transactionsData.filter(transaction => {
+            const transactionDate = new Date(transaction.date);
+            return transactionDate >= startDate && transactionDate <= endDate;
+        })
+        .reduce(
+            (sum, transaction) => transaction.type === "Expense" ? sum + transaction.amount : sum,
+            0
+        )
+        setSpendings(totalSpendings);
+
+        return totalEarnings - totalSpendings;
+    }, [transactionsData]);
+  
 
     const debts = [
         { name: 'Credit Card', paid: 500, remaining: 200, total: 700 },
@@ -78,7 +103,7 @@ const Dashboard = () => {
                             <span className={styles.statLabel}>Total Balance</span>
                             <div className={styles.statDot}></div>
                         </div>
-                        <h2 className={styles.statAmount}>${totalBalance}</h2>
+                        <h2 className={styles.statAmount}>${calulateBalance}</h2>
                         <p className={styles.statSubtext}>Updated just now</p>
                     </div>
 
@@ -89,16 +114,15 @@ const Dashboard = () => {
                         <div className={styles.flowItems}>
                             <div className={styles.flowItem}>
                                 <span className={styles.flowIcon}>↗</span>
-                                <span className={styles.flowAmount}>${monthlyEarnings}</span>
+                                <span className={styles.flowAmount}>${earnings}</span>
                                 <span className={styles.flowLabel}>Income</span>
                             </div>
                             <div className={styles.flowItem}>
                                 <span className={styles.flowIcon} style={{ color: '#FF8042' }}>↙</span>
-                                <span className={styles.flowAmount} style={{ color: '#FF8042' }}>${monthlySpendings}</span>
+                                <span className={styles.flowAmount} style={{ color: '#FF8042' }}>${spendings}</span>
                                 <span className={styles.flowLabel}>Expenses</span>
                             </div>
                         </div>
-                        <p className={styles.monthlyChange}>+${} this month</p>
                     </div>
 
                     <div className={styles.statCard}>
@@ -123,60 +147,8 @@ const Dashboard = () => {
                         <SpendingChart preview={false} content={transactionsData}/>
 
                         {/* Cash Flow Timeline */}
-                        <div className={styles.card}>
-                            <div className={styles.cardHeaderRow}>
-                                <h3 className={styles.cardTitle}>Cash Flow Timeline</h3>
-                                <div className={styles.toggleButtons}>
-                                    <button
-                                        className={`${styles.toggleBtn} ${cashFlowPeriod === '7days' ? styles.active : ''}`}
-                                        onClick={() => setCashFlowPeriod('7days')}
-                                    >
-                                        7 Days
-                                    </button>
-                                    <button
-                                        className={`${styles.toggleBtn} ${cashFlowPeriod === '30days' ? styles.active : ''}`}
-                                        onClick={() => setCashFlowPeriod('30days')}
-                                    >
-                                        30 Days
-                                    </button>
-                                </div>
-                            </div>
-                            <div className={styles.chartPlaceholder}>
-                                <svg viewBox="0 0 800 200" className={styles.lineChart}>
-                                    {/* Grid lines */}
-                                    <line x1="0" y1="180" x2="800" y2="180" stroke="#E5E7EB" strokeWidth="1" />
-                                    <line x1="0" y1="135" x2="800" y2="135" stroke="#E5E7EB" strokeWidth="1" />
-                                    <line x1="0" y1="90" x2="800" y2="90" stroke="#E5E7EB" strokeWidth="1" />
-                                    <line x1="0" y1="45" x2="800" y2="45" stroke="#E5E7EB" strokeWidth="1" />
-
-                                    {/* Income line (blue) */}
-                                    <path d="M 0 180 L 114 170 L 228 100 L 342 20 L 456 15 L 570 80 L 684 160 L 800 175"
-                                          fill="none" stroke="#38BDF8" strokeWidth="3" />
-                                    <path d="M 0 180 L 114 170 L 228 100 L 342 20 L 456 15 L 570 80 L 684 160 L 800 175 L 800 200 L 0 200 Z"
-                                          fill="url(#blueGradient)" opacity="0.2" />
-
-                                    {/* Expenses line (red) */}
-                                    <path d="M 0 185 L 114 183 L 228 182 L 342 180 L 456 178 L 570 181 L 684 183 L 800 185"
-                                          fill="none" stroke="#FF8042" strokeWidth="2" strokeDasharray="5,5" />
-
-                                    <defs>
-                                        <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.3" />
-                                            <stop offset="100%" stopColor="#38BDF8" stopOpacity="0" />
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                                <div className={styles.chartLabels}>
-                                    <span>Mon</span>
-                                    <span>Tue</span>
-                                    <span>Wed</span>
-                                    <span>Thu</span>
-                                    <span>Fri</span>
-                                    <span>Sat</span>
-                                    <span>Sun</span>
-                                </div>
-                            </div>
-                        </div>
+                        <CashflowChart preview={true} />
+                        
 
                         {/* Debt Payoff Visualizer */}
                         <div className={styles.card}>
