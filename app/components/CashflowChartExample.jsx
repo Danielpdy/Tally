@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from './dashboard/dashboardPreview.module.css';
 
 import { LineChart,
@@ -14,6 +14,14 @@ import { LineChart,
 const cashflowChart = ({ preview, content }) => {
 
     const [isPreview, setIsPreview] = useState(preview);
+    const [earnings, setEarnings] = useState(0);
+    const [spendings, setSpendings] = useState(0);
+    const transactions = {
+        name: "",
+        Spendings: "",
+        Earnings: "",
+        Balance: ""
+    };
     const previewData = [
         {
             name: "Week One",
@@ -42,6 +50,21 @@ const cashflowChart = ({ preview, content }) => {
     ];
 
     const data = isPreview ? previewData : content;
+
+
+    const monthlyBalance = useMemo(() => {
+        const spendings = content.reduce((sum, transaction) => {
+            transaction.type === "Expense" ? transaction.amount + sum : sum
+        }, 0);
+        setSpendings(spendings);
+
+        const earnings = content.reduce((sum, transaction) => {
+          transaction.type === "Income" ? transaction.amount + sum : sum;
+        }, 0);
+        setEarnings(earnings);
+
+        return earnings - spendings;
+    }, [content]);
 
   return (
     <div className={styles.cashFlowChartDash}>

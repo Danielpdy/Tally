@@ -25,37 +25,45 @@ const SpendingChart = ({ preview, content = []}) => {
             { type: "Goal", amount: 5}
     ];
 
-    const groupedData = isPreview ? previewData : content.reduce((acc, transaction) => {
-        const existingType = acc.find(item => item.type === transaction.type);
-        if (existingType) {
-            existingType.amount += transaction.amount;
-        } else {
-            acc.push({ type: transaction.type, amount: transaction.amount });
-        }
-        return acc;
-    }, []);
-
     const getWeekRange = () => {
-        const now = new Date();
-        const dayOfWeek = now.getDay();
+      const now = new Date();
+      const dayOfWeek = now.getDay();
 
-        const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+      const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
 
-        const weekStart = new Date(now);
-        weekStart.setDate(now.getDate() - daysFromMonday);
-        weekStart.setHours(0, 0, 0, 0);
+      const weekStart = new Date(now);
+      weekStart.setDate(now.getDate() - daysFromMonday);
+      weekStart.setHours(0, 0, 0, 0);
 
-        const weekEnd = new Date(weekStart);
-        weekEnd.setDate(weekStart.getDate() + 6);
-        weekEnd.setHours(23, 59, 59, 999);
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+      weekEnd.setHours(23, 59, 59, 999);
 
-        return {weekStart, weekEnd}
-    }
+      return { weekStart, weekEnd };
+    };
 
     const currentWeekData = useMemo(() => {
-        const { weekStart, weekEnd } = getWeekRange();
-        
-    })
+      const { weekStart, weekEnd } = getWeekRange();
+
+      return content.filter((transaction) => {
+        const transactionDate = new Date(transaction.date);
+        return transactionDate >= weekStart && transactionDate <= weekEnd;
+      });
+    }, [content]);
+
+    const groupedData = isPreview
+      ? previewData
+      : currentWeekData.reduce((acc, transaction) => {
+          const existingType = acc.find(
+            (item) => item.type === transaction.type
+          );
+          if (existingType) {
+            existingType.amount += transaction.amount;
+          } else {
+            acc.push({ type: transaction.type, amount: transaction.amount });
+          }
+          return acc;
+        }, []);
 
     const data = groupedData;
 
