@@ -147,7 +147,7 @@ const Dashboard = () => {
                         <SpendingChart preview={false} content={transactionsData}/>
 
                         {/* Cash Flow Timeline */}
-                        <CashflowChart preview={true} />
+                        <CashflowChart preview={false} content={transactionsData} />
                         
 
                         {/* Debt Payoff Visualizer */}

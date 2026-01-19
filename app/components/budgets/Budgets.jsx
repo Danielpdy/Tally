@@ -374,9 +374,49 @@ const Budgets = () => {
   };
 
   const calculateSafeToSpend = () => {
-    if (totalBillsDue === undefined) return;
+    // Get current week's date range (Monday to Sunday)
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
 
-    const totalEarnings = transactions.reduce(
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - daysFromMonday);
+    weekStart.setHours(0, 0, 0, 0);
+
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+    weekEnd.setHours(23, 59, 59, 999);
+
+    console.log('=== SAFE TO SPEND CALCULATION ===');
+    console.log('Current Week Range:', weekStart.toDateString(), 'to', weekEnd.toDateString());
+    console.log('Total transactions in DB:', transactions.length);
+
+    console.log('\n🔍 ALL TRANSACTIONS:');
+    transactions.forEach(t => {
+      console.log(`  ${t.name} - ${t.date} - Type: ${t.type} - Amount: ${t.amount}`);
+    });
+
+    // Filter transactions for current week only
+    const currentWeekTransactions = transactions.filter(transaction => {
+      const transactionDate = new Date(transaction.date);
+      // Normalize transaction date to remove time component for accurate comparison
+      transactionDate.setHours(0, 0, 0, 0);
+
+      const isInRange = transactionDate >= weekStart && transactionDate <= weekEnd;
+
+      console.log(`Checking: ${transaction.name} ${transaction.date} -> ${transactionDate.toDateString()} - In range? ${isInRange}`);
+
+      if (isInRange) {
+        console.log('✅ IN RANGE:', transaction.name, transaction.date, 'Type:', transaction.type, 'Amount:', transaction.amount);
+      }
+
+      return isInRange;
+    });
+
+    console.log('Transactions in current week:', currentWeekTransactions.length);
+
+    // Calculate total income from current week's transactions
+    const totalEarnings = currentWeekTransactions.reduce(
       (sum, transaction) =>
         transaction.type === "Income" ? sum + transaction.amount : sum,
       0
@@ -386,15 +426,28 @@ const Budgets = () => {
     setSafetyBuffer(buffer);
     setEarnings(totalEarnings);
 
-    const totalSpendings = transactions.reduce(
+    // Calculate total spending: current week's expense transactions + bills due this week
+    const transactionSpendings = currentWeekTransactions.reduce(
       (sum, transaction) =>
         transaction.type === "Expense" ? sum + transaction.amount : sum,
       0
     );
+
+    // Add bills due this week to spendings
+    const totalSpendings = transactionSpendings + (totalBillsDue || 0);
     setSpendings(totalSpendings);
 
+    console.log('📊 TOTALS:');
+    console.log('Total Earnings (Income):', totalEarnings);
+    console.log('Transaction Spendings (Expense):', transactionSpendings);
+    console.log('Bills Due This Week:', totalBillsDue);
+    console.log('Total Spendings (Expense + Bills):', totalSpendings);
+    console.log('Buffer:', buffer);
+    console.log('Safe To Spend:', totalEarnings - totalSpendings - buffer);
+
+    // Safe to spend = Income - Spendings (which already includes bills) - Buffer
     setSafeToSpendAmount(
-      totalEarnings - totalSpendings - totalBillsDue - buffer
+      totalEarnings - totalSpendings - buffer
     );
   };
 

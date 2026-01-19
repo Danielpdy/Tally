@@ -49,17 +49,89 @@ const cashflowChart = ({ preview, content }) => {
         }
     ];
 
-    const data = isPreview ? previewData : content;
+    const getWeekRanges = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth();
 
+        const firstDayOfMonth = new Date(year, month, 1);
+        const lastDayOfMonth = new Date(year, month + 1, 0);
+
+        const weeks = [];
+        let weekStart = new Date(firstDayOfMonth);
+        let weekNumber = 1;
+
+        while (weekStart <= lastDayOfMonth) {
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+
+            const actualWeekEnd = weekEnd > lastDayOfMonth ? new Date(lastDayOfMonth) : weekEnd;
+
+            weeks.push({
+                name: `Week ${weekNumber}`,
+                start: new Date(weekStart),
+                end: new Date(actualWeekEnd)
+            });
+
+            weekStart.setDate(weekStart.getDate() + 7);
+            weekNumber++;
+        }
+
+        return weeks;
+    }
+
+    const getWeeklyData = (transactions) => {
+        if (!transactions || !Array.isArray(transactions)) {
+            return [];
+        }
+
+        const weekRanges = getWeekRanges();
+
+        return weekRanges.map(week => {
+            let earnings = 0;
+            let spendings = 0;
+
+            transactions.forEach(transaction => {
+                const transactionDate = new Date(transaction.date);
+
+                if (transactionDate >= week.start && transactionDate <= week.end) {
+                    if (transaction.type === "Income") {
+                        earnings += transaction.amount;
+                    } else if (transaction.type === "Expense") {
+                        spendings += transaction.amount;
+                    }
+                }
+            });
+
+            const balance = earnings - spendings;
+
+            return {
+                name: week.name,
+                Spendings: spendings,
+                Earnings: earnings,
+                Balance: balance
+            };
+        });
+    }
+
+    const weeklyData = useMemo(() => {
+        return isPreview ? [] : getWeeklyData(content);
+    }, [content, isPreview]);
+
+    const data = isPreview ? previewData : weeklyData;
 
     const monthlyBalance = useMemo(() => {
+        if (!content || !Array.isArray(content)) {
+            return 0;
+        }
+
         const spendings = content.reduce((sum, transaction) => {
-            transaction.type === "Expense" ? transaction.amount + sum : sum
+            return transaction.type === "Expense" ? transaction.amount + sum : sum;
         }, 0);
         setSpendings(spendings);
 
         const earnings = content.reduce((sum, transaction) => {
-          transaction.type === "Income" ? transaction.amount + sum : sum;
+          return transaction.type === "Income" ? transaction.amount + sum : sum;
         }, 0);
         setEarnings(earnings);
 
