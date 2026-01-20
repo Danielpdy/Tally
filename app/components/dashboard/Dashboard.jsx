@@ -3,12 +3,16 @@ import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import styles from './dashboard.module.css';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import SpendingChart from '../SpendingChart';
 import CashflowChart from '../CashflowChartExample';
+import SafetoSpend from '../SafetoSpend';
 import { GetTransactions } from '@services/TransactionService';
+import { GetBillsDueThisWeek, GetBillsOverdueThisWeek, GetRecurringBills } from '@services/RecurringBillsService';
+import { GetPaidBills } from '@services/BillPaymentService';
 import { useSession } from '@node_modules/next-auth/react';
 
 
@@ -17,15 +21,35 @@ const Dashboard = () => {
     const [earnings, setEarnings] = useState(0);
     const [spendings, setSpendings] = useState(0);
     const [transactionsData, setTransactionsData] = useState([]);
+    const [billsDueThisWeek, setBillsDueThisWeek] = useState([]);
+    const [billsOverdueThisWeek, setBillsOverdueThisWeek] = useState([]);
     const { data: session } = useSession();
 
     useEffect(() => {
-        fetchTransactions();
-    }, [session.accessToken])
+        if (session?.accessToken) {
+            fetchTransactions();
+            fetchBillsDueThisWeek();
+            fetchBillsOverdueThisWeek();
+        }
+    }, [session?.accessToken])
 
     const fetchTransactions = async () => {
         const data = await GetTransactions(session.accessToken);
         setTransactionsData(data);
+    };
+
+    const fetchBillsDueThisWeek = async () => {
+        const data = await GetBillsDueThisWeek(session.accessToken);
+        console.log('Bills due this week API response:', data);
+        console.log('upcomingBills array:', data?.upcomingBills);
+        setBillsDueThisWeek(data?.upcomingBills || []);
+    };
+
+    const fetchBillsOverdueThisWeek = async () => {
+        const data = await GetBillsOverdueThisWeek(session.accessToken);
+        console.log('Bills overdue this week API response:', data);
+        console.log('overdueBills array:', data?.overdueBills);
+        setBillsOverdueThisWeek(data?.overdueBills || []);
     }
 
     const financialGoals = [
@@ -42,7 +66,8 @@ const Dashboard = () => {
         const endDate = now;
 
         const totalEarnings = result.filter(transaction => {
-            const transactionDate = new Date(transaction.date);
+            const [year, month, day] = transaction.date.split('-').map(Number);
+            const transactionDate = new Date(year, month - 1, day);
             return transactionDate >= startDate && transactionDate <= endDate;
         })
         .reduce(
@@ -52,7 +77,8 @@ const Dashboard = () => {
         setEarnings(totalEarnings);
 
         const totalSpendings = transactionsData.filter(transaction => {
-            const transactionDate = new Date(transaction.date);
+            const [year, month, day] = transaction.date.split('-').map(Number);
+            const transactionDate = new Date(year, month - 1, day);
             return transactionDate >= startDate && transactionDate <= endDate;
         })
         .reduce(
@@ -144,7 +170,7 @@ const Dashboard = () => {
                     {/* Left Column */}
                     <div className={styles.leftColumn}>
                         {/* Where Your Money Went */}
-                        <SpendingChart preview={false} content={transactionsData}/>
+                        <SpendingChart preview={false} content={transactionsData} recurringBillsDueThisWeek={billsDueThisWeek} recurringBillsOverdueThisWeek={billsOverdueThisWeek}/>
 
                         {/* Cash Flow Timeline */}
                         <CashflowChart preview={false} content={transactionsData} />
@@ -189,25 +215,7 @@ const Dashboard = () => {
                     {/* Right Column */}
                     <div className={styles.rightColumn}>
                         {/* Safe to Spend */}
-                        <div className={styles.card}>
-                            <h3 className={styles.cardTitle}>Safe to Spend</h3>
-                            <div className={styles.safeToSpendCircle}>
-                                <div className={styles.circularProgressWrapper}>
-                                    <CircularProgressbar
-                                        value={65}
-                                        text={"test"}
-                                        styles={buildStyles({
-                                            pathColor: '#38BDF8',
-                                            textColor: '#1F2937',
-                                            trailColor: '#E5E7EB',
-                                            textSize: '16px'
-                                        })}
-                                    />
-                                </div>
-                            </div>
-                            <p className={styles.safeToSpendLabel}>Remaining Budget This Month</p>
-                            <p className={styles.safeToSpendSubtext}>{}</p>
-                        </div>
+                        <SafetoSpend preview={false} content={transactionsData} recurringBills={[]} />
 
                         {/* Financial Goals */}
                         <div className={styles.card}>

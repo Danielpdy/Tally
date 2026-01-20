@@ -13,7 +13,7 @@ import { LineChart,
 
 const cashflowChart = ({ preview, content }) => {
 
-    const [isPreview, setIsPreview] = useState(preview);
+    const isPreview = preview;
     const [earnings, setEarnings] = useState(0);
     const [spendings, setSpendings] = useState(0);
     const transactions = {
@@ -92,7 +92,8 @@ const cashflowChart = ({ preview, content }) => {
             let spendings = 0;
 
             transactions.forEach(transaction => {
-                const transactionDate = new Date(transaction.date);
+                const [year, month, day] = transaction.date.split('-').map(Number);
+                const transactionDate = new Date(year, month - 1, day);
 
                 if (transactionDate >= week.start && transactionDate <= week.end) {
                     if (transaction.type === "Income") {
@@ -116,7 +117,7 @@ const cashflowChart = ({ preview, content }) => {
 
     const weeklyData = useMemo(() => {
         return isPreview ? [] : getWeeklyData(content);
-    }, [content, isPreview]);
+    }, [content, preview]);
 
     const data = isPreview ? previewData : weeklyData;
 

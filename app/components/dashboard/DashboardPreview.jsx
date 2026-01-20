@@ -144,17 +144,17 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
 
                 <section className={styles.graphsSectionOne}>
                     <div className={styles.chartCardBox}>
-                        <SpendingChart preview={true} content={[]}/>
+                        <SpendingChart preview={true} content={[]} recurringBills={[]} paidBills={[]}/>
                     </div>
 
                     <div className={styles.chartCardBox2}>
-                        <SafetoSpend />
+                        <SafetoSpend preview={true} content={[]} recurringBills={[]} />
                     </div>
                 </section>
                 
                 <section className='fullWidth'>
                     <div className={styles.cashFlowCard}>
-                        <CashflowChart />
+                        <CashflowChart preview={true} content={[]} />
                     </div>
                 </section>
 
