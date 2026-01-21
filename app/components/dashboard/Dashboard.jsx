@@ -5,11 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './dashboard.module.css';
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
 import SpendingChart from '../SpendingChart';
 import CashflowChart from '../CashflowChartExample';
 import SafetoSpend from '../SafetoSpend';
+import FinancialGoals from '../FinancialGoals';
 import { GetTransactions } from '@services/TransactionService';
 import { GetBillsDueThisWeek, GetBillsOverdueThisWeek, GetRecurringBills } from '@services/RecurringBillsService';
 import { GetPaidBills } from '@services/BillPaymentService';
@@ -23,6 +22,8 @@ const Dashboard = () => {
     const [transactionsData, setTransactionsData] = useState([]);
     const [billsDueThisWeek, setBillsDueThisWeek] = useState([]);
     const [billsOverdueThisWeek, setBillsOverdueThisWeek] = useState([]);
+    const [billsPaidThisWeek, setBillsPaidThisWeek] = useState([]);
+    const [allRecurringBills, setAllRecurringBills] = useState([]);
     const { data: session } = useSession();
 
     useEffect(() => {
@@ -30,6 +31,8 @@ const Dashboard = () => {
             fetchTransactions();
             fetchBillsDueThisWeek();
             fetchBillsOverdueThisWeek();
+            fetchBillsPaid();
+            fetchAllRecurringBills();
         }
     }, [session?.accessToken])
 
@@ -52,12 +55,25 @@ const Dashboard = () => {
         setBillsOverdueThisWeek(data?.overdueBills || []);
     }
 
-    const financialGoals = [
-        { name: 'Emergency Fund', current: 8500, target: 10000, percentage: 85, due: 'Dec 2025', emoji: '💪' },
-        { name: 'Vacation Fund', current: 3600, target: 5000, percentage: 72, due: 'Jul 2025', emoji: '✈️' },
-        { name: 'New Car', current: 12000, target: 25000, percentage: 48, due: 'Dec 2026', emoji: '🚗' },
-        { name: 'Home Deposit', current: 45000, target: 100000, percentage: 45, due: 'Dec 2027', emoji: '🏠' }
-    ];
+    const fetchBillsPaid = async () => {
+        const data = await GetPaidBills(session.accessToken);
+        const paidBillIds = data.payments?.map(payment => payment.recurringBillId) || [];
+        setBillsPaidThisWeek(paidBillIds);
+    }
+
+    const fetchAllRecurringBills = async () => {
+        const data = await GetRecurringBills(session.accessToken);
+        setAllRecurringBills(data || []);
+    }
+
+    // Filter out paid bills from due and overdue bills
+    const unpaidBillsDue = useMemo(() => {
+        return billsDueThisWeek.filter(bill => !billsPaidThisWeek.includes(bill.id));
+    }, [billsDueThisWeek, billsPaidThisWeek]);
+
+    const unpaidBillsOverdue = useMemo(() => {
+        return billsOverdueThisWeek.filter(bill => !billsPaidThisWeek.includes(bill.id));
+    }, [billsOverdueThisWeek, billsPaidThisWeek]);
 
     const calulateBalance = useMemo(() => {
         const result = [...transactionsData];
@@ -76,7 +92,7 @@ const Dashboard = () => {
         );
         setEarnings(totalEarnings);
 
-        const totalSpendings = transactionsData.filter(transaction => {
+        const transactionSpendings = transactionsData.filter(transaction => {
             const [year, month, day] = transaction.date.split('-').map(Number);
             const transactionDate = new Date(year, month - 1, day);
             return transactionDate >= startDate && transactionDate <= endDate;
@@ -84,11 +100,17 @@ const Dashboard = () => {
         .reduce(
             (sum, transaction) => transaction.type === "Expense" ? sum + transaction.amount : sum,
             0
-        )
+        );
+
+        const unpaidBillsThisMonth = allRecurringBills
+            .filter(bill => !billsPaidThisWeek.includes(bill.id))
+            .reduce((sum, bill) => sum + bill.amount, 0);
+
+        const totalSpendings = transactionSpendings + unpaidBillsThisMonth;
         setSpendings(totalSpendings);
 
         return totalEarnings - totalSpendings;
-    }, [transactionsData]);
+    }, [transactionsData, allRecurringBills, billsPaidThisWeek]);
   
 
     const debts = [
@@ -170,10 +192,10 @@ const Dashboard = () => {
                     {/* Left Column */}
                     <div className={styles.leftColumn}>
                         {/* Where Your Money Went */}
-                        <SpendingChart preview={false} content={transactionsData} recurringBillsDueThisWeek={billsDueThisWeek} recurringBillsOverdueThisWeek={billsOverdueThisWeek}/>
+                        <SpendingChart preview={false} content={transactionsData} recurringBillsDueThisWeek={unpaidBillsDue} recurringBillsOverdueThisWeek={unpaidBillsOverdue}/>
 
                         {/* Cash Flow Timeline */}
-                        <CashflowChart preview={false} content={transactionsData} />
+                        <CashflowChart preview={false} content={transactionsData} recurringBills={allRecurringBills} paidBillIds={billsPaidThisWeek} />
                         
 
                         {/* Debt Payoff Visualizer */}
@@ -215,38 +237,10 @@ const Dashboard = () => {
                     {/* Right Column */}
                     <div className={styles.rightColumn}>
                         {/* Safe to Spend */}
-                        <SafetoSpend preview={false} content={transactionsData} recurringBills={[]} />
+                        <SafetoSpend preview={false} content={transactionsData} recurringBillsDueThisWeek={unpaidBillsDue} recurringBillsOverdueThisWeek={unpaidBillsOverdue} />
 
                         {/* Financial Goals */}
-                        <div className={styles.card}>
-                            <div className={styles.cardHeaderRow}>
-                                <h3 className={styles.cardTitle}>Financial Goals</h3>
-                                <button className={styles.addGoalBtn}>+ Add Goal</button>
-                            </div>
-                            <div className={styles.goalsGrid}>
-                                {financialGoals.map((goal, idx) => (
-                                    <div key={idx} className={styles.goalCard}>
-                                        <div className={styles.goalCircle}>
-                                            <CircularProgressbar
-                                                value={goal.percentage}
-                                                text={`${goal.percentage}%`}
-                                                styles={buildStyles({
-                                                    pathColor: '#8B5CF6',
-                                                    textColor: '#8B5CF6',
-                                                    trailColor: '#E9D5FF',
-                                                    textSize: '24px',
-                                                    fontWeight: 'bold'
-                                                })}
-                                            />
-                                        </div>
-                                        <h4 className={styles.goalName}>{goal.name}</h4>
-                                        <p className={styles.goalAmount}>${goal.current.toLocaleString()} / ${goal.target.toLocaleString()}</p>
-                                        <p className={styles.goalDue}>Due {goal.due}</p>
-                                        <p className={styles.goalEncouragement}>Keep going! {goal.emoji}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        <FinancialGoals preview={false} />
 
                         {/* AI Insights */}
                         <div className={styles.card}>

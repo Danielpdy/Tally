@@ -6,10 +6,7 @@ import SpendingChart from '@app/components/SpendingChart';
 import SafetoSpend from '@app/components/SafetoSpend';
 import styles from './dashboardPreview.module.css';
 import CashflowChart from '@app/components/CashflowChartExample';
-import EmergencyFundBar from '@app/components/EmergencyFundBar';
-import VacationFundBar from '@app/components/VacationFundBar';
-import NewCarBar from '@app/components/NewCarBar';
-import HomeDepositBar from '@app/components/HomeDepositBar';
+import FinancialGoals from '@app/components/FinancialGoals';
 import DebtChartBarExample from '@app/components/DebtChartBarExample';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -158,52 +155,7 @@ const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
                     </div>
                 </section>
 
-                <section className={styles.goalsBars}>
-                    <h3 className={styles.goalsBarsTitle}>Financial Goals</h3>
-                    <div className={styles.goalsBarsBox}>
-
-                        <div>
-                            <EmergencyFundBar />
-                            <br />
-                            <div className={styles.goalsBarsDataContent}>
-                                <span className={styles.fundTitle}>Emergency Fund</span>                      
-                                <p className={styles.fundAmount}>$8,500 / $10,000</p>                            
-                                <p className={styles.fundDue}>Due: Dec 2025</p>
-                                <span className={styles.fundMessage}>Keep going! 💪</span>
-                            </div>
-                        </div>
-                        <div>
-                            <VacationFundBar />
-                            <br />
-                            <div className={styles.goalsBarsDataContent}>
-                                <span className={styles.fundTitle}>Vacation Fund</span>
-                                <p className={styles.fundAmount}>$3,600 / $5,000</p>
-                                <p className={styles.fundDue}>Due: Jun 2026</p>
-                                <span className={styles.fundMessage}>Keep going! 💪</span>
-                            </div>
-                        </div>
-                        <div>
-                            <NewCarBar />
-                            <br />
-                            <div className={styles.goalsBarsDataContent}>
-                                <span className={styles.fundTitle}>New Car</span>
-                                <p className={styles.fundAmount}>$12,000 / $25,000</p>
-                                <p className={styles.fundDue}>Due: Dec 2026</p>
-                                <span className={styles.fundMessage}>Keep going! 💪</span>
-                            </div>
-                        </div>
-                        <div>
-                            <HomeDepositBar />
-                            <br />
-                            <div className={styles.goalsBarsDataContent}>
-                                <span className={styles.fundTitle}>Home Deposit</span>
-                                <p className={styles.fundAmount}>$45,000 / $100,000</p>
-                                <p className={styles.fundDue}>Due: Dec 2027</p>
-                                <span className={styles.fundMessage}>Keep going! 💪</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <FinancialGoals preview={true} goals={[]} />
 
                 <section className={styles.debtChartandInsights}>
                     <div className={styles.debtChartandInsightsBoxes}>

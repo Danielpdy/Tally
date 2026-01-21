@@ -4,7 +4,7 @@ import "react-circular-progressbar/dist/styles.css";
 import styles from './dashboard/dashboardPreview.module.css';
 
 
-const SafetoSpend = ({ preview = false, content = [], recurringBills = [] }) => {
+const SafetoSpend = ({ preview = false, content = [], recurringBillsDueThisWeek = [], recurringBillsOverdueThisWeek = [] }) => {
 
     const getWeekRange = () => {
         const now = new Date();
@@ -29,18 +29,17 @@ const SafetoSpend = ({ preview = false, content = [], recurringBills = [] }) => 
 
         const { weekStart, weekEnd } = getWeekRange();
 
-        // Filter transactions for current week
         const weekTransactions = content.filter((transaction) => {
             const [year, month, day] = transaction.date.split('-').map(Number);
             const transactionDate = new Date(year, month - 1, day);
             return transactionDate >= weekStart && transactionDate <= weekEnd;
         });
 
-        if (weekTransactions.length === 0) {
+        if (weekTransactions.length === 0 && recurringBillsDueThisWeek.length === 0 && recurringBillsOverdueThisWeek.length === 0) {
             return { amount: 0, percentage: 0, hasTransactions: false };
         }
 
-        // Calculate weekly income and expenses
+
         const weeklyIncome = weekTransactions.reduce((sum, t) =>
             t.type === "Income" ? sum + t.amount : sum, 0
         );
@@ -49,18 +48,17 @@ const SafetoSpend = ({ preview = false, content = [], recurringBills = [] }) => 
             t.type === "Expense" ? sum + t.amount : sum, 0
         );
 
-        // Calculate upcoming bills for this week
-        const upcomingBills = recurringBills.reduce((sum, bill) => {
-            if (!bill.dueDate) {
-                return sum;
-            }
-            const [year, month, day] = bill.dueDate.split('-').map(Number);
-            const billDate = new Date(year, month - 1, day);
-            if (billDate >= weekStart && billDate <= weekEnd) {
-                return sum + bill.amount;
-            }
-            return sum;
-        }, 0);
+
+        // Calculate total unpaid bills (due + overdue this week)
+        const billsDue = Array.isArray(recurringBillsDueThisWeek)
+            ? recurringBillsDueThisWeek.reduce((sum, bill) => sum + bill.amount, 0)
+            : 0;
+
+        const billsOverdue = Array.isArray(recurringBillsOverdueThisWeek)
+            ? recurringBillsOverdueThisWeek.reduce((sum, bill) => sum + bill.amount, 0)
+            : 0;
+
+        const upcomingBills = billsDue + billsOverdue;
 
         // Safe to spend = Income - Expenses - Upcoming bills
         const safeAmount = weeklyIncome - weeklyExpenses - upcomingBills;
@@ -78,13 +76,16 @@ const SafetoSpend = ({ preview = false, content = [], recurringBills = [] }) => 
             weeklyExpenses,
             upcomingBills
         };
-    }, [content, recurringBills, preview]);
+    }, [content, recurringBillsDueThisWeek, recurringBillsOverdueThisWeek, preview]);
 
     if (!preview && !calculateSafeToSpend.hasTransactions) {
         return (
             <div className={styles.safeToSpendProgressBar}>
                 <div className='fullWidth'>
-                    <h3 className={styles.safetoSpendTitle}>Safe to Spend</h3>
+                    <div className={styles.chartHeader}>
+                        <h3 className={styles.safetoSpendTitle}>Safe to Spend</h3>
+                        <span className={styles.weeklyBadge}>Weekly</span>
+                    </div>
                 </div>
                 <div style={{
                     display: 'flex',
@@ -128,7 +129,10 @@ const SafetoSpend = ({ preview = false, content = [], recurringBills = [] }) => 
   return (
     <div className={styles.safeToSpendProgressBar}>
         <div className='fullWidth'>
-            <h3 className={styles.safetoSpendTitle}>Safe to Spend</h3>
+            <div className={styles.chartHeader}>
+                <h3 className={styles.safetoSpendTitle}>Safe to Spend</h3>
+                <span className={styles.weeklyBadge}>Weekly</span>
+            </div>
         </div>
         <div className={styles.progressBar}>
             <CircularProgressbar

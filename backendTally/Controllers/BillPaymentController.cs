@@ -35,10 +35,11 @@ namespace backendTally.Controllers
             }
 
             int authenticatedUserId = int.Parse(userIdClaim);
-            var startOfWeek = WeekCalculator.GetCurrentWeekStart();
-            var endOfWeek = WeekCalculator.GetCurrentWeekEnd();
+            var now = DateTime.UtcNow;
+            var startOfMonth = new DateTime(now.Year, now.Month, 1);
+            var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
-            var payments = await _billPaymentService.GetPaymentsForWeek(authenticatedUserId, startOfWeek, endOfWeek);
+            var payments = await _billPaymentService.GetPaymentsForWeek(authenticatedUserId, startOfMonth, endOfMonth);
 
             return Ok(new { payments });
 

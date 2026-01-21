@@ -11,7 +11,7 @@ import { LineChart,
         ResponsiveContainer
         } from 'recharts';
 
-const cashflowChart = ({ preview, content }) => {
+const cashflowChart = ({ preview, content, recurringBills = [], paidBillIds = [] }) => {
 
     const isPreview = preview;
     const [earnings, setEarnings] = useState(0);
@@ -104,6 +104,25 @@ const cashflowChart = ({ preview, content }) => {
                 }
             });
 
+            if (Array.isArray(recurringBills)) {
+                recurringBills.forEach(bill => {
+                    if (paidBillIds.includes(bill.id)) {
+                        return;
+                    }
+
+                    const billDayOfMonth = bill.dayOfMonth;
+                    const now = new Date();
+                    const year = now.getFullYear();
+                    const month = now.getMonth();
+
+                    const billDate = new Date(year, month, billDayOfMonth);
+
+                    if (billDate >= week.start && billDate <= week.end) {
+                        spendings += bill.amount;
+                    }
+                });
+            }
+
             const balance = earnings - spendings;
 
             return {
@@ -117,7 +136,7 @@ const cashflowChart = ({ preview, content }) => {
 
     const weeklyData = useMemo(() => {
         return isPreview ? [] : getWeeklyData(content);
-    }, [content, preview]);
+    }, [content, preview, recurringBills, paidBillIds]);
 
     const data = isPreview ? previewData : weeklyData;
 
@@ -141,7 +160,10 @@ const cashflowChart = ({ preview, content }) => {
 
   return (
     <div className={styles.cashFlowChartDash}>
-        <h3 className={styles.cashFlowTitle}>Cash Flow Timeline</h3>
+        <div className={styles.chartHeader}>
+            <h3 className={styles.cashFlowTitle}>Cash Flow Timeline</h3>
+            <span className={styles.monthlyBadge}>Monthly</span>
+        </div>
         <ResponsiveContainer width="100%" height="100%">
             <LineChart
                 data={data}

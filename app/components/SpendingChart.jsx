@@ -107,7 +107,10 @@ const SpendingChart = ({ preview, content = [], recurringBillsDueThisWeek = [], 
 
   return (
     <div className={styles.chartCard}>
-        <h3 className={styles.spendingChartTitle}>Where Your Money Went</h3>
+        <div className={styles.chartHeader}>
+            <h3 className={styles.spendingChartTitle}>Where Your Money Went</h3>
+            <span className={styles.weeklyBadge}>Weekly</span>
+        </div>
 
         <div className={styles.chartWrap}>
             {!isPreview && content.length === 0 ? (

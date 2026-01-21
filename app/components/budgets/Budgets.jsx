@@ -415,7 +415,7 @@ const Budgets = () => {
 
     console.log('Transactions in current week:', currentWeekTransactions.length);
 
-    // Calculate total income from current week's transactions
+  
     const totalEarnings = currentWeekTransactions.reduce(
       (sum, transaction) =>
         transaction.type === "Income" ? sum + transaction.amount : sum,
@@ -426,14 +426,14 @@ const Budgets = () => {
     setSafetyBuffer(buffer);
     setEarnings(totalEarnings);
 
-    // Calculate total spending: current week's expense transactions + bills due this week
+    
     const transactionSpendings = currentWeekTransactions.reduce(
       (sum, transaction) =>
         transaction.type === "Expense" ? sum + transaction.amount : sum,
       0
     );
 
-    // Add bills due this week to spendings
+
     const totalSpendings = transactionSpendings + (totalBillsDue || 0);
     setSpendings(totalSpendings);
 

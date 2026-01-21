@@ -774,4 +774,37 @@
   font-weight: 600;
 }
 
+.chartHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.weeklyBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #F5F3FF 0%, #E8E4F3 100%);
+  color: #8B4FFF;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1px solid #E0D4FF;
+  letter-spacing: 0.3px;
+}
+
+.monthlyBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #E8F5FF 0%, #D4EDFF 100%);
+  color: #0099FF;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1px solid #B3DBFF;
+  letter-spacing: 0.3px;
+}
+
 
