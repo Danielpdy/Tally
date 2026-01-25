@@ -12,6 +12,7 @@ import FinancialGoals from '../FinancialGoals';
 import { GetTransactions } from '@services/TransactionService';
 import { GetBillsDueThisWeek, GetBillsOverdueThisWeek, GetRecurringBills } from '@services/RecurringBillsService';
 import { GetPaidBills } from '@services/BillPaymentService';
+import { GetFinancialGoals } from '@services/FinantialGoalService';
 import { useSession } from '@node_modules/next-auth/react';
 
 
@@ -24,6 +25,7 @@ const Dashboard = () => {
     const [billsOverdueThisWeek, setBillsOverdueThisWeek] = useState([]);
     const [billsPaidThisWeek, setBillsPaidThisWeek] = useState([]);
     const [allRecurringBills, setAllRecurringBills] = useState([]);
+    const [financialGoals, setFinancialGoals] = useState([]);
     const { data: session } = useSession();
 
     useEffect(() => {
@@ -33,6 +35,7 @@ const Dashboard = () => {
             fetchBillsOverdueThisWeek();
             fetchBillsPaid();
             fetchAllRecurringBills();
+            fetchFinancialGoals();
         }
     }, [session?.accessToken])
 
@@ -64,6 +67,11 @@ const Dashboard = () => {
     const fetchAllRecurringBills = async () => {
         const data = await GetRecurringBills(session.accessToken);
         setAllRecurringBills(data || []);
+    }
+
+    const fetchFinancialGoals = async () => {
+        const data = await GetFinancialGoals(session.accessToken);
+        setFinancialGoals(data || []);
     }
 
     // Filter out paid bills from due and overdue bills
@@ -240,7 +248,7 @@ const Dashboard = () => {
                         <SafetoSpend preview={false} content={transactionsData} recurringBillsDueThisWeek={unpaidBillsDue} recurringBillsOverdueThisWeek={unpaidBillsOverdue} />
 
                         {/* Financial Goals */}
-                        <FinancialGoals preview={false} />
+                        <FinancialGoals preview={false} goals={financialGoals} />
 
                         {/* AI Insights */}
                         <div className={styles.card}>

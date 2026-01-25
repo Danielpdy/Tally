@@ -149,15 +149,26 @@ const SafetoSpend = ({ preview = false, content = [], recurringBillsDueThisWeek 
         <div className={styles.safeToSpendData}>
             <h2 className={styles.amountTitle}>${calculateSafeToSpend.amount.toFixed(2)}</h2>
             <p className='smallText'>Safe to Spend This Week</p>
-            {!preview && calculateSafeToSpend.upcomingBills > 0 && (
-                <p style={{color: "#FF8042", textAlign: "center", fontSize: "12px"}}>
-                    ${calculateSafeToSpend.upcomingBills.toFixed(2)} in bills due this week
-                </p>
-            )}
-            {!preview && calculateSafeToSpend.percentage >= 50 ? (
-                <p style={{color: "#00D4FF", textAlign: "center"}}>You're tracking well!</p>
-            ) : !preview && (
-                <p style={{color: "#FF8042", textAlign: "center"}}>Consider reducing expenses</p>
+            {preview ? (
+                <>
+                    <p style={{color: "#FF8042", textAlign: "center", fontSize: "12px"}}>
+                        $450.00 in bills due this week
+                    </p>
+                    <p style={{color: "#00D4FF", textAlign: "center"}}>You're tracking well!</p>
+                </>
+            ) : (
+                <>
+                    {calculateSafeToSpend.upcomingBills > 0 && (
+                        <p style={{color: "#FF8042", textAlign: "center", fontSize: "12px"}}>
+                            ${calculateSafeToSpend.upcomingBills.toFixed(2)} in bills due this week
+                        </p>
+                    )}
+                    {calculateSafeToSpend.percentage >= 50 ? (
+                        <p style={{color: "#00D4FF", textAlign: "center"}}>You're tracking well!</p>
+                    ) : (
+                        <p style={{color: "#FF8042", textAlign: "center"}}>Consider reducing expenses</p>
+                    )}
+                </>
             )}
         </div>
     </div>

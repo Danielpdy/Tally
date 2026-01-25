@@ -176,8 +176,8 @@
 }
 
 .cardTitle {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 600;
     color: #8B5CF6;
     margin-bottom: 20px;
 }
@@ -428,11 +428,20 @@
 }
 
 .goalCard {
-    background: linear-gradient(135deg, #F5F3FF 0%, #FFF0F8 100%);
+    background: white;
     border-radius: 12px;
     padding: 20px;
     text-align: center;
-    border: 1px solid #E9D5FF;
+    border: 1px solid #E5E7EB;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s;
+}
+
+.goalCard:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
 }
 
 .goalCircle {
@@ -464,6 +473,62 @@
     font-size: 12px;
     color: #8B5CF6;
     font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* Goal Actions */
+.goalActions {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-top: auto;
+}
+
+.goalUpdateBtn,
+.goalDeleteBtn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+}
+
+.goalUpdateBtn {
+    color: #8B5CF6;
+    border-color: #E9D5FF;
+}
+
+.goalUpdateBtn:hover {
+    background: #F5F3FF;
+    border-color: #8B5CF6;
+    transform: translateY(-1px);
+}
+
+.goalUpdateBtn svg {
+    stroke: #8B5CF6;
+}
+
+.goalDeleteBtn {
+    color: #EF4444;
+    border-color: #FEE2E2;
+}
+
+.goalDeleteBtn:hover {
+    background: #FEF2F2;
+    border-color: #EF4444;
+    transform: translateY(-1px);
+}
+
+.goalDeleteBtn svg {
+    stroke: #EF4444;
 }
 
 /* AI Insights */
