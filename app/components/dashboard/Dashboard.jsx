@@ -46,15 +46,11 @@ const Dashboard = () => {
 
     const fetchBillsDueThisWeek = async () => {
         const data = await GetBillsDueThisWeek(session.accessToken);
-        console.log('Bills due this week API response:', data);
-        console.log('upcomingBills array:', data?.upcomingBills);
         setBillsDueThisWeek(data?.upcomingBills || []);
     };
 
     const fetchBillsOverdueThisWeek = async () => {
         const data = await GetBillsOverdueThisWeek(session.accessToken);
-        console.log('Bills overdue this week API response:', data);
-        console.log('overdueBills array:', data?.overdueBills);
         setBillsOverdueThisWeek(data?.overdueBills || []);
     }
 

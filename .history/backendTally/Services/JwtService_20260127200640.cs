@@ -59,6 +59,9 @@ namespace backendTally.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
+            // STEP 6: Convert token object to string format
+            // WriteToken() produces the final JWT string: header.payload.signature
+            // This is what you send to the client and what they include in Authorization headers
             return tokenHandler.WriteToken(token);
         }
     }

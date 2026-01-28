@@ -49,16 +49,28 @@ namespace backendTally.Services
                     Convert.ToDouble(_configuration["Jwt:ExpiryInMinutes"])
                 ),
 
+                // Issuer: Who created this token (your backend API)
+                // Validated in Program.cs TokenValidationParameters to prevent token forgery
                 Issuer = _configuration["Jwt:Issuer"],
 
+                // Audience: Who this token is intended for (your frontend app)
+                // Prevents tokens meant for one app being used in another
                 Audience = _configuration["Jwt:Audience"],
 
+                // SigningCredentials: The cryptographic signature we created in STEP 3
+                // Ensures token integrity - any modification breaks the signature
                 SigningCredentials = creds
             };
 
+            // STEP 5: Create the actual token
+            // JwtSecurityTokenHandler is a factory for creating and reading tokens
+            // CreateToken() serializes claims, encodes header/payload, and generates signature
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
+            // STEP 6: Convert token object to string format
+            // WriteToken() produces the final JWT string: header.payload.signature
+            // This is what you send to the client and what they include in Authorization headers
             return tokenHandler.WriteToken(token);
         }
     }
