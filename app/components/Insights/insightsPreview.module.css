@@ -30,21 +30,26 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(3px);
+    background: rgba(250, 248, 255, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 10;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
+    animation: fadeIn 0.15s ease-out;
 }
 
-.lockedSection:hover .lockOverlay {
-    opacity: 1;
-    pointer-events: auto;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(8px);
+    }
 }
 
 .lockContent {
@@ -53,6 +58,18 @@
     align-items: center;
     gap: 16px;
     padding: 24px;
+    animation: slideUp 0.15s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .lockIconLarge {
@@ -455,7 +472,7 @@
 
 .noBills {
     font-size: 14px;
-    color: #00C49F;
+    color: #10B981;
     text-align: center;
     padding: 20px 0;
     margin: 0;
@@ -509,7 +526,7 @@
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    padding: 0;
+    padding: 8px 0 0 0;
     transition: color 0.2s;
 }
 
@@ -617,6 +634,78 @@
 .goalAmount {
     font-size: 12px;
     color: #64748b;
+}
+
+/* Monthly Summary Grid */
+.summaryGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 16px 0;
+}
+
+.summaryItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%);
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.summaryItem:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.summaryIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.summaryContent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.summaryLabel {
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summaryValue {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.summaryChange {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.summaryMessage {
+    font-size: 14px;
+    font-weight: 400;
+    color: #475569;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    .summaryGrid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Spending Trend Card */

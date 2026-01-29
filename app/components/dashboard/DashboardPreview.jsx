@@ -1,273 +1,262 @@
 "use client"
 
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react';
 import SpendingChart from '@app/components/SpendingChart';
 import SafetoSpend from '@app/components/SafetoSpend';
-import styles from './dashboardPreview.module.css';
+import styles from './dashboard.module.css';
+import previewStyles from './dashboardPreview.module.css';
 import CashflowChart from '@app/components/CashflowChartExample';
 import FinancialGoals from '@app/components/FinancialGoals';
-import DebtChartBarExample from '@app/components/DebtChartBarExample';
-import Image from 'next/image';
 import Link from 'next/link';
-
+import { useRouter } from 'next/navigation';
 
 const DashboardPreview = () => {
+    const [hoveredSection, setHoveredSection] = useState(null);
+    const router = useRouter();
 
-const [balance, setBalance] = useState(24322);
-const [monthlyIncome, setMonthlyIncome] = useState(5240);
-const [monthlyExpenses, setMonthlyExpenses] = useState(3890);
+    // Hardcoded data
+    const balance = 24322;
+    const earnings = 5240;
+    const spendings = 3890;
 
+    const debts = [
+        { name: 'Credit Card', paid: 500, remaining: 200, total: 700 },
+        { name: 'Car Loan', paid: 4000, remaining: 3500, total: 7500 },
+        { name: 'Student Loan', paid: 5000, remaining: 10000, total: 15000 }
+    ];
 
+    const insights = [
+        { icon: '📈', text: 'You spent 14% more on dining this month.', type: 'warning' },
+        { icon: '⭕', text: 'Your rent is 38% of income—try keeping it under 30%.', type: 'info' },
+        { icon: '🎯', text: 'You\'re on track to hit your savings goal early 🎯', type: 'success' },
+        { icon: '✨', text: 'Great job! You\'ve saved $450 more than last month.', type: 'success' }
+    ];
 
-  return (
-        <section className={styles.dashboardContent}>
-            <div className={styles.dashboardMain}>
-                <section className={styles.mainMessage}>
-                    <div className={styles.mainMessageContent}>
-                        <div className={styles.financialFreedom}>Financial Freedom Starts Here</div>
-                        <h1 className='bigTitles textAlign'>Take Control of Your Money</h1>
-                        <div>
-                            <p className='smallText textAlign'>Track spending, crush goals, and build wealth with AI-powered
-                                insights.
-                            </p>
-                            <p className='smallText textAlign'>
-                                Sign up to unlock all features below
-                            </p>
-                        </div>
-                        <div className={styles.mainMessageBoxBtns}>
-                            <button className={styles.purpleButtons}>Start Free Trial</button>
-                            <button className='whiteButton'>Watch Demo</button>
-                        </div>
-                        <p className='smallerText'>No credit card required • 14-day free trial • Cancel anytime</p>
-                    </div>
+    const achievements = [
+        { icon: '🏆', title: '3 Months Under Budget', description: 'Stayed within budget for 3 consecutive months', active: true },
+        { icon: '🔥', title: '7 Day Streak', description: 'Tracked expenses every day for a week', active: true },
+        { icon: '🎯', title: 'First Goal Complete', description: 'Completed your first savings goal', active: true },
+        { icon: '💰', title: 'Savings Master', description: 'Saved over $5,000 in total', active: false }
+    ];
 
-                    <div className={styles.mainMessageContent}>
-                        <h2 className={styles.dashSubtitle}
-                        >Everything You Need to Master Your Finances</h2>
-                        <p className='smallText'
-                        style={{textAlign:"center"}}
-                        >See what awaits you inside. Sign up to start tracking today.</p>
-                    </div>
-                </section>
+    const handleGetStarted = () => {
+        router.push("/LoginSignup");
+    };
 
-                
-                <section className={styles.firstRowDash}>
-                    <div className={styles.firstrowBoxes}>
-                        <p className='smallerText'>Total Balance</p>
-                        <h2>${balance}</h2>
-                        <p className='smallerText'>Updated just now</p>
-                    </div>
-
-                    <div className={styles.firstrowBoxes}>
-                        <p className='smallerText'>Monthly Flow</p>
-                        <div className='fullWidth'>
-                            <div className={styles.monthlyFlowNumbers}>
-                                <div className={styles.monthlyData}>
-                                    <img src="/assets/icons/trendingupIcon.svg"
-                                    width={20}
-                                    height={20}
-                                    alt="Income" />
-                                    <p 
-                                        style={{
-                                            color: "#22c55e",
-                                            fontSize: "20px",
-                                            fontWeight: "600"
-                                        }}
-                                    >
-                                        ${monthlyIncome}
-                                    </p>
-                                </div>
-                                <p className='smallerText'>Income</p>
-                            </div>  
-                            <div className={styles.monthlyFlowNumbers}>
-                                <div className={styles.monthlyData}>
-                                    <img src="/assets/icons/trendingdownIcon.svg"
-                                    width={20}
-                                    height={20}
-                                    alt="Expenses" />
-                                    <p
-                                        style={{
-                                            color: "#ef4444",
-                                            fontSize: "20px",
-                                            fontWeight: "600"
-                                        }}
-                                    >
-                                        ${monthlyExpenses}
-                                    </p>
-                                </div>
-                                <p className='smallerText'>Expenses</p>
-                            </div>    
-                        </div>
-                    </div>
-
-                    <div className={styles.firstrowBoxes}>
-                        <div className={styles.progressCardContent}>
-                            <div className={styles.progressHeader}>
-                                <span className={styles.progressIcon}>🏖️</span>
-                                <span className={styles.progressTitle}>Vacation Fund</span>
-                            </div>
-
-                            <div className={styles.progressPercentage}>72%</div>
-
-                            <div className={styles.progressBarWrapper}>
-                                <div className={styles.progressBarTrack}>
-                                    <div
-                                        className={styles.progressBarFillGradient}
-                                        style={{ width: '72%' }}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className={styles.progressAmount}>$3,600 / $5,000</div>
-                        </div>
-                    </div>
-
-                    <div className={styles.premiumOverlay}>
-                        <div className={styles.unlockMessage}>
-                            <div className="lock-icon">
-                                <img src="./assets/icons/lockIcon.svg"
-                                width={60}
-                                height={60}
-                                alt="" />
-                            </div>
-                            <h3 className='subTitles'>Sign Up to Unlock</h3>
-                            <Link href="/LoginSignup">
-                            <button className={styles.purpleButtons}>Create Free Account</button>
-                            </Link>
-                        </div>
-                    </div>
-                </section>
-
-                <section className={styles.graphsSectionOne}>
-                    <div className={styles.chartCardBox}>
-                        <SpendingChart preview={true} content={[]} recurringBills={[]} paidBills={[]}/>
-                    </div>
-
-                    <div className={styles.chartCardBox2}>
-                        <SafetoSpend preview={true} content={[]} recurringBills={[]} />
-                    </div>
-                </section>
-                
-                <section className='fullWidth'>
-                    <div className={styles.cashFlowCard}>
-                        <CashflowChart preview={true} content={[]} />
-                    </div>
-                </section>
-
-                <FinancialGoals preview={true} goals={[]} />
-
-                <section className={styles.debtChartandInsights}>
-                    <div className={styles.debtChartandInsightsBoxes}>
-                        <DebtChartBarExample />
-                    </div>
-
-                    <div className={`${styles.debtChartandInsightsBoxes2} ${styles.flexColumn20}`}>
-                        <div className={styles.insightsTitleBox}>
-                            <h3 className={styles.goalsBarsTitle}>Insights & Alerts</h3>
-                            <Image 
-                                src="/assets/icons/sparkleIconPurple.svg"
-                                width={24}
-                                height={24}
-                                alt='Insights Icon'
-                            />
-                        </div>
-                        <div className={styles.flexColumn20}>
-                            <div className={styles.insightsBox}>
-                                <div className={styles.insightsIconsBoxOrange}>
-                                    <Image
-                                        src="/assets/icons/orangeArrowIcon.svg"
-                                        width={24}
-                                        height={24}
-                                        alt='arrow'
-                                    />
-                                </div>
-                                <p className={styles.insightsText}>You spent 14% more on dinning this month.</p>
-                            </div>
-
-                            <div className={styles.insightsBox}>
-                                <div className={styles.insightsIconsBoxOrange}>
-                                    <Image 
-                                        src="/assets/icons/orangeAlertIcon.svg"
-                                        width={24}
-                                        height={24}
-                                        alt='alert'
-                                    />
-                                </div>
-                                <p className={styles.insightsText}>Your rent is 38% of income - try keeping it under 30%.</p> 
-                            </div>
-
-                            <div className={styles.insightsBox}>
-                                <div className={styles.insightsIconsBoxPurple}>
-                                    <Image 
-                                        src="/assets/icons/purpleTargetIcon.svg"
-                                        width={24}
-                                        height={24}
-                                        alt='alert'
-                                    />
-                                </div>
-                                <p className={styles.insightsText}>Your rent is 38% of income - try keeping it under 30%.</p> 
-                            </div>
-
-                            <div className={styles.insightsBox}>
-                                <div className={styles.insightsIconsBoxPurple}>
-                                    <Image 
-                                        src="/assets/icons/sparkleIconPurple.svg"
-                                        width={24}
-                                        height={24}
-                                        alt='alert'
-                                    />
-                                </div>
-                                <p className={styles.insightsText}>Your rent is 38% of income - try keeping it under 30%.</p> 
-                            </div>
-                        </div>
-                    </div>
-                </section>
+    const LockOverlay = ({ message }) => (
+        <div className={previewStyles.lockOverlay}>
+            <div className={previewStyles.lockContent}>
+                <div className={previewStyles.lockIconLarge}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                </div>
+                <p className={previewStyles.lockMessage}>{message}</p>
+                <button onClick={handleGetStarted} className={previewStyles.getStartedButton}>Get Started</button>
             </div>
+        </div>
+    );
 
-            <section className={styles.getStartedSection}>
-                    <div className={styles.getStartedTitleSection}>
-                        <h1 className={styles.getStartedTitle}>Ready to Tansform Your Financial Life?</h1>
-                        <p className={styles.getStartedsubTitle}>Join thousands of users who've already taken control. 
-                        Start your free trial today.
-                        </p>
-
-                        <div className={styles.getStartedButtonBox}>
-                            <button className={styles.purpleButtons}>Get Started Free</button>
-                            <button className='whiteButton'>Go to Log In</button>
-                        </div>
-                    </div>
-
-                    <div className={styles.getStartedStatsBox}>
-                        <div>
-                            <p className={styles.getStartedStatsText}>14 Days</p>
-                            <p className='smallerText textAlign'>Free</p>
-                        </div>
-
-                        <div>
-                            <p className={styles.getStartedStatsText}>1,000+</p>
-                            <p className='smallerText textAlign'>Happy Users</p>
-                        </div>
-
-                        <div className='textAlign'>
-                            <div className={styles.userRatingBox}>
-                                <p className={styles.getStartedStatsText}>4.9</p>
-                                <Image 
-                                    src='/assets/icons/starIcon.svg'
-                                    width={24}
-                                    height={24}
-                                    alt='star'
-                                />
+    return (
+        <div className={styles.pageWrapper}>
+            <div className={styles.dashboardPage}>
+                {/* Top Stats Row */}
+                <div
+                    className={previewStyles.lockedSection}
+                    onMouseEnter={() => setHoveredSection('stats')}
+                    onMouseLeave={() => setHoveredSection(null)}
+                >
+                    <div className={styles.topStatsRow}>
+                        <div className={styles.statCard}>
+                            <div className={styles.statHeader}>
+                                <span className={styles.statLabel}>Total Balance</span>
+                                <div className={styles.statDot}></div>
                             </div>
-                            <p className='smallerText textAlign'>User Rating</p>
+                            <h2 className={styles.statAmount}>${balance.toLocaleString()}</h2>
+                            <p className={styles.statSubtext}>Updated just now</p>
+                        </div>
+
+                        <div className={styles.statCard}>
+                            <div className={styles.statHeader}>
+                                <span className={styles.statLabel}>Monthly Flow</span>
+                            </div>
+                            <div className={styles.flowItems}>
+                                <div className={styles.flowItem}>
+                                    <span className={styles.flowIcon}>↗</span>
+                                    <span className={styles.flowAmount}>${earnings.toLocaleString()}</span>
+                                    <span className={styles.flowLabel}>Income</span>
+                                </div>
+                                <div className={styles.flowItem}>
+                                    <span className={styles.flowIcon} style={{ color: '#FF8042' }}>↙</span>
+                                    <span className={styles.flowAmount} style={{ color: '#FF8042' }}>${spendings.toLocaleString()}</span>
+                                    <span className={styles.flowLabel}>Expenses</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={styles.statCard}>
+                            <div className={styles.statHeader}>
+                                <span className={styles.statLabel}>Vacation Fund</span>
+                            </div>
+                            <div className={styles.goalProgress}>
+                                <span className={styles.goalPercentage}>72%</span>
+                                <div className={styles.progressBarHorizontal}>
+                                    <div className={styles.progressFillHorizontal} style={{ width: '72%' }}></div>
+                                </div>
+                            </div>
+                            <p className={styles.goalAmount}>$3,600 / $5,000</p>
                         </div>
                     </div>
-            </section>
-        </section>
-        
-        );
-    }
+                    {hoveredSection === 'stats' && <LockOverlay message="Sign in to see your balance" />}
+                </div>
 
-    
+                {/* Main Content Grid */}
+                <div className={styles.mainGrid}>
+                    {/* Left Column */}
+                    <div className={styles.leftColumn}>
+                        {/* Where Your Money Went */}
+                        <div
+                            className={previewStyles.lockedSection}
+                            onMouseEnter={() => setHoveredSection('spending')}
+                            onMouseLeave={() => setHoveredSection(null)}
+                        >
+                            <SpendingChart preview={true} content={[]} recurringBillsDueThisWeek={[]} recurringBillsOverdueThisWeek={[]}/>
+                            {hoveredSection === 'spending' && <LockOverlay message="Sign in to track spending" />}
+                        </div>
 
-export default DashboardPreview
+                        {/* Cash Flow Timeline */}
+                        <div
+                            className={previewStyles.lockedSection}
+                            onMouseEnter={() => setHoveredSection('cashflow')}
+                            onMouseLeave={() => setHoveredSection(null)}
+                        >
+                            <CashflowChart preview={true} content={[]} recurringBills={[]} paidBillIds={[]} />
+                            {hoveredSection === 'cashflow' && <LockOverlay message="Sign in to view cash flow" />}
+                        </div>
+
+                        {/* Debt Payoff Visualizer */}
+                        <div
+                            className={previewStyles.lockedSection}
+                            onMouseEnter={() => setHoveredSection('debt')}
+                            onMouseLeave={() => setHoveredSection(null)}
+                        >
+                            <div className={styles.card}>
+                                <div className={styles.cardHeaderRow}>
+                                    <div>
+                                        <h3 className={styles.cardTitle}>Debt Payoff Visualizer</h3>
+                                        <p className={styles.debtSubtitle}>Estimated Debt-Free Date: <span className={styles.debtDate}>March 2027</span></p>
+                                    </div>
+                                    <div className={styles.debtToggle}>
+                                        <button className={`${styles.debtToggleBtn} ${styles.active}`}>Snowball</button>
+                                        <button className={styles.debtToggleBtn}>Avalanche</button>
+                                    </div>
+                                </div>
+                                <div className={styles.debtBars}>
+                                    {debts.map((debt, idx) => (
+                                        <div key={idx} className={styles.debtItem}>
+                                            <span className={styles.debtLabel}>{debt.name}</span>
+                                            <div className={styles.debtBar}>
+                                                <div className={styles.debtPaid} style={{ width: `${(debt.paid / debt.total) * 100}%` }}></div>
+                                                <div className={styles.debtRemaining} style={{ width: `${(debt.remaining / debt.total) * 100}%` }}></div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    <div className={styles.debtLegend}>
+                                        <div className={styles.debtLegendItem}>
+                                            <div className={styles.debtLegendColor} style={{ backgroundColor: '#8B5CF6' }}></div>
+                                            <span>Paid So Far</span>
+                                        </div>
+                                        <div className={styles.debtLegendItem}>
+                                            <div className={styles.debtLegendColor} style={{ backgroundColor: '#FF8042' }}></div>
+                                            <span>Remaining Balance</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {hoveredSection === 'debt' && <LockOverlay message="Sign in to track debt" />}
+                        </div>
+                    </div>
+
+                    {/* Right Column */}
+                    <div className={styles.rightColumn}>
+                        {/* Safe to Spend */}
+                        <div
+                            className={previewStyles.lockedSection}
+                            onMouseEnter={() => setHoveredSection('safe')}
+                            onMouseLeave={() => setHoveredSection(null)}
+                        >
+                            <SafetoSpend preview={true} content={[]} recurringBillsDueThisWeek={[]} recurringBillsOverdueThisWeek={[]} />
+                            {hoveredSection === 'safe' && <LockOverlay message="Sign in to see safe to spend" />}
+                        </div>
+
+                        {/* Financial Goals */}
+                        <div
+                            className={previewStyles.lockedSection}
+                            onMouseEnter={() => setHoveredSection('goals')}
+                            onMouseLeave={() => setHoveredSection(null)}
+                        >
+                            <FinancialGoals preview={true} goals={[]} />
+                            {hoveredSection === 'goals' && <LockOverlay message="Sign in to track goals" />}
+                        </div>
+
+                        {/* AI Insights */}
+                        <div
+                            className={previewStyles.lockedSection}
+                            onMouseEnter={() => setHoveredSection('insights')}
+                            onMouseLeave={() => setHoveredSection(null)}
+                        >
+                            <div className={styles.card}>
+                                <h3 className={styles.cardTitle}>AI Insights & Alerts</h3>
+                                <div className={styles.insightsList}>
+                                    {insights.map((insight, idx) => (
+                                        <div key={idx} className={styles.insightItem}>
+                                            <span className={styles.insightIcon}>{insight.icon}</span>
+                                            <p className={styles.insightText}>{insight.text}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            {hoveredSection === 'insights' && <LockOverlay message="Sign in to get AI insights" />}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Achievements & Streaks */}
+                <div
+                    className={previewStyles.lockedSection}
+                    onMouseEnter={() => setHoveredSection('achievements')}
+                    onMouseLeave={() => setHoveredSection(null)}
+                >
+                    <div className={styles.achievementsSection}>
+                        <h3 className={styles.sectionTitle}>Achievements & Streaks</h3>
+                        <div className={styles.achievementsGrid}>
+                            {achievements.map((achievement, idx) => (
+                                <div key={idx} className={`${styles.achievementCard} ${!achievement.active ? styles.locked : ''}`}>
+                                    <div className={styles.achievementIcon}>{achievement.icon}</div>
+                                    <h4 className={styles.achievementTitle}>{achievement.title}</h4>
+                                    <p className={styles.achievementDesc}>{achievement.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    {hoveredSection === 'achievements' && <LockOverlay message="Sign in to earn achievements" />}
+                </div>
+
+                {/* Footer */}
+                <div className={styles.dashboardFooter}>
+                    <p>© 2025 Tally – Your Balance in Focus</p>
+                    <div className={styles.footerLinks}>
+                        <Link href="#">Privacy Policy</Link>
+                        <span>•</span>
+                        <Link href="#">Support</Link>
+                        <span>•</span>
+                        <span>v1.0.0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default DashboardPreview;

@@ -4,13 +4,6 @@ import React, { useState } from 'react';
 import styles from './insightsPreview.module.css';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import {
-    XAxis,
-    Tooltip,
-    ResponsiveContainer,
-    Area,
-    AreaChart
-} from "recharts";
 import { useRouter } from 'next/navigation';
 
 const InsightsPreview = () => {
@@ -34,16 +27,6 @@ const InsightsPreview = () => {
         { name: 'Vacation', current: 360, target: 3000, percentage: 12 }
     ];
 
-    const trendData = [
-        { month: 'Aug', amount: 2200 },
-        { month: 'Sep', amount: 2400 },
-        { month: 'Oct', amount: 2100 },
-        { month: 'Nov', amount: 2800 },
-        { month: 'Dec', amount: 2450 }
-    ];
-
-    const avgMonthlySpend = 2450;
-
     const handleGetStarted = () => {
         router.push("/LoginSignup");
     };
@@ -66,12 +49,6 @@ const InsightsPreview = () => {
     return (
         <div className={styles.pageWrapper}>
         <div className={styles.insightsPage}>
-            {/* Header */}
-            <div className={styles.pageHeader}>
-                <h1 className={styles.pageTitle}>Financial Insights</h1>
-                <p className={styles.pageSubtitle}>Your monthly financial health overview and alerts.</p>
-            </div>
-
             {/* Health Score Card */}
             <div
                 className={styles.lockedSection}
@@ -137,15 +114,15 @@ const InsightsPreview = () => {
                         </div>
                         <div className={styles.insightsList}>
                             <div className={styles.insightItem}>
-                                <span className={styles.insightBullet} style={{ backgroundColor: '#00C49F' }} />
+                                <span className={styles.insightBullet} style={{ backgroundColor: '#10B981' }} />
                                 <p className={styles.insightText}>
-                                    You're earning <strong style={{ color: '#00C49F' }}>$1,100 more</strong> than you spend — positive cash flow!
+                                    You're earning <strong style={{ color: '#10B981' }}>$1,100 more</strong> than you spend — positive cash flow!
                                 </p>
                             </div>
                             <div className={styles.insightItem}>
-                                <span className={styles.insightBullet} style={{ backgroundColor: '#00C49F' }} />
+                                <span className={styles.insightBullet} style={{ backgroundColor: '#10B981' }} />
                                 <p className={styles.insightText}>
-                                    Your income is <strong style={{ color: '#00C49F' }}>8% higher</strong> than last month.
+                                    Your income is <strong style={{ color: '#10B981' }}>8% higher</strong> than last month.
                                 </p>
                             </div>
                             <div className={styles.insightItem}>
@@ -171,25 +148,25 @@ const InsightsPreview = () => {
                     <div className={styles.insightCard}>
                         <div className={styles.cardHeader}>
                             <div className={styles.cardTitleRow}>
-                                <span className={styles.cardIcon} style={{ backgroundColor: '#FEF3C7' }}>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <span className={styles.cardIcon} style={{ backgroundColor: '#EEF2FF' }}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                                         <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                                     </svg>
                                 </span>
                                 <h3 className={styles.cardTitle}>Bill Alerts</h3>
                             </div>
-                            <span className={styles.countBadge}>2</span>
+                            <span className={styles.countBadge} style={{ backgroundColor: '#EF4444' }}>2</span>
                         </div>
                         <div className={styles.billsList}>
                             {upcomingBills.map((bill, idx) => (
                                 <div key={idx} className={styles.billItem}>
                                     <div className={styles.billInfo}>
-                                        <span className={styles.billDot} style={{ backgroundColor: bill.dueIn <= 2 ? '#EC4899' : '#FB923C' }} />
+                                        <span className={styles.billDot} style={{ backgroundColor: bill.dueIn <= 2 ? '#EF4444' : '#FB923C' }} />
                                         <div>
                                             <span className={styles.billName}>{bill.name}</span>
-                                            <span className={styles.billDue} style={{ color: bill.dueIn <= 2 ? '#EC4899' : '#FB923C' }}>
-                                                Due in {bill.dueIn} days
+                                            <span className={styles.billDue} style={{ color: bill.dueIn <= 2 ? '#EF4444' : '#FB923C' }}>
+                                                {bill.dueIn <= 2 ? 'Overdue' : 'Due this week'}
                                             </span>
                                         </div>
                                     </div>
@@ -197,7 +174,7 @@ const InsightsPreview = () => {
                                 </div>
                             ))}
                         </div>
-                        <button className={styles.linkBtn} disabled>View all upcoming</button>
+                        <button className={styles.linkBtn} disabled>View your recurring bills</button>
                     </div>
                     {hoveredSection === 'bills' && <LockOverlay message="Sign in to manage bills" />}
                 </div>
@@ -211,11 +188,11 @@ const InsightsPreview = () => {
                     <div className={styles.insightCard}>
                         <div className={styles.cardHeader}>
                             <div className={styles.cardTitleRow}>
-                                <span className={styles.cardIcon} style={{ backgroundColor: '#D1FAE5' }}>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00C49F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z"/>
-                                        <path d="M2 9v1c0 1.1.9 2 2 2h1"/>
-                                        <path d="M16 11h.01"/>
+                                <span className={styles.cardIcon} style={{ backgroundColor: '#EEF2FF' }}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M11 17h3v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a3.16 3.16 0 0 0 2-2h1a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-1a5 5 0 0 0-2-4V3a4 4 0 0 0-3.2 1.6l-.3.4H11a6 6 0 0 0-6 6v1a5 5 0 0 0 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1z"/>
+                                        <path d="M16 10h.01"/>
+                                        <path d="M2 8v1a2 2 0 0 0 2 2h1"/>
                                     </svg>
                                 </span>
                                 <h3 className={styles.cardTitle}>Savings Rate</h3>
@@ -232,7 +209,7 @@ const InsightsPreview = () => {
                             <span className={styles.savingsRate}>{savingsRate.rate}%</span>
                             <span className={styles.savingsChange} style={{
                                 backgroundColor: '#D1FAE5',
-                                color: '#00C49F'
+                                color: '#10B981'
                             }}>
                                 ↗ +{savingsRate.change}% vs last month
                             </span>
@@ -254,21 +231,14 @@ const InsightsPreview = () => {
                     <div className={styles.insightCardSmall}>
                         <div className={styles.cardHeader}>
                             <div className={styles.cardTitleRow}>
-                                <span className={styles.cardIcon} style={{ backgroundColor: '#FEE2E2' }}>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EC4899" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <span className={styles.cardIcon} style={{ backgroundColor: '#EEF2FF' }}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
                                         <line x1="4" y1="22" x2="4" y2="15"/>
                                     </svg>
                                 </span>
                                 <h3 className={styles.cardTitle}>Goal Progress</h3>
                             </div>
-                            <button className={styles.addBtn} disabled>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M12 8v8"/>
-                                    <path d="M8 12h8"/>
-                                </svg>
-                            </button>
                         </div>
                         <div className={styles.goalsList}>
                             {formattedGoals.map((goal, idx) => (
@@ -276,7 +246,7 @@ const InsightsPreview = () => {
                                     <div className={styles.goalHeader}>
                                         <span className={styles.goalName}>{goal.name}</span>
                                         <span className={styles.goalPercentage} style={{
-                                            color: goal.percentage >= 75 ? '#00C49F' : goal.percentage >= 40 ? '#8B5CF6' : '#64748b'
+                                            color: '#38BDF8'
                                         }}>{goal.percentage}%</span>
                                     </div>
                                     <div className={styles.goalProgressBar}>
@@ -284,7 +254,7 @@ const InsightsPreview = () => {
                                             className={styles.goalProgressFill}
                                             style={{
                                                 width: `${goal.percentage}%`,
-                                                backgroundColor: goal.percentage >= 75 ? '#00C49F' : '#8B5CF6'
+                                                backgroundColor: '#38BDF8'
                                             }}
                                         />
                                     </div>
@@ -294,14 +264,15 @@ const InsightsPreview = () => {
                                 </div>
                             ))}
                         </div>
+                        <button className={styles.linkBtn} disabled>View your Financial Goals</button>
                     </div>
                     {hoveredSection === 'goals' && <LockOverlay message="Sign in to track goals" />}
                 </div>
 
-                {/* Spending Trend Card */}
+                {/* Monthly Summary Card */}
                 <div
                     className={styles.lockedSection}
-                    onMouseEnter={() => setHoveredSection('trend')}
+                    onMouseEnter={() => setHoveredSection('summary')}
                     onMouseLeave={() => setHoveredSection(null)}
                 >
                     <div className={styles.insightCardLarge}>
@@ -309,58 +280,120 @@ const InsightsPreview = () => {
                             <div className={styles.cardTitleRow}>
                                 <span className={styles.cardIcon} style={{ backgroundColor: '#EEF2FF' }}>
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M3 3v18h18"/>
-                                        <path d="M18 17V9"/>
-                                        <path d="M13 17V5"/>
-                                        <path d="M8 17v-3"/>
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14 2 14 8 20 8"/>
+                                        <line x1="16" y1="13" x2="8" y2="13"/>
+                                        <line x1="16" y1="17" x2="8" y2="17"/>
+                                        <polyline points="10 9 9 9 8 9"/>
                                     </svg>
                                 </span>
-                                <h3 className={styles.cardTitle}>Spending Trend (MoM)</h3>
+                                <h3 className={styles.cardTitle}>Monthly Summary</h3>
                             </div>
-                            <span className={styles.monthlyBadge}>Monthly</span>
+                            <span className={styles.monthlyBadge}>December</span>
                         </div>
-                        <div className={styles.chartContainer}>
-                            <ResponsiveContainer width="100%" height={180}>
-                                <AreaChart data={trendData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                                    <defs>
-                                        <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.2}/>
-                                            <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0}/>
-                                        </linearGradient>
-                                    </defs>
-                                    <XAxis
-                                        dataKey="month"
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tick={{ fill: '#64748b', fontSize: 12 }}
-                                    />
-                                    <Tooltip
-                                        formatter={(value) => [`$${value.toLocaleString()}`, 'Spending']}
-                                        contentStyle={{
-                                            backgroundColor: '#fff',
-                                            border: '1px solid #E9D5FF',
-                                            borderRadius: '8px'
-                                        }}
-                                    />
-                                    <Area
-                                        type="monotone"
-                                        dataKey="amount"
-                                        stroke="#8B5CF6"
-                                        strokeWidth={2}
-                                        fillOpacity={1}
-                                        fill="url(#colorAmount)"
-                                    />
-                                </AreaChart>
-                            </ResponsiveContainer>
+
+                        <div className={styles.summaryGrid}>
+                            {/* Income Summary */}
+                            <div className={styles.summaryItem}>
+                                <div className={styles.summaryIcon} style={{ backgroundColor: '#D1FAE5' }}>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M12 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5"/>
+                                        <path d="M18 12h.01"/>
+                                        <path d="M19 22v-6"/>
+                                        <path d="m22 19-3-3-3 3"/>
+                                        <path d="M6 12h.01"/>
+                                        <circle cx="12" cy="12" r="2"/>
+                                    </svg>
+                                </div>
+                                <div className={styles.summaryContent}>
+                                    <span className={styles.summaryLabel}>Income</span>
+                                    <span className={styles.summaryMessage}>
+                                        You earned <strong style={{ color: '#10B981' }}>$4,850</strong> this month from 4 income sources
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Expenses Summary */}
+                            <div className={styles.summaryItem}>
+                                <div className={styles.summaryIcon} style={{ backgroundColor: '#FEF3C7' }}>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FB923C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M12 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5"/>
+                                        <path d="m16 19 3 3 3-3"/>
+                                        <path d="M18 12h.01"/>
+                                        <path d="M19 16v6"/>
+                                        <path d="M6 12h.01"/>
+                                        <circle cx="12" cy="12" r="2"/>
+                                    </svg>
+                                </div>
+                                <div className={styles.summaryContent}>
+                                    <span className={styles.summaryLabel}>Expenses</span>
+                                    <span className={styles.summaryMessage}>
+                                        You spent <strong style={{ color: '#FB923C' }}>$3,720</strong> across 47 transactions this month
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Net Savings */}
+                            <div className={styles.summaryItem}>
+                                <div className={styles.summaryIcon} style={{ backgroundColor: '#E8E3F3' }}>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a0b2e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M11 17h3v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a3.16 3.16 0 0 0 2-2h1a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-1a5 5 0 0 0-2-4V3a4 4 0 0 0-3.2 1.6l-.3.4H11a6 6 0 0 0-6 6v1a5 5 0 0 0 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1z"/>
+                                        <path d="M16 10h.01"/>
+                                        <path d="M2 8v1a2 2 0 0 0 2 2h1"/>
+                                    </svg>
+                                </div>
+                                <div className={styles.summaryContent}>
+                                    <span className={styles.summaryLabel}>Savings</span>
+                                    <span className={styles.summaryMessage}>
+                                        You kept <strong style={{ color: '#1a0b2e' }}>$1,130</strong> — that's 23% of your income saved
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Bills Status */}
+                            <div className={styles.summaryItem}>
+                                <div className={styles.summaryIcon} style={{ backgroundColor: '#FEE2E2' }}>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#EC4899" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M13 16H8"/>
+                                        <path d="M14 8H8"/>
+                                        <path d="M16 12H8"/>
+                                        <path d="M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z"/>
+                                    </svg>
+                                </div>
+                                <div className={styles.summaryContent}>
+                                    <span className={styles.summaryLabel}>Bills</span>
+                                    <span className={styles.summaryMessage}>
+                                        <strong style={{ color: '#EC4899' }}>2 bills</strong> due this week totaling <strong style={{ color: '#EC4899' }}>$160.99</strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Cash Flow */}
+                            <div className={styles.summaryItem}>
+                                <div className={styles.summaryIcon} style={{ backgroundColor: '#EEF2FF' }}>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                    </svg>
+                                </div>
+                                <div className={styles.summaryContent}>
+                                    <span className={styles.summaryLabel}>Cash Flow</span>
+                                    <span className={styles.summaryMessage}>
+                                        <strong style={{ color: '#8B5CF6' }}>Positive</strong> — you're earning <strong style={{ color: '#10B981' }}>$1,130 more</strong> than you spend
+                                    </span>
+                                </div>
+                            </div>
                         </div>
+
                         <div className={styles.trendFooter}>
-                            <span className={styles.avgSpend}>Average monthly spend: <strong>${avgMonthlySpend.toLocaleString()}</strong></span>
-                            <span className={styles.trendChange} style={{ color: '#EC4899' }}>
-                                ↗ 12% higher than avg
+                            <span className={styles.avgSpend}>
+                                You're saving $38 per day on average
                             </span>
+                            <button className={styles.linkBtn} disabled>
+                                View all transactions →
+                            </button>
                         </div>
                     </div>
-                    {hoveredSection === 'trend' && <LockOverlay message="Sign in to view trends" />}
+                    {hoveredSection === 'summary' && <LockOverlay message="Sign in to view your summary" />}
                 </div>
             </div>
         </div>
