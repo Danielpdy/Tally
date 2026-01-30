@@ -253,6 +253,35 @@
     border-color: #d1d5db;
 }
 
+/* Score Factors */
+.scoreFactors {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.scoreFactorsLabel {
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+}
+
+.scoreFactorsTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.scoreTag {
+    padding: 6px 12px;
+    background: #F5F3FF;
+    color: #8B5CF6;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 20px;
+    border: 1px solid #E9D5FF;
+}
+
 /* Cards Row */
 .cardsRow {
     display: grid;
@@ -277,6 +306,8 @@
     box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
     border: 1px solid #E9D5FF;
     transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .insightCard:hover,
@@ -528,6 +559,7 @@
     cursor: pointer;
     padding: 8px 0 0 0;
     transition: color 0.2s;
+    margin-top: auto;
 }
 
 .linkBtn:hover {

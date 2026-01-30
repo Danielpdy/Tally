@@ -9,21 +9,21 @@ import { useSession } from 'next-auth/react';
 import { GetTransactions } from '@services/TransactionService';
 import { GetBillsDueThisWeek, GetBillsOverdueThisWeek, GetRecurringBills } from '@services/RecurringBillsService';
 import { GetFinancialGoals } from '@services/FinantialGoalService';
-import { GetPaidBills } from '@services/BillPaymentService';
 import { calculateHealthScore, getHealthStatus, generateHealthDescription } from '@services/HealthScoreService';
 
 const Insights = () => {
     const router = useRouter();
     const { data: session } = useSession();
 
+    // Data states
     const [transactions, setTransactions] = useState([]);
     const [billsDueThisWeek, setBillsDueThisWeek] = useState([]);
     const [billsOverdue, setBillsOverdue] = useState([]);
-    const [billsPaidIds, setBillsPaidIds] = useState([]);
     const [recurringBills, setRecurringBills] = useState([]);
     const [financialGoals, setFinancialGoals] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    // Fetch all data
     useEffect(() => {
         if (session?.accessToken) {
             fetchAllData();
@@ -33,30 +33,17 @@ const Insights = () => {
     const fetchAllData = async () => {
         setIsLoading(true);
         try {
-            const [transactionsData, billsDue, billsOverdueData, bills, goals, paidBillsData] = await Promise.all([
+            const [transactionsData, billsDue, billsOverdueData, bills, goals] = await Promise.all([
                 GetTransactions(session.accessToken),
                 GetBillsDueThisWeek(session.accessToken),
                 GetBillsOverdueThisWeek(session.accessToken),
                 GetRecurringBills(session.accessToken),
-                GetFinancialGoals(session.accessToken),
-                GetPaidBills(session.accessToken)
+                GetFinancialGoals(session.accessToken)
             ]);
 
-            // Extract paid bill IDs
-            const paidIds = paidBillsData?.payments?.map(p => p.recurringBillId) || [];
-            setBillsPaidIds(paidIds);
-
             setTransactions(Array.isArray(transactionsData) ? transactionsData : []);
-
-            // Filter out paid bills from due this week
-            const dueBills = (billsDue?.upcomingBills || []).filter(bill => !paidIds.includes(bill.id));
-            setBillsDueThisWeek(dueBills);
-
-            // Extract IDs from objects and filter out paid bills from overdue
-            const overdueIds = (billsOverdueData?.overdueBills?.map(bill => typeof bill === 'object' ? bill.id : bill) || [])
-                .filter(id => !paidIds.includes(id));
-            setBillsOverdue(overdueIds);
-
+            setBillsDueThisWeek(billsDue?.upcomingBills || []);
+            setBillsOverdue(billsOverdueData?.overdueBills || []);
             setRecurringBills(Array.isArray(bills) ? bills : []);
             setFinancialGoals(Array.isArray(goals) ? goals : []);
         } catch (error) {
@@ -66,6 +53,7 @@ const Insights = () => {
         }
     };
 
+    // Calculate monthly data
     const monthlyData = useMemo(() => {
         const now = new Date();
         const currentMonth = now.getMonth();
@@ -117,7 +105,7 @@ const Insights = () => {
         };
     }, [transactions]);
 
-
+    // Calculate health score using the service
     const healthScore = useMemo(() => {
         return calculateHealthScore({
             savingsRate: monthlyData.current.savingsRate,
@@ -128,7 +116,7 @@ const Insights = () => {
 
     const healthStatus = getHealthStatus(healthScore);
 
-
+    // Format goals for display
     const formattedGoals = useMemo(() => {
         return financialGoals.slice(0, 3).map(goal => ({
             id: goal.id,
@@ -139,7 +127,7 @@ const Insights = () => {
         }));
     }, [financialGoals]);
 
-
+    // Combine bills for alerts
     const billAlerts = useMemo(() => {
         const overdue = billsOverdue.map(id => {
             const bill = recurringBills.find(b => b.id === id);
@@ -151,7 +139,7 @@ const Insights = () => {
         return [...overdue, ...dueSoon].slice(0, 4);
     }, [billsOverdue, billsDueThisWeek, recurringBills]);
 
-  
+    // Generate dynamic health description using the service
     const healthDescription = useMemo(() => {
         return generateHealthDescription({
             savings: monthlyData.current.savings,
@@ -183,7 +171,7 @@ const Insights = () => {
                                 value={healthScore}
                                 text={healthScore.toString()}
                                 styles={buildStyles({
-                                    pathColor: '#8B5CF6',
+                                    pathColor: healthStatus.color,
                                     textColor: '#1a0b2e',
                                     trailColor: '#E9D5FF',
                                     textSize: '28px',

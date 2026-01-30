@@ -137,7 +137,9 @@ const Budgets = () => {
   const fetchBillsOverdueThisWeek = async () => {
     try {
       const data = await GetBillsOverdueThisWeek(session.accessToken);
-      setBillsOverdueThisWeekIds(data.overdueBills);
+      // Extract IDs from objects if backend returns full bill objects
+      const ids = data.overdueBills?.map(bill => typeof bill === 'object' ? bill.id : bill) || [];
+      setBillsOverdueThisWeekIds(ids);
     } catch (error){
       console.error(error);
     }
@@ -282,8 +284,8 @@ const Budgets = () => {
       }
     } else{
     const newBillPayment = {
-      RecurringBillId : recurringBillId,
-      PaidDate: new Date().toISOString()
+      recurringBillId: recurringBillId,
+      paidDate: new Date().toISOString()
     };
 
       try{
@@ -387,33 +389,13 @@ const Budgets = () => {
     weekEnd.setDate(weekStart.getDate() + 6);
     weekEnd.setHours(23, 59, 59, 999);
 
-    console.log('=== SAFE TO SPEND CALCULATION ===');
-    console.log('Current Week Range:', weekStart.toDateString(), 'to', weekEnd.toDateString());
-    console.log('Total transactions in DB:', transactions.length);
-
-    console.log('\n🔍 ALL TRANSACTIONS:');
-    transactions.forEach(t => {
-      console.log(`  ${t.name} - ${t.date} - Type: ${t.type} - Amount: ${t.amount}`);
-    });
-
     // Filter transactions for current week only
     const currentWeekTransactions = transactions.filter(transaction => {
       const transactionDate = new Date(transaction.date);
       // Normalize transaction date to remove time component for accurate comparison
       transactionDate.setHours(0, 0, 0, 0);
-
-      const isInRange = transactionDate >= weekStart && transactionDate <= weekEnd;
-
-      console.log(`Checking: ${transaction.name} ${transaction.date} -> ${transactionDate.toDateString()} - In range? ${isInRange}`);
-
-      if (isInRange) {
-        console.log('✅ IN RANGE:', transaction.name, transaction.date, 'Type:', transaction.type, 'Amount:', transaction.amount);
-      }
-
-      return isInRange;
+      return transactionDate >= weekStart && transactionDate <= weekEnd;
     });
-
-    console.log('Transactions in current week:', currentWeekTransactions.length);
 
   
     const totalEarnings = currentWeekTransactions.reduce(
@@ -436,14 +418,6 @@ const Budgets = () => {
 
     const totalSpendings = transactionSpendings + (totalBillsDue || 0);
     setSpendings(totalSpendings);
-
-    console.log('📊 TOTALS:');
-    console.log('Total Earnings (Income):', totalEarnings);
-    console.log('Transaction Spendings (Expense):', transactionSpendings);
-    console.log('Bills Due This Week:', totalBillsDue);
-    console.log('Total Spendings (Expense + Bills):', totalSpendings);
-    console.log('Buffer:', buffer);
-    console.log('Safe To Spend:', totalEarnings - totalSpendings - buffer);
 
     // Safe to spend = Income - Spendings (which already includes bills) - Buffer
     setSafeToSpendAmount(

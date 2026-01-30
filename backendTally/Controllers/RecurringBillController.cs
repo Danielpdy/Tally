@@ -131,8 +131,8 @@ namespace backendTally.Models
 
             return Ok(new
             {
-                Total = total,
-                UpcomingBills = upcomingBills
+                total = total,
+                upcomingBills = upcomingBills
             });
                 
         }
@@ -162,13 +162,14 @@ namespace backendTally.Models
                 .ToList();
 
             var today = DateTime.UtcNow.Date;
-            var overdueBills = upcomingBills
+            var overdueBillIds = upcomingBills
                 .Where(rb => rb.DayOfMonth < today.Day)
+                .Select(rb => rb.Id)
                 .ToList();
 
             return Ok(new
             {
-                OverdueBills = overdueBills
+                overdueBills = overdueBillIds
             });   
         }
 

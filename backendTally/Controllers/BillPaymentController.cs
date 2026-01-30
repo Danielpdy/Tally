@@ -36,13 +36,12 @@ namespace backendTally.Controllers
 
             int authenticatedUserId = int.Parse(userIdClaim);
             var now = DateTime.UtcNow;
-            var startOfMonth = new DateTime(now.Year, now.Month, 1);
-            var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
+            var startOfMonth = new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+            var endOfMonth = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month), 23, 59, 59, DateTimeKind.Utc);
 
             var payments = await _billPaymentService.GetPaymentsForWeek(authenticatedUserId, startOfMonth, endOfMonth);
 
             return Ok(new { payments });
-
         }
 
         [HttpPost]

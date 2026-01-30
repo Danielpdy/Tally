@@ -76,8 +76,14 @@ const Dashboard = () => {
     }, [billsDueThisWeek, billsPaidThisWeek]);
 
     const unpaidBillsOverdue = useMemo(() => {
-        return billsOverdueThisWeek.filter(bill => !billsPaidThisWeek.includes(bill.id));
-    }, [billsOverdueThisWeek, billsPaidThisWeek]);
+        // billsOverdueThisWeek may contain IDs or objects - handle both cases
+        const overdueIds = billsOverdueThisWeek.map(bill => typeof bill === 'object' ? bill.id : bill);
+        // Filter out paid bills and map IDs back to full bill objects
+        return overdueIds
+            .filter(id => !billsPaidThisWeek.includes(id))
+            .map(id => allRecurringBills.find(bill => bill.id === id))
+            .filter(Boolean);
+    }, [billsOverdueThisWeek, billsPaidThisWeek, allRecurringBills]);
 
     const calulateBalance = useMemo(() => {
         const result = [...transactionsData];

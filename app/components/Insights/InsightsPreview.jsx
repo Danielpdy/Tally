@@ -12,7 +12,7 @@ const InsightsPreview = () => {
 
     // Hardcoded sample data
     const healthScore = 78;
-    const healthStatus = { text: 'Very Good Health', tier: 'Top 35%', color: '#8B5CF6' };
+    const healthStatus = { text: 'Very Good Health', color: '#8B5CF6' };
 
     const savingsRate = { rate: 18, change: 2.4, isPositive: true };
 
@@ -74,18 +74,19 @@ const InsightsPreview = () => {
                     <div className={styles.healthScoreRight}>
                         <div className={styles.healthTitleRow}>
                             <h2 className={styles.healthTitle}>{healthStatus.text}</h2>
-                            <span className={styles.tierBadge} style={{ backgroundColor: `${healthStatus.color}20`, color: healthStatus.color }}>
-                                {healthStatus.tier}
-                            </span>
                         </div>
                         <p className={styles.healthDescription}>
                             Great job! Your financial habits are consistent. You've maintained a positive
                             cash flow for the last 3 months. Keep reducing unnecessary subscriptions
                             to reach the "Excellent" tier.
                         </p>
-                        <div className={styles.healthActions}>
-                            <button className={styles.primaryBtn} disabled>View Detailed Report</button>
-                            <button className={styles.secondaryBtn} disabled>See History</button>
+                        <div className={styles.scoreFactors}>
+                            <span className={styles.scoreFactorsLabel}>What affects your score:</span>
+                            <div className={styles.scoreFactorsTags}>
+                                <span className={styles.scoreTag}>Savings rate</span>
+                                <span className={styles.scoreTag}>Bills paid on time</span>
+                                <span className={styles.scoreTag}>Goal progress</span>
+                            </div>
                         </div>
                     </div>
                 </div>
