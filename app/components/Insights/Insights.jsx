@@ -11,6 +11,8 @@ import { GetBillsDueThisWeek, GetBillsOverdueThisWeek, GetRecurringBills } from 
 import { GetFinancialGoals } from '@services/FinantialGoalService';
 import { GetPaidBills } from '@services/BillPaymentService';
 import { calculateHealthScore, getHealthStatus, generateHealthDescription } from '@services/HealthScoreService';
+import { useMonthlyData } from '@hooks/useMonthlyData';
+import MonthlySummary from '../MonthlySummary';
 
 const Insights = () => {
     const router = useRouter();
@@ -66,56 +68,10 @@ const Insights = () => {
         }
     };
 
-    const monthlyData = useMemo(() => {
-        const now = new Date();
-        const currentMonth = now.getMonth();
-        const currentYear = now.getFullYear();
-        const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-        const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+    // Use the custom hook for monthly data calculation
+    const monthlyData = useMonthlyData(transactions);
 
-        const filterByMonth = (month, year) => transactions.filter(t => {
-            const date = new Date(t.date);
-            return date.getMonth() === month && date.getFullYear() === year;
-        });
-
-        const calculateMonthStats = (monthTransactions) => {
-            const income = monthTransactions
-                .filter(t => t.type === 'Income')
-                .reduce((sum, t) => sum + t.amount, 0);
-            const expenses = monthTransactions
-                .filter(t => t.type === 'Expense')
-                .reduce((sum, t) => sum + t.amount, 0);
-            const savings = income - expenses;
-            const savingsRate = income > 0 ? ((savings / income) * 100) : 0;
-            const transactionCount = monthTransactions.filter(t => t.type === 'Expense').length;
-            const incomeSourceCount = monthTransactions.filter(t => t.type === 'Income').length;
-            return { income, expenses, savings, savingsRate, transactionCount, incomeSourceCount };
-        };
-
-        const currentMonthTransactions = filterByMonth(currentMonth, currentYear);
-        const lastMonthTransactions = filterByMonth(lastMonth, lastMonthYear);
-
-        const current = calculateMonthStats(currentMonthTransactions);
-        const previous = calculateMonthStats(lastMonthTransactions);
-
-        const savingsChange = current.savingsRate - previous.savingsRate;
-        const incomeChange = previous.income > 0
-            ? ((current.income - previous.income) / previous.income * 100)
-            : 0;
-        const expensesChange = previous.expenses > 0
-            ? ((current.expenses - previous.expenses) / previous.expenses * 100)
-            : 0;
-
-        return {
-            current,
-            previous,
-            savingsChange,
-            incomeChange,
-            expensesChange,
-            currentMonthName: now.toLocaleString('default', { month: 'long' }),
-            lastMonthName: new Date(lastMonthYear, lastMonth).toLocaleString('default', { month: 'long' })
-        };
-    }, [transactions]);
+    const { current, previous, savingsChange, incomeChange, expensesChange, currentMonthName, lastMonthName } = monthlyData;
 
 
     const healthScore = useMemo(() => {
@@ -225,6 +181,42 @@ const Insights = () => {
                             </div>
                             <span className={styles.dateBadge}>{monthlyData.currentMonthName}</span>
                         </div>
+                        {transactions.length === 0 ? (
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                padding: '40px 20px',
+                                gap: '12px',
+                                minHeight: '200px'
+                            }}>
+                                <div style={{
+                                    width: '50px',
+                                    height: '50px',
+                                    background: 'linear-gradient(135deg, #e4d8fc 0%, #F5F3FF 100%)',
+                                    borderRadius: '12px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                    </svg>
+                                </div>
+                                <p style={{
+                                    fontSize: '14px',
+                                    color: '#6b7280',
+                                    textAlign: 'center',
+                                    maxWidth: '250px',
+                                    lineHeight: '1.5',
+                                    margin: 0
+                                }}>
+                                    Add your first transaction to start tracking your monthly cash flow and income trends
+                                </p>
+                            </div>
+                        ) : (
+                        <>
                         <div className={styles.insightsList}>
                             <div className={styles.insightItem}>
                                 <span className={styles.insightBullet} style={{ backgroundColor: monthlyData.current.savings >= 0 ? '#10B981' : '#EF4444' }} />
@@ -260,6 +252,8 @@ const Insights = () => {
                                 <>Review your expenses to improve your savings rate.</>
                             )}
                         </p>
+                        </>
+                        )}
                     </div>
 
                     {/* Bill Alerts Card */}
@@ -282,7 +276,46 @@ const Insights = () => {
                         </div>
                         <div className={styles.billsList}>
                             {billAlerts.length === 0 ? (
-                                <p className={styles.noBills}>No upcoming or overdue bills this week!</p>
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    padding: '40px 20px',
+                                    gap: '12px',
+                                    minHeight: '180px'
+                                }}>
+                                    <div style={{
+                                        width: '50px',
+                                        height: '50px',
+                                        background: 'linear-gradient(135deg, #D1FAE5 0%, #ECFDF5 100%)',
+                                        borderRadius: '12px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                            <polyline points="22 4 12 14.01 9 11.01"/>
+                                        </svg>
+                                    </div>
+                                    <h4 style={{
+                                        fontSize: '16px',
+                                        fontWeight: 600,
+                                        color: '#10B981',
+                                        margin: 0
+                                    }}>All Clear!</h4>
+                                    <p style={{
+                                        fontSize: '14px',
+                                        color: '#6b7280',
+                                        textAlign: 'center',
+                                        maxWidth: '250px',
+                                        lineHeight: '1.5',
+                                        margin: 0
+                                    }}>
+                                        No upcoming or overdue bills this week. You're all caught up!
+                                    </p>
+                                </div>
                             ) : (
                                 billAlerts.map((bill, idx) => (
                                     <div key={idx} className={styles.billItem}>
@@ -324,20 +357,60 @@ const Insights = () => {
                                 </svg>
                             </span>
                         </div>
-                        <div className={styles.savingsContent}>
-                            <span className={styles.savingsRate}>{monthlyData.current.savingsRate.toFixed(0)}%</span>
-                            <span className={styles.savingsChange} style={{
-                                backgroundColor: monthlyData.savingsChange >= 0 ? '#D1FAE5' : '#FEE2E2',
-                                color: monthlyData.savingsChange >= 0 ? '#10B981' : '#EF4444'
+                        {transactions.length === 0 ? (
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                padding: '40px 20px',
+                                gap: '12px',
+                                minHeight: '200px'
                             }}>
-                                {monthlyData.savingsChange >= 0 ? '↗' : '↘'} {monthlyData.savingsChange >= 0 ? '+' : ''}{monthlyData.savingsChange.toFixed(1)}% vs {monthlyData.lastMonthName}
-                            </span>
-                        </div>
-                        <p className={styles.targetText}>
-                            {monthlyData.current.savingsRate >= 20
-                                ? "You've hit the recommended 20% savings rate!"
-                                : `Target rate: 20%. ${(20 - monthlyData.current.savingsRate).toFixed(0)}% to go.`}
-                        </p>
+                                <div style={{
+                                    width: '50px',
+                                    height: '50px',
+                                    background: 'linear-gradient(135deg, #e4d8fc 0%, #F5F3FF 100%)',
+                                    borderRadius: '12px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M11 17h3v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a3.16 3.16 0 0 0 2-2h1a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-1a5 5 0 0 0-2-4V3a4 4 0 0 0-3.2 1.6l-.3.4H11a6 6 0 0 0-6 6v1a5 5 0 0 0 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1z"/>
+                                        <path d="M16 10h.01"/>
+                                        <path d="M2 8v1a2 2 0 0 0 2 2h1"/>
+                                    </svg>
+                                </div>
+                                <p style={{
+                                    fontSize: '14px',
+                                    color: '#6b7280',
+                                    textAlign: 'center',
+                                    maxWidth: '250px',
+                                    lineHeight: '1.5',
+                                    margin: 0
+                                }}>
+                                    Track income and expenses to calculate your monthly savings rate
+                                </p>
+                            </div>
+                        ) : (
+                            <>
+                                <div className={styles.savingsContent}>
+                                    <span className={styles.savingsRate}>{monthlyData.current.savingsRate.toFixed(0)}%</span>
+                                    <span className={styles.savingsChange} style={{
+                                        backgroundColor: monthlyData.savingsChange >= 0 ? '#D1FAE5' : '#FEE2E2',
+                                        color: monthlyData.savingsChange >= 0 ? '#10B981' : '#EF4444'
+                                    }}>
+                                        {monthlyData.savingsChange >= 0 ? '↗' : '↘'} {monthlyData.savingsChange >= 0 ? '+' : ''}{monthlyData.savingsChange.toFixed(1)}% vs {monthlyData.lastMonthName}
+                                    </span>
+                                </div>
+                                <p className={styles.targetText}>
+                                    {monthlyData.current.savingsRate >= 20
+                                        ? "You've hit the recommended 20% savings rate!"
+                                        : `Target rate: 20%. ${(20 - monthlyData.current.savingsRate).toFixed(0)}% to go.`}
+                                </p>
+                            </>
+                        )}
                     </div>
                 </div>
 
@@ -358,7 +431,47 @@ const Insights = () => {
                         </div>
                         <div className={styles.goalsList}>
                             {formattedGoals.length === 0 ? (
-                                <p className={styles.noBills}>No financial goals set yet. Create one to start tracking!</p>
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    padding: '40px 20px',
+                                    gap: '12px',
+                                    minHeight: '180px'
+                                }}>
+                                    <div style={{
+                                        width: '50px',
+                                        height: '50px',
+                                        background: 'linear-gradient(135deg, #DBEAFE 0%, #EFF6FF 100%)',
+                                        borderRadius: '12px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <path d="M12 16v-4"/>
+                                            <path d="M12 8h.01"/>
+                                        </svg>
+                                    </div>
+                                    <h4 style={{
+                                        fontSize: '16px',
+                                        fontWeight: 600,
+                                        color: '#1a0b2e',
+                                        margin: 0
+                                    }}>No Goals Yet</h4>
+                                    <p style={{
+                                        fontSize: '14px',
+                                        color: '#6b7280',
+                                        textAlign: 'center',
+                                        maxWidth: '280px',
+                                        lineHeight: '1.5',
+                                        margin: 0
+                                    }}>
+                                        Set your first financial goal and start tracking your progress toward your dreams!
+                                    </p>
+                                </div>
                             ) : (
                                 formattedGoals.map((goal, idx) => (
                                     <div key={idx} className={styles.goalItem}>
@@ -387,141 +500,15 @@ const Insights = () => {
                         <button className={styles.linkBtn} onClick={() => router.push('/Dashboard')}>View your Financial Goals</button>
                     </div>
 
-                    {/* Monthly Summary Card */}
-                    <div className={styles.insightCardLarge}>
-                        <div className={styles.cardHeader}>
-                            <div className={styles.cardTitleRow}>
-                                <span className={styles.cardIcon} style={{ backgroundColor: '#EEF2FF' }}>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                        <polyline points="14 2 14 8 20 8"/>
-                                        <line x1="16" y1="13" x2="8" y2="13"/>
-                                        <line x1="16" y1="17" x2="8" y2="17"/>
-                                        <polyline points="10 9 9 9 8 9"/>
-                                    </svg>
-                                </span>
-                                <h3 className={styles.cardTitle}>Monthly Summary</h3>
-                            </div>
-                            <span className={styles.monthlyBadge}>{monthlyData.currentMonthName}</span>
-                        </div>
-
-                        <div className={styles.summaryGrid}>
-                            {/* Income Summary */}
-                            <div className={styles.summaryItem}>
-                                <div className={styles.summaryIcon} style={{ backgroundColor: '#D1FAE5' }}>
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M12 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5"/>
-                                        <path d="M18 12h.01"/>
-                                        <path d="M19 22v-6"/>
-                                        <path d="m22 19-3-3-3 3"/>
-                                        <path d="M6 12h.01"/>
-                                        <circle cx="12" cy="12" r="2"/>
-                                    </svg>
-                                </div>
-                                <div className={styles.summaryContent}>
-                                    <span className={styles.summaryLabel}>Income</span>
-                                    <span className={styles.summaryMessage}>
-                                        You earned <strong style={{ color: '#10B981' }}>${monthlyData.current.income.toLocaleString()}</strong> this month from {monthlyData.current.incomeSourceCount} income source{monthlyData.current.incomeSourceCount !== 1 ? 's' : ''}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Expenses Summary */}
-                            <div className={styles.summaryItem}>
-                                <div className={styles.summaryIcon} style={{ backgroundColor: '#FEF3C7' }}>
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FB923C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M12 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5"/>
-                                        <path d="m16 19 3 3 3-3"/>
-                                        <path d="M18 12h.01"/>
-                                        <path d="M19 16v6"/>
-                                        <path d="M6 12h.01"/>
-                                        <circle cx="12" cy="12" r="2"/>
-                                    </svg>
-                                </div>
-                                <div className={styles.summaryContent}>
-                                    <span className={styles.summaryLabel}>Expenses</span>
-                                    <span className={styles.summaryMessage}>
-                                        You spent <strong style={{ color: '#FB923C' }}>${monthlyData.current.expenses.toLocaleString()}</strong> across {monthlyData.current.transactionCount} transaction{monthlyData.current.transactionCount !== 1 ? 's' : ''} this month
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Net Savings */}
-                            <div className={styles.summaryItem}>
-                                <div className={styles.summaryIcon} style={{ backgroundColor: '#E8E3F3' }}>
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a0b2e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M11 17h3v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a3.16 3.16 0 0 0 2-2h1a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-1a5 5 0 0 0-2-4V3a4 4 0 0 0-3.2 1.6l-.3.4H11a6 6 0 0 0-6 6v1a5 5 0 0 0 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1z"/>
-                                        <path d="M16 10h.01"/>
-                                        <path d="M2 8v1a2 2 0 0 0 2 2h1"/>
-                                    </svg>
-                                </div>
-                                <div className={styles.summaryContent}>
-                                    <span className={styles.summaryLabel}>Savings</span>
-                                    <span className={styles.summaryMessage}>
-                                        {monthlyData.current.savings >= 0 ? (
-                                            <>You kept <strong style={{ color: '#1a0b2e' }}>${monthlyData.current.savings.toLocaleString()}</strong> — that's {monthlyData.current.savingsRate.toFixed(0)}% of your income saved</>
-                                        ) : (
-                                            <>You overspent by <strong style={{ color: '#EF4444' }}>${Math.abs(monthlyData.current.savings).toLocaleString()}</strong> this month</>
-                                        )}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Bills Status */}
-                            <div className={styles.summaryItem}>
-                                <div className={styles.summaryIcon} style={{ backgroundColor: '#FEE2E2' }}>
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#EC4899" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M13 16H8"/>
-                                        <path d="M14 8H8"/>
-                                        <path d="M16 12H8"/>
-                                        <path d="M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z"/>
-                                    </svg>
-                                </div>
-                                <div className={styles.summaryContent}>
-                                    <span className={styles.summaryLabel}>Bills</span>
-                                    <span className={styles.summaryMessage}>
-                                        {billsOverdue.length > 0 ? (
-                                            <><strong style={{ color: '#EC4899' }}>{billsOverdue.length} bill{billsOverdue.length !== 1 ? 's' : ''}</strong> overdue — pay now to avoid fees</>
-                                        ) : billsDueThisWeek.length > 0 ? (
-                                            <><strong style={{ color: '#EC4899' }}>{billsDueThisWeek.length} bill{billsDueThisWeek.length !== 1 ? 's' : ''}</strong> due this week totaling <strong style={{ color: '#EC4899' }}>${billsDueThisWeek.reduce((sum, b) => sum + (b.amount || 0), 0).toFixed(2)}</strong></>
-                                        ) : (
-                                            <>All bills are paid — great job staying on top!</>
-                                        )}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Cash Flow */}
-                            <div className={styles.summaryItem}>
-                                <div className={styles.summaryIcon} style={{ backgroundColor: '#EEF2FF' }}>
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                                    </svg>
-                                </div>
-                                <div className={styles.summaryContent}>
-                                    <span className={styles.summaryLabel}>Cash Flow</span>
-                                    <span className={styles.summaryMessage}>
-                                        {monthlyData.current.savings >= 0 ? (
-                                            <><strong style={{ color: '#8B5CF6' }}>Positive</strong> — you're earning <strong style={{ color: '#10B981' }}>${monthlyData.current.savings.toLocaleString()} more</strong> than you spend</>
-                                        ) : (
-                                            <><strong style={{ color: '#EF4444' }}>Negative</strong> — you're spending <strong style={{ color: '#EF4444' }}>${Math.abs(monthlyData.current.savings).toLocaleString()} more</strong> than you earn</>
-                                        )}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className={styles.trendFooter}>
-                            <span className={styles.avgSpend}>
-                                {monthlyData.current.savings >= 0
-                                    ? `You're saving $${(monthlyData.current.savings / 30).toFixed(0)} per day on average`
-                                    : `You're overspending by $${(Math.abs(monthlyData.current.savings) / 30).toFixed(0)} per day`}
-                            </span>
-                            <button className={styles.linkBtn} onClick={() => router.push('/Transactions')}>
-                                View all transactions →
-                            </button>
-                        </div>
-                    </div>
+                    {/* Monthly Summary Card - Now using reusable component */}
+                    <MonthlySummary
+                        preview={false}
+                        monthlyData={monthlyData}
+                        billsOverdue={billsOverdue}
+                        billsDueThisWeek={billsDueThisWeek}
+                        onViewTransactions={() => router.push('/Transactions')}
+                        hasTransactions={transactions.length > 0}
+                    />
                 </div>
             </div>
         </div>

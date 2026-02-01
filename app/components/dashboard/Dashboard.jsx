@@ -3,7 +3,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import styles from './dashboard.module.css';
 import SpendingChart from '../SpendingChart';
 import CashflowChart from '../CashflowChartExample';
@@ -14,9 +14,12 @@ import { GetBillsDueThisWeek, GetBillsOverdueThisWeek, GetRecurringBills } from 
 import { GetPaidBills } from '@services/BillPaymentService';
 import { GetFinancialGoals } from '@services/FinantialGoalService';
 import { useSession } from '@node_modules/next-auth/react';
+import { useMonthlyData } from '@hooks/useMonthlyData';
+import MonthlySummary from '../MonthlySummary';
 
 
 const Dashboard = () => {
+    const router = useRouter();
     const [cashFlowPeriod, setCashFlowPeriod] = useState('7days');
     const [earnings, setEarnings] = useState(0);
     const [spendings, setSpendings] = useState(0);
@@ -27,6 +30,9 @@ const Dashboard = () => {
     const [allRecurringBills, setAllRecurringBills] = useState([]);
     const [financialGoals, setFinancialGoals] = useState([]);
     const { data: session } = useSession();
+
+    // Calculate monthly data using the custom hook
+    const monthlyData = useMonthlyData(transactionsData);
 
     useEffect(() => {
         if (session?.accessToken) {
@@ -127,13 +133,6 @@ const Dashboard = () => {
         { name: 'Credit Card', paid: 500, remaining: 200, total: 700 },
         { name: 'Car Loan', paid: 4000, remaining: 3500, total: 7500 },
         { name: 'Student Loan', paid: 5000, remaining: 10000, total: 15000 }
-    ];
-
-    const insights = [
-        { icon: '📈', text: 'You spent 14% more on dining this month.', type: 'warning' },
-        { icon: '⭕', text: 'Your rent is 38% of income—try keeping it under 30%.', type: 'info' },
-        { icon: '🎯', text: 'You\'re on track to hit your savings goal early 🎯', type: 'success' },
-        { icon: '✨', text: 'Great job! You\'ve saved $450 more than last month.', type: 'success' }
     ];
 
     const achievements = [
@@ -252,18 +251,15 @@ const Dashboard = () => {
                         {/* Financial Goals */}
                         <FinancialGoals preview={false} goals={financialGoals} />
 
-                        {/* AI Insights */}
-                        <div className={styles.card}>
-                            <h3 className={styles.cardTitle}>AI Insights & Alerts</h3>
-                            <div className={styles.insightsList}>
-                                {insights.map((insight, idx) => (
-                                    <div key={idx} className={styles.insightItem}>
-                                        <span className={styles.insightIcon}>{insight.icon}</span>
-                                        <p className={styles.insightText}>{insight.text}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        {/* Monthly Summary */}
+                        <MonthlySummary
+                            preview={false}
+                            monthlyData={monthlyData}
+                            billsOverdue={unpaidBillsOverdue}
+                            billsDueThisWeek={unpaidBillsDue}
+                            onViewTransactions={() => router.push('/Transactions')}
+                            hasTransactions={transactionsData.length > 0}
+                        />
                     </div>
                 </div>
 

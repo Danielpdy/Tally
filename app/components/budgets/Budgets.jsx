@@ -426,7 +426,7 @@ const Budgets = () => {
   };
 
   const percentageIncomeAvailable = useMemo(() => {
-    if (!earnings || earnings === 0) return 0;
+    if (!earnings || earnings === 0) return "0.0";
 
     return ((safeToSpendAmount / earnings) * 100).toFixed(1);
   }, [safeToSpendAmount, earnings]);
@@ -439,6 +439,7 @@ const Budgets = () => {
 
   const percentageBillsCoverage = useMemo(() => {
     if (earnings == null || totalBillsDue == null || spendings == null) return 0;
+    if (earnings === 0) return 0;
 
     return ((totalBillsDue + spendings) / earnings) * 100;
   }, [earnings, spendings, totalBillsDue]);
@@ -517,12 +518,6 @@ const Budgets = () => {
       )}
       <div className={styles.pageWrapper}>
         <div className={styles.budgetPage}>
-          {/* Page Header */}
-          <div className={styles.pageHeader}>
-          <h1>Budget & Bills</h1>
-          <p>Manage your weekly safe-to-spend and recurring bills</p>
-        </div>
-
         {/* Two Column Layout */}
         <div className={styles.twoColumnLayout}>
           {/* Left Column */}

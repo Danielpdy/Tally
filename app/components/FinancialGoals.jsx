@@ -197,9 +197,9 @@ const FinancialGoals = ({ preview = false, goals = [] }) => {
                                     value={goal.percentage}
                                     text={`${goal.percentage}%`}
                                     styles={buildStyles({
-                                        pathColor: '#8B5CF6',
-                                        textColor: '#8B5CF6',
-                                        trailColor: '#E9D5FF',
+                                        pathColor: '#38BDF8',
+                                        textColor: '#38BDF8',
+                                        trailColor: '#DBEAFE',
                                         textSize: '24px',
                                         fontWeight: 'bold'
                                     })}
@@ -210,7 +210,7 @@ const FinancialGoals = ({ preview = false, goals = [] }) => {
                                 ${goal.current.toLocaleString()} / ${goal.target.toLocaleString()}
                             </p>
                             <p className={styles.goalDue}>Due {goal.due}</p>
-                            <p className={styles.goalEncouragement}>
+                            <p className={styles.goalEncouragement} style={{ color: goal.percentage >= 100 ? '#9CA3AF' : '#38BDF8' }}>
                                 {goal.percentage >= 100 ? `Congrats! Goal achieved! 🎉` : `Keep going! ${goal.emoji}`}
                             </p>
 

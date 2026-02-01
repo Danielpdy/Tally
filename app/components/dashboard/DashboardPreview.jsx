@@ -7,6 +7,7 @@ import styles from './dashboard.module.css';
 import previewStyles from './dashboardPreview.module.css';
 import CashflowChart from '@app/components/CashflowChartExample';
 import FinancialGoals from '@app/components/FinancialGoals';
+import MonthlySummary from '@app/components/MonthlySummary';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -23,13 +24,6 @@ const DashboardPreview = () => {
         { name: 'Credit Card', paid: 500, remaining: 200, total: 700 },
         { name: 'Car Loan', paid: 4000, remaining: 3500, total: 7500 },
         { name: 'Student Loan', paid: 5000, remaining: 10000, total: 15000 }
-    ];
-
-    const insights = [
-        { icon: '📈', text: 'You spent 14% more on dining this month.', type: 'warning' },
-        { icon: '⭕', text: 'Your rent is 38% of income—try keeping it under 30%.', type: 'info' },
-        { icon: '🎯', text: 'You\'re on track to hit your savings goal early 🎯', type: 'success' },
-        { icon: '✨', text: 'Great job! You\'ve saved $450 more than last month.', type: 'success' }
     ];
 
     const achievements = [
@@ -200,24 +194,14 @@ const DashboardPreview = () => {
                             {hoveredSection === 'goals' && <LockOverlay message="Sign in to track goals" />}
                         </div>
 
-                        {/* AI Insights */}
+                        {/* Monthly Summary */}
                         <div
                             className={previewStyles.lockedSection}
                             onMouseEnter={() => setHoveredSection('insights')}
                             onMouseLeave={() => setHoveredSection(null)}
                         >
-                            <div className={styles.card}>
-                                <h3 className={styles.cardTitle}>AI Insights & Alerts</h3>
-                                <div className={styles.insightsList}>
-                                    {insights.map((insight, idx) => (
-                                        <div key={idx} className={styles.insightItem}>
-                                            <span className={styles.insightIcon}>{insight.icon}</span>
-                                            <p className={styles.insightText}>{insight.text}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            {hoveredSection === 'insights' && <LockOverlay message="Sign in to get AI insights" />}
+                            <MonthlySummary preview={true} />
+                            {hoveredSection === 'insights' && <LockOverlay message="Sign in to view your monthly summary" />}
                         </div>
                     </div>
                 </div>
