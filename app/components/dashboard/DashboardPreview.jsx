@@ -8,7 +8,7 @@ import previewStyles from './dashboardPreview.module.css';
 import CashflowChart from '@app/components/CashflowChartExample';
 import FinancialGoals from '@app/components/FinancialGoals';
 import MonthlySummary from '@app/components/MonthlySummary';
-import Link from 'next/link';
+import ExpensePatternDetector from '@app/components/ExpensePatternDetector';
 import { useRouter } from 'next/navigation';
 
 const DashboardPreview = () => {
@@ -19,19 +19,6 @@ const DashboardPreview = () => {
     const balance = 24322;
     const earnings = 5240;
     const spendings = 3890;
-
-    const debts = [
-        { name: 'Credit Card', paid: 500, remaining: 200, total: 700 },
-        { name: 'Car Loan', paid: 4000, remaining: 3500, total: 7500 },
-        { name: 'Student Loan', paid: 5000, remaining: 10000, total: 15000 }
-    ];
-
-    const achievements = [
-        { icon: '🏆', title: '3 Months Under Budget', description: 'Stayed within budget for 3 consecutive months', active: true },
-        { icon: '🔥', title: '7 Day Streak', description: 'Tracked expenses every day for a week', active: true },
-        { icon: '🎯', title: 'First Goal Complete', description: 'Completed your first savings goal', active: true },
-        { icon: '💰', title: 'Savings Master', description: 'Saved over $5,000 in total', active: false }
-    ];
 
     const handleGetStarted = () => {
         router.push("/LoginSignup");
@@ -129,46 +116,14 @@ const DashboardPreview = () => {
                             {hoveredSection === 'cashflow' && <LockOverlay message="Sign in to view cash flow" />}
                         </div>
 
-                        {/* Debt Payoff Visualizer */}
+                        {/* Expense Pattern Detector */}
                         <div
                             className={previewStyles.lockedSection}
-                            onMouseEnter={() => setHoveredSection('debt')}
+                            onMouseEnter={() => setHoveredSection('patterns')}
                             onMouseLeave={() => setHoveredSection(null)}
                         >
-                            <div className={styles.card}>
-                                <div className={styles.cardHeaderRow}>
-                                    <div>
-                                        <h3 className={styles.cardTitle}>Debt Payoff Visualizer</h3>
-                                        <p className={styles.debtSubtitle}>Estimated Debt-Free Date: <span className={styles.debtDate}>March 2027</span></p>
-                                    </div>
-                                    <div className={styles.debtToggle}>
-                                        <button className={`${styles.debtToggleBtn} ${styles.active}`}>Snowball</button>
-                                        <button className={styles.debtToggleBtn}>Avalanche</button>
-                                    </div>
-                                </div>
-                                <div className={styles.debtBars}>
-                                    {debts.map((debt, idx) => (
-                                        <div key={idx} className={styles.debtItem}>
-                                            <span className={styles.debtLabel}>{debt.name}</span>
-                                            <div className={styles.debtBar}>
-                                                <div className={styles.debtPaid} style={{ width: `${(debt.paid / debt.total) * 100}%` }}></div>
-                                                <div className={styles.debtRemaining} style={{ width: `${(debt.remaining / debt.total) * 100}%` }}></div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                    <div className={styles.debtLegend}>
-                                        <div className={styles.debtLegendItem}>
-                                            <div className={styles.debtLegendColor} style={{ backgroundColor: '#8B5CF6' }}></div>
-                                            <span>Paid So Far</span>
-                                        </div>
-                                        <div className={styles.debtLegendItem}>
-                                            <div className={styles.debtLegendColor} style={{ backgroundColor: '#FF8042' }}></div>
-                                            <span>Remaining Balance</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {hoveredSection === 'debt' && <LockOverlay message="Sign in to track debt" />}
+                            <ExpensePatternDetector preview={true} transactions={[]} />
+                            {hoveredSection === 'patterns' && <LockOverlay message="Sign in to discover spending patterns" />}
                         </div>
                     </div>
 
@@ -203,39 +158,6 @@ const DashboardPreview = () => {
                             <MonthlySummary preview={true} />
                             {hoveredSection === 'insights' && <LockOverlay message="Sign in to view your monthly summary" />}
                         </div>
-                    </div>
-                </div>
-
-                {/* Achievements & Streaks */}
-                <div
-                    className={previewStyles.lockedSection}
-                    onMouseEnter={() => setHoveredSection('achievements')}
-                    onMouseLeave={() => setHoveredSection(null)}
-                >
-                    <div className={styles.achievementsSection}>
-                        <h3 className={styles.sectionTitle}>Achievements & Streaks</h3>
-                        <div className={styles.achievementsGrid}>
-                            {achievements.map((achievement, idx) => (
-                                <div key={idx} className={`${styles.achievementCard} ${!achievement.active ? styles.locked : ''}`}>
-                                    <div className={styles.achievementIcon}>{achievement.icon}</div>
-                                    <h4 className={styles.achievementTitle}>{achievement.title}</h4>
-                                    <p className={styles.achievementDesc}>{achievement.description}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    {hoveredSection === 'achievements' && <LockOverlay message="Sign in to earn achievements" />}
-                </div>
-
-                {/* Footer */}
-                <div className={styles.dashboardFooter}>
-                    <p>© 2025 Tally – Your Balance in Focus</p>
-                    <div className={styles.footerLinks}>
-                        <Link href="#">Privacy Policy</Link>
-                        <span>•</span>
-                        <Link href="#">Support</Link>
-                        <span>•</span>
-                        <span>v1.0.0</span>
                     </div>
                 </div>
             </div>

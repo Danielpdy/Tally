@@ -1,0 +1,57 @@
+/* Base Skeleton Animations */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Base Skeleton Styles */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        #F3F4F6 0%,
+        #E5E7EB 20%,
+        #F3F4F6 40%,
+        #F3F4F6 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.skeletonText {
+    border-radius: 6px;
+    background: linear-gradient(
+        90deg,
+        #F3F4F6 0%,
+        #E5E7EB 20%,
+        #F3F4F6 40%,
+        #F3F4F6 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+.skeletonCircle {
+    border-radius: 50%;
+    background: linear-gradient(
+        135deg,
+        #EBF8FF 0%,
+        #E0F2FE 50%,
+        #EBF8FF 100%
+    );
+    animation: pulse 2s ease-in-out infinite;
+}

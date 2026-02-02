@@ -23,13 +23,9 @@ const page = () => {
     }
   }, [status]);
 
-  if (status === "loading" || isTransitioning) {
-    return <TransactionsSkeleton />
-  }
-
-  if (!session) {
-    return <TransactionsPreview />
-  }
+  if (status === "loading" || isTransitioning) return <TransactionsSkeleton />
+  
+  if (!session) return <TransactionsPreview />
 
   return <Transactions />
 } 

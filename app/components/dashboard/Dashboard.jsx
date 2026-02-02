@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import styles from './dashboard.module.css';
 import SpendingChart from '../SpendingChart';
@@ -16,11 +14,11 @@ import { GetFinancialGoals } from '@services/FinantialGoalService';
 import { useSession } from '@node_modules/next-auth/react';
 import { useMonthlyData } from '@hooks/useMonthlyData';
 import MonthlySummary from '../MonthlySummary';
+import ExpensePatternDetector from '../ExpensePatternDetector';
 
 
 const Dashboard = () => {
     const router = useRouter();
-    const [cashFlowPeriod, setCashFlowPeriod] = useState('7days');
     const [earnings, setEarnings] = useState(0);
     const [spendings, setSpendings] = useState(0);
     const [transactionsData, setTransactionsData] = useState([]);
@@ -129,30 +127,9 @@ const Dashboard = () => {
     }, [transactionsData, allRecurringBills, billsPaidThisWeek]);
   
 
-    const debts = [
-        { name: 'Credit Card', paid: 500, remaining: 200, total: 700 },
-        { name: 'Car Loan', paid: 4000, remaining: 3500, total: 7500 },
-        { name: 'Student Loan', paid: 5000, remaining: 10000, total: 15000 }
-    ];
-
-    const achievements = [
-        { icon: '🏆', title: '3 Months Under Budget', description: 'Stayed within budget for 3 consecutive months', active: true },
-        { icon: '🔥', title: '7 Day Streak', description: 'Tracked expenses every day for a week', active: true },
-        { icon: '🎯', title: 'First Goal Complete', description: 'Completed your first savings goal', active: true },
-        { icon: '💰', title: 'Savings Master', description: 'Saved over $5,000 in total', active: false }
-    ];
-
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.dashboardPage}>
-                {/* Header */}
-                <div className={styles.pageHeader}>
-                    <div>
-                        <h1>Dashboard</h1>
-                        <p>Your complete financial overview</p>
-                    </div>
-                </div>
-
                 {/* Top Stats Row */}
                 <div className={styles.topStatsRow}>
                     <div className={styles.statCard}>
@@ -207,40 +184,8 @@ const Dashboard = () => {
                         <CashflowChart preview={false} content={transactionsData} recurringBills={allRecurringBills} paidBillIds={billsPaidThisWeek} />
                         
 
-                        {/* Debt Payoff Visualizer */}
-                        <div className={styles.card}>
-                            <div className={styles.cardHeaderRow}>
-                                <div>
-                                    <h3 className={styles.cardTitle}>Debt Payoff Visualizer</h3>
-                                    <p className={styles.debtSubtitle}>Estimated Debt-Free Date: <span className={styles.debtDate}>March 2027</span></p>
-                                </div>
-                                <div className={styles.debtToggle}>
-                                    <button className={`${styles.debtToggleBtn} ${styles.active}`}>Snowball</button>
-                                    <button className={styles.debtToggleBtn}>Avalanche</button>
-                                </div>
-                            </div>
-                            <div className={styles.debtBars}>
-                                {debts.map((debt, idx) => (
-                                    <div key={idx} className={styles.debtItem}>
-                                        <span className={styles.debtLabel}>{debt.name}</span>
-                                        <div className={styles.debtBar}>
-                                            <div className={styles.debtPaid} style={{ width: `${(debt.paid / debt.total) * 100}%` }}></div>
-                                            <div className={styles.debtRemaining} style={{ width: `${(debt.remaining / debt.total) * 100}%` }}></div>
-                                        </div>
-                                    </div>
-                                ))}
-                                <div className={styles.debtLegend}>
-                                    <div className={styles.debtLegendItem}>
-                                        <div className={styles.debtLegendColor} style={{ backgroundColor: '#8B5CF6' }}></div>
-                                        <span>Paid So Far</span>
-                                    </div>
-                                    <div className={styles.debtLegendItem}>
-                                        <div className={styles.debtLegendColor} style={{ backgroundColor: '#FF8042' }}></div>
-                                        <span>Remaining Balance</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {/* Expense Pattern Detector */}
+                        <ExpensePatternDetector transactions={transactionsData} preview={false} />
                     </div>
 
                     {/* Right Column */}
@@ -260,32 +205,6 @@ const Dashboard = () => {
                             onViewTransactions={() => router.push('/Transactions')}
                             hasTransactions={transactionsData.length > 0}
                         />
-                    </div>
-                </div>
-
-                {/* Achievements & Streaks */}
-                <div className={styles.achievementsSection}>
-                    <h3 className={styles.sectionTitle}>Achievements & Streaks</h3>
-                    <div className={styles.achievementsGrid}>
-                        {achievements.map((achievement, idx) => (
-                            <div key={idx} className={`${styles.achievementCard} ${!achievement.active ? styles.locked : ''}`}>
-                                <div className={styles.achievementIcon}>{achievement.icon}</div>
-                                <h4 className={styles.achievementTitle}>{achievement.title}</h4>
-                                <p className={styles.achievementDesc}>{achievement.description}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Footer */}
-                <div className={styles.dashboardFooter}>
-                    <p>© 2025 Tally – Your Balance in Focus</p>
-                    <div className={styles.footerLinks}>
-                        <Link href="#">Privacy Policy</Link>
-                        <span>•</span>
-                        <Link href="#">Support</Link>
-                        <span>•</span>
-                        <span>v1.0.0</span>
                     </div>
                 </div>
             </div>

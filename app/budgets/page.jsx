@@ -21,7 +21,7 @@ const page = () => {
     } else{
       setIsTransitioning(false);
     }
-  }, [status])
+  }, [status]);
 
   if (status === "loading" || isTransitioning) return <BudgetSkeleton />
   

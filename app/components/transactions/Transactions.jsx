@@ -137,8 +137,13 @@ const Transactions = () => {
             }
 
             result = result.filter(t => {
-                const transactionDate = new Date(t.date);
-                return transactionDate >= startDate && transactionDate <= endDate;
+                const [year, month, day] = t.date.split('-').map(Number);
+                const transactionDate = new Date(year, month - 1, day);
+
+                // Normalize endDate to end of day for proper comparison
+                const endOfDay = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 23, 59, 59);
+
+                return transactionDate >= startDate && transactionDate <= endOfDay;
             });
         }
 

@@ -65,10 +65,9 @@ async function handleSubmit(e) {
             setSignupBtn("Create Account");
             setIsCreated(true);
 
-            // Auto-hide the success message after 4 seconds
             setTimeout(() => {
                 setIsCreated(false);
-            }, 4000);
+            }, 1000);
         } catch (err) {
             setStatus(`error: ${err.message}`);
         }

@@ -158,11 +158,15 @@ const cashflowChart = ({ preview, content, recurringBills = [], paidBillIds = []
         return earnings - spendings;
     }, [content]);
 
+    const currentMonthName = useMemo(() => {
+        return new Date().toLocaleString('default', { month: 'long' });
+    }, []);
+
   return (
     <div className={styles.cashFlowChartDash}>
         <div className={styles.chartHeader}>
             <h3 className={styles.cashFlowTitle}>Cash Flow Timeline</h3>
-            <span className={styles.monthlyBadge}>Monthly</span>
+            <span className={styles.monthlyBadge}>{currentMonthName}</span>
         </div>
         <ResponsiveContainer width="100%" height="100%">
             <LineChart
