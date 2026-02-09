@@ -249,132 +249,8 @@ html, body {
   box-shadow: 0 26px 72px rgba(0,0,0,0.6), 0 0 0 6px rgba(0,195,137,0.10);
 }
 
-.homeSection-services {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  padding: 100px 0px;
-  background-color: #FAF8FF;
-  padding: 120px 40px;
-}
-
-.homeSec-text{
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.subTitles{
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: rgb(19, 47, 39)
-}
-
-.boxServices{
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  text-align: start;
-  gap: 18px;
-  padding: 50px 30px;
-  border: 2px solid rgba(139, 92, 246, 0.1);
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.08);
-  border-radius: 14px;
-  background-color: #FFFFFF;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  
-}
-
-.boxServices:hover .gradient-line {
-  transform: scaleX(1);
-}
 
 
-.homeSection-howItWorks {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
-  padding: 80px 0px;
-  background-color: #FAF8FF;
-}
-
- .boxServices:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.15);
-}
-
- .gradient-line {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s ease;
-}
-
-
- .card-purple:hover {
-  border-color: rgba(139, 92, 246, 0.3);
-  background: linear-gradient(135deg, #faf5ff 0%, #fdf2f8 100%);
-}
-
- .card-purple .gradient-line {
-  background: linear-gradient(90deg, #8B5CF6 0%, #EC4899 100%);
-}
-
-.card-blue:hover {
-  border-color: rgba(59, 130, 246, 0.3);
-  background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
-}
-
-.card-blue .gradient-line {
-  background: linear-gradient(90deg, #22D3EE 0%, #8B5CF6 100%);
-}
-
-.card-orange:hover {
-  border-color: rgba(249, 115, 22, 0.3);
-  background: linear-gradient(135deg, #fff7ed 0%, #fef2f2 100%);
-}
-
-.card-orange .gradient-line {
-  background: linear-gradient(90deg, #FB923C 0%, #F97316 100%);
-}
-
-
-.howItWorksBox{
-  width: 100%;
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.howItWorks{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 300px;
-  text-align: center;
-  gap: 20px;
-}
-
-.howItWorksNumbers{
-  font-family: "GT America", "Satoshi", "Inter", "Poppins", "Helvetica Neue", Arial, sans-serif;
-  font-size: 26px;
-  font-weight: 800;
-  color: white;
-  background: linear-gradient(180deg, #6C5CE7 0%, #0099FF 100%);
-  box-shadow: 0 20px 60px rgba(108, 92, 231, 0.4);
-  padding: 25px 40px;
-  border-radius: 50%;
-}
 
 .footerBox{
   width: 100%;
@@ -596,7 +472,7 @@ html, body {
   .bigTitles{
     font-size: 2.5rem;
     max-width: 300px;
-    
+
   }
   .getStartedBtn{
     display: none;
@@ -627,16 +503,6 @@ html, body {
     font-size: 1rem;
   }
 
-  .boxServices{
-    width: 400px;
-  }
-
-  .homeSection-services{
-    padding: 60px 20px;
-    flex-wrap: wrap;
-    row-gap: 40px;
-  }
-
   .darkButton{
     padding: 8px 18px;
     font-size: 12px;
@@ -645,12 +511,6 @@ html, body {
   .whiteButton{
     padding: 8px 18px;
     font-size: 12px;
-  }
-
-  .howItWorksBox{
-    flex-wrap: wrap;
-    padding: 0px 100px;
-    row-gap: 30px;
   }
 }
 
@@ -873,20 +733,81 @@ html, body {
 /* ==================== RESPONSIVE ==================== */
 
 @media (max-width: 640px) {
+  .homeSection-main {
+    padding: 40px 20px;
+    gap: 40px;
+  }
+
+  .homeContent {
+    gap: 24px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .cashflowSpan {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .cashflowSpan img {
+    width: 12px;
+    height: 12px;
+  }
+
+  .bigTitles {
+    font-size: 2.5rem;
+    line-height: 1.1;
+  }
+
+  .regularText {
+    font-size: 15px;
+    max-width: 90%;
+  }
+
+  .googleAndGithub {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .darkButton,
+  .whiteButton {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
+    justify-content: center;
+  }
+
+  .floating-cards-wrapper {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+
   .floating-cards-container {
     padding: 1rem;
   }
-  
+
   .card {
     padding: 1.25rem;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 0.75rem;
   }
-  
+
   .balance-text {
-    font-size: 2rem; /* Slightly smaller on mobile */
+    font-size: 2rem;
   }
-  
+
   .flow-text {
-    font-size: 1.5rem; /* Slightly smaller on mobile */
+    font-size: 1.5rem;
+  }
+
+  .card-label {
+    font-size: 0.7rem;
+  }
+
+  .percentage {
+    font-size: 0.8rem;
   }
 }
 
@@ -967,7 +888,193 @@ html, body {
     font-size: 10px;
   }
 
-  
+  .card {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* Extra small screens (480px and below) */
+@media (max-width: 480px) {
+  .homeSection-main {
+    padding: 30px 16px;
+    gap: 30px;
+  }
+
+  .homeContent {
+    gap: 20px;
+  }
+
+  .cashflowSpan {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+
+  .cashflowSpan img {
+    width: 11px;
+    height: 11px;
+  }
+
+  .bigTitles {
+    font-size: 2rem;
+    line-height: 1.15;
+  }
+
+  .regularText {
+    font-size: 14px;
+    max-width: 95%;
+  }
+
+  .smallText {
+    font-size: 12px;
+    max-width: 280px;
+  }
+
+  .googleAndGithub {
+    gap: 10px;
+  }
+
+  .darkButton,
+  .whiteButton {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .darkButton img,
+  .whiteButton img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .floating-cards-wrapper {
+    padding: 0 16px;
+  }
+
+  .card {
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .balance-text {
+    font-size: 1.75rem;
+  }
+
+  .flow-text {
+    font-size: 1.35rem;
+  }
+
+  .dot {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .card-label {
+    font-size: 0.65rem;
+  }
+
+  .percentage {
+    font-size: 0.75rem;
+  }
+
+  .bar-row {
+    gap: 0.5rem;
+  }
+}
+
+/* Very small screens (320px and below) */
+@media (max-width: 360px) {
+  .homeSection-main {
+    padding: 24px 12px;
+    gap: 24px;
+  }
+
+  .homeContent {
+    gap: 16px;
+  }
+
+  .cashflowSpan {
+    padding: 4px 6px;
+    font-size: 11px;
+  }
+
+  .cashflowSpan img {
+    width: 10px;
+    height: 10px;
+  }
+
+  .bigTitles {
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+
+  .regularText {
+    font-size: 13px;
+  }
+
+  .smallText {
+    font-size: 11px;
+    max-width: 260px;
+  }
+
+  .googleAndGithub {
+    gap: 8px;
+  }
+
+  .darkButton,
+  .whiteButton {
+    padding: 9px 14px;
+    font-size: 12px;
+  }
+
+  .darkButton img,
+  .whiteButton img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .floating-cards-wrapper {
+    padding: 0 12px;
+  }
+
+  .card {
+    padding: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .balance-text {
+    font-size: 1.5rem;
+  }
+
+  .flow-text {
+    font-size: 1.25rem;
+  }
+
+  .dot {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .card-label {
+    font-size: 0.625rem;
+  }
+
+  .percentage {
+    font-size: 0.7rem;
+    margin-left: 0.35rem;
+  }
+
+  .bar-row {
+    gap: 0.5rem;
+  }
+
+  .bar-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  .bar-bg {
+    height: 0.5rem;
+  }
 }
 
 

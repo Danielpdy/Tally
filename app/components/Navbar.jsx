@@ -84,6 +84,7 @@ useEffect(() => {
 
             {/* desktop Navigation */}
             <div className="navPages">
+                <Link href="/" className="navButtons">Home</Link>
                 <Link href="/dashboard" className="navButtons">Dashboard</Link>
                 <Link href="/transactions" className="navButtons">Transactions</Link>
                 <Link href="/budgets" className="navButtons">Budgets</Link>
@@ -124,7 +125,16 @@ useEffect(() => {
                             {session ? (
                                 <>
                                 <p>Welcome, {session.user.name}</p>
-                                
+
+                                <Link href="/">
+                                    <div className="flex">
+                                        <Image src="/assets/icons/tallyappIcon.svg"
+                                        width={20}
+                                        height={20}
+                                        alt="Home"/>
+                                        <span>Home</span>
+                                    </div>
+                                </Link>
                                 <Link href="/dashboard">
                                     <div className="flex">
                                         <Image src="/assets/icons/dashboardIcon.svg"
@@ -173,7 +183,16 @@ useEffect(() => {
                                 <button className="darkButton" onClick={() => signOut()}>Sign out</button>   
                                 </>
                             ) : (
-                                <> 
+                                <>
+                                <Link href="/">
+                                    <div className="flex">
+                                        <Image src="/assets/icons/tallyappIcon.svg"
+                                        width={20}
+                                        height={20}
+                                        alt="Home"/>
+                                        <span>Home</span>
+                                    </div>
+                                </Link>
                                 <Link href="/dashboard">
                                     <div className="flex">
                                         <Image src="/assets/icons/dashboardIcon.svg"
@@ -257,7 +276,16 @@ useEffect(() => {
                         {session ? (
                             <>
                             <p>Welcome, {session.user.name}</p>
-                            
+
+                            <Link href="/">
+                                <div className="flex">
+                                    <Image src="/assets/icons/tallyappIcon.svg"
+                                    width={20}
+                                    height={20}
+                                    alt="Home"/>
+                                    <span>Home</span>
+                                </div>
+                            </Link>
                             <Link href="/dashboard">
                                 <div className="flex">
                                     <Image src="/assets/icons/dashboardIcon.svg"
@@ -298,6 +326,15 @@ useEffect(() => {
                             </>
                         ) : (
                             <>
+                            <Link href="/">
+                                <div className="flex">
+                                    <Image src="/assets/icons/tallyappIcon.svg"
+                                    width={20}
+                                    height={20}
+                                    alt="Home"/>
+                                    <span>Home</span>
+                                </div>
+                            </Link>
                             <Link href="/dashboard">
                                 <div className="flex">
                                     <Image src="/assets/icons/dashboardIcon.svg"

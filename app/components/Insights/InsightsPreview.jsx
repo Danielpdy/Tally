@@ -49,6 +49,18 @@ const InsightsPreview = () => {
     return (
         <div className={styles.pageWrapper}>
         <div className={styles.insightsPage}>
+            {/* Main Feature Highlight Card */}
+            <section className={styles.mainCard}>
+                <div className={styles.cardContent}>
+                    <p className={styles.encourageMessage}>
+                        Sign in to unlock your personalized financial insights and take control of your money!
+                    </p>
+                    <button onClick={handleGetStarted} className={styles.getStartedButton}>
+                        Get Started
+                    </button>
+                </div>
+            </section>
+
             {/* Health Score Card */}
             <div
                 className={styles.lockedSection}

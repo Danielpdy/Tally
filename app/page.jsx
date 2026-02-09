@@ -103,67 +103,7 @@ export default function Home() {
         
       </section>
 
-      <section className="homeSection-services">
-        <div className="boxServices card-purple">
-          <img src="/assets/icons/importIcon.svg"
-          width={54}
-          height={54}
-          alt="Import CVSs" />
-          <div className="homeSec-text">
-            <label className="subTitles">Import CSVs</label>
-            <p className="smallText">Upload bank CSVs and bulk import transactions.</p>
-          </div>
-          <div className="gradient-line"></div>
-        </div>
 
-        <div className="boxServices card-blue">
-          <img src="/assets/icons/quickInsightsIcon.svg" 
-          width={54}
-          height={54}
-          alt="Quick Insights" />
-          <div className="homeSec-text">
-            <label className="subTitles">Quick Insights</label>
-            <p className="smallText">See balance, monthly inflows/outflows and alerts.</p>
-          </div>
-          <div className="gradient-line"></div>
-        </div>
-
-        <div className="boxServices card-orange">
-          <img src="/assets/icons/manualEntryIcon.svg" 
-          width={54}
-          height={54}
-          alt="Manual Entry & Budgets" />
-          <div className="homeSec-text">
-            <label className="subTitles">Manual entry & budgets</label>
-            <p className="smallText">Add transactions manually and set simple budgets.</p>
-          </div>
-          <div className="gradient-line"></div>
-        </div>
-      </section>
-
-      <section className="homeSection-howItWorks">
-        <h1 className="bigTitles">How it works</h1>
-
-        <div className="howItWorksBox">
-          <div className="howItWorks">
-            <label className="howItWorksNumbers">1</label>
-            <label className="subTitles">Export CSV from bank</label>
-            <p className="smallText">Download your transaction history as a CSV file from your bank</p>
-          </div>
-
-          <div className="howItWorks">
-            <label className="howItWorksNumbers">2</label>
-            <label className="subTitles">Upload & map columns</label>
-            <p className="smallText">Upload your CSV and map the columns to match your data</p>
-          </div>
-
-          <div className="howItWorks">
-            <label className="howItWorksNumbers">3</label>
-            <label className="subTitles">Review and categorize</label>
-            <p className="smallText">Review your transactions, categorize them, and add any missing details</p>
-          </div>
-        </div>
-      </section>
 
       
     </section>

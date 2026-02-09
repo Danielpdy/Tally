@@ -12,6 +12,40 @@
     margin: 0 auto;
 }
 
+/* Main Card - Feature Highlight */
+.mainCard {
+    width: 100%;
+    max-width: 1200px;
+    background: linear-gradient(135deg, #F5F3FF 0%, #EEF2FF 100%);
+    border-radius: 16px;
+    padding: 24px 32px;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.12);
+    border: 1px solid #E9D5FF;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    width: 100%;
+}
+
+.encourageMessage {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1a0b2e;
+    margin: 0;
+    line-height: 1.5;
+    flex: 1;
+}
+
 /* Locked Section */
 .lockedSection {
     position: relative;
@@ -98,20 +132,24 @@
 
 .getStartedButton {
     padding: 12px 24px;
-    background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%);
+    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .getStartedButton:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+    box-shadow: 0 8px 16px rgba(139, 92, 246, 0.4);
 }
 
 /* Page Header */
@@ -824,6 +862,25 @@
 @media (max-width: 768px) {
     .insightsPage {
         padding: 16px;
+    }
+
+    .mainCard {
+        padding: 20px;
+    }
+
+    .cardContent {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+
+    .encourageMessage {
+        font-size: 15px;
+    }
+
+    .getStartedButton {
+        width: 100%;
+        justify-content: center;
     }
 
     .cardsRow {

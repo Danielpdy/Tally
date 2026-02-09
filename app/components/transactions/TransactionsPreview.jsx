@@ -16,12 +16,32 @@ const TransactionsPreview = () => {
   const [showStatusDropdown, setShowStatusDropdown] = useState(false)
   const [showSortDropdown, setShowSortDropdown] = useState(false)
   const [showBanner, setShowBanner] = useState(false)
+  const [hoveredSection, setHoveredSection] = useState(null)
   const router = useRouter();
   const pathname = usePathname();
 
   const handleActionClick = () => {
     setShowBanner(true)
   }
+
+  const handleGetStarted = () => {
+    router.push("/LoginSignup");
+  }
+
+  const LockOverlay = ({ message }) => (
+    <div className={styles.lockOverlay}>
+      <div className={styles.lockContent}>
+        <div className={styles.lockIconLarge}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <p className={styles.lockMessage}>{message}</p>
+        <button onClick={handleGetStarted} className={styles.getStartedButtonOverlay}>Get Started</button>
+      </div>
+    </div>
+  )
 
   const transactions = [
     {
@@ -180,19 +200,26 @@ const TransactionsPreview = () => {
                 {/* Left Column: Graph and Transactions */}
                 <div className={styles.leftColumn}>
                     {/* 7-Day Overview Graph Card */}
-                    <div className={styles.graphCard}>
-                        <div className={styles.graphHeader}>
-                            <Image
-                                src="/assets/icons/trendingUpBlue.svg"
-                                width={24}
-                                height={24}
-                                alt="chart"
-                            />
-                            <h3 className={styles.graphTitle}>7-Day Overview</h3>
+                    <div
+                        className={styles.lockedSection}
+                        onMouseEnter={() => setHoveredSection('chart')}
+                        onMouseLeave={() => setHoveredSection(null)}
+                    >
+                        <div className={styles.graphCard}>
+                            <div className={styles.graphHeader}>
+                                <Image
+                                    src="/assets/icons/trendingUpBlue.svg"
+                                    width={24}
+                                    height={24}
+                                    alt="chart"
+                                />
+                                <h3 className={styles.graphTitle}>7-Day Overview</h3>
+                            </div>
+                            <div className={styles.graphWrapper}>
+                                <SevendayOverviewPreview />
+                            </div>
                         </div>
-                        <div className={styles.graphWrapper}>
-                            <SevendayOverviewPreview />
-                        </div>
+                        {hoveredSection === 'chart' && <LockOverlay message="Sign in to view detailed charts" />}
                     </div>
 
                     {/* Search Bar */}
@@ -341,7 +368,7 @@ const TransactionsPreview = () => {
                     {/* Transactions List */}
                     <div className={styles.transactionsList}>
                         {transactions.map((transaction) => (
-                            <div key={transaction.id} className={styles.transactionCard}>
+                            <div key={transaction.id} className={styles.transactionCard} onClick={handleActionClick}>
                                 <div className={styles.transactionLeft}>
                                     <div className={styles.transactionIcon}>
                                         <Image
@@ -377,7 +404,12 @@ const TransactionsPreview = () => {
                 {/* Right Column: Balance Card and Quick Actions Card */}
                 <div className={styles.rightColumn}>
                     {/* Net Balance Card */}
-                    <div className={styles.balanceCard}>
+                    <div
+                        className={styles.lockedSection}
+                        onMouseEnter={() => setHoveredSection('balance')}
+                        onMouseLeave={() => setHoveredSection(null)}
+                    >
+                        <div className={styles.balanceCard}>
                         <p className={styles.balanceLabel}>Net Balance</p>
                         <h2 className={styles.balanceAmount}>$2,489.61</h2>
                         <div className={styles.cashFlowIndicator}>
@@ -418,52 +450,39 @@ const TransactionsPreview = () => {
                                 <span className={styles.totalNumber}>8</span>
                             </div>
                         </div>
+                        </div>
+                        {hoveredSection === 'balance' && <LockOverlay message="Sign in to view balance details" />}
                     </div>
 
                     {/* Quick Actions Card */}
-                    <div className={styles.quickActionsCard}>
-                        <div className={styles.quickActionsHeader}>
-                            <h4 className={styles.quickActionsTitle}>Quick Actions</h4>
-                            <div className={styles.sparkleIcon}>
-                                <Image
-                                    src="/assets/icons/sparkleIconPurple.svg"
-                                    width={20}
-                                    height={20}
-                                    alt="AI"
-                                />
-                            </div>
-                        </div>
-
+                    <div
+                        className={styles.lockedSection}
+                        onMouseEnter={() => setHoveredSection('quickActions')}
+                        onMouseLeave={() => setHoveredSection(null)}
+                    >
+                        <div className={styles.quickActionsCard}>
+                        <h3 className={styles.quickActionsTitle}>Quick Actions</h3>
                         <div className={styles.actionsList}>
                             <button className={styles.actionButton} onClick={handleActionClick}>
                                 <div className={styles.actionIconPurple}>
                                     <span>+</span>
                                 </div>
-                                <span>Add Transaction</span>
+                                Add Transaction
                             </button>
-
                             <button className={styles.actionButton} onClick={handleActionClick}>
-                                <div className={styles.actionIconBlue}>↓</div>
-                                <span>Export CSV</span>
-                            </button>
-
-                            <button className={styles.actionButton} onClick={handleActionClick}>
-                                <div className={styles.actionIconOrange}>↑</div>
-                                <span>Import CSV</span>
+                                <div className={styles.actionIconBlue}>
+                                    <Image
+                                        src='/assets/icons/clipboardIcon.svg'
+                                        width={20}
+                                        height={20}
+                                        alt='manage bills'
+                                    />
+                                </div>
+                                Manage Bills & Budget
                             </button>
                         </div>
-
-                        <button className={styles.unlockButton}
-                            onClick={handleActionClick}
-                        >
-                            <Image
-                                src="/assets/icons/sparkleIconPurple.svg"
-                                width={20}
-                                height={20}
-                                alt="Unlock"
-                            />
-                            Unlock Full Access
-                        </button>
+                        </div>
+                        {hoveredSection === 'quickActions' && <LockOverlay message="Sign in to use quick actions" />}
                     </div>
                 </div>
             </section>
@@ -476,7 +495,13 @@ const TransactionsPreview = () => {
                 <div className={styles.bannerOverlay} onClick={() => setShowBanner(false)}></div>
                 <div className={styles.signupBanner}>
                     <button className={styles.closeBanner} onClick={() => setShowBanner(false)}>×</button>
-                    <div className={styles.bannerIcon}>🎉</div>
+                    <div className={styles.bannerIcon}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="m10 17 5-5-5-5"/>
+                            <path d="M15 12H3"/>
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                        </svg>
+                    </div>
                     <h4 className={styles.bannerTitle}>Ready to unlock full features?</h4>
                     <p className={styles.bannerText}>Sign up free to edit transactions, export data, and unlock powerful insights!</p>
                     <div className={styles.bannerButtons}>

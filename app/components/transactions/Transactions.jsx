@@ -72,11 +72,22 @@ const Transactions = () => {
 
 
     const { globalEarnings, globalSpendings, globalNet } = useMemo(() => {
-        const income = transactions.reduce((sum, t) => (
+        // Filter transactions for current month only
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+
+        const currentMonthTransactions = transactions.filter(t => {
+            const [year, month, day] = t.date.split('-').map(Number);
+            const transactionDate = new Date(year, month - 1, day);
+            return transactionDate >= startOfMonth && transactionDate <= endOfMonth;
+        });
+
+        const income = currentMonthTransactions.reduce((sum, t) => (
             t.type === "Income" ? sum + t.amount : sum
         ), 0);
 
-         const expense = transactions.reduce((sum, t) => (
+         const expense = currentMonthTransactions.reduce((sum, t) => (
             t.type === "Expense" ? sum + t.amount : sum
         ), 0);
 
