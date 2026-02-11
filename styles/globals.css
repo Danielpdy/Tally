@@ -466,51 +466,20 @@ html, body {
 
 @media (max-width: 768px) {
   .navbar {
-    padding: 20px 20px;
+    padding: 16px 20px;
   }
 
-  .bigTitles{
-    font-size: 2.5rem;
-    max-width: 300px;
-
-  }
-  .getStartedBtn{
+  .getStartedBtn {
     display: none;
   }
-  .regularText{
-    font-size: 14px;
-    text-align: center;
+
+  .homePageimg {
+    width: 100%;
+    max-width: 500px;
   }
 
-  .homeContent{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: start;
-    gap: 30px;
-  }
-
-  .homeSection-main{
-    flex-wrap: wrap;
-    row-gap: 40px;
-  }
-
-  .homePageimg{
-    width: 600px;
-  }
-
-  .subTitles{
+  .subTitles {
     font-size: 1rem;
-  }
-
-  .darkButton{
-    padding: 8px 18px;
-    font-size: 12px;
-  }
-
-  .whiteButton{
-    padding: 8px 18px;
-    font-size: 12px;
   }
 }
 
@@ -551,265 +520,742 @@ html, body {
   }
 }
 
-/* ==================== MAIN CONTAINER ==================== */
+/* ==================== HERO COLLAGE ==================== */
 
-.floating-cards-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.25rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-}
-
-.floating-cards-wrapper {
-  max-width: 36rem; /* 576px */
-  width: 100%;
-}
-
-/* ==================== CARD BASE STYLES ==================== */
-
-.card {
-  background-color: white;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  width: 460px;
-  margin-bottom: 1rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
-              0 8px 10px -6px rgba(0, 0, 0, 0.1);
+.heroCollage {
   position: relative;
+  width: 100%;
+  max-width: 580px;
+  height: 560px;
 }
 
-/* ==================== FLOAT ANIMATIONS WITH DELAYS ==================== */
-
-.card.float-1 {
-  animation: float 3s ease-in-out infinite;
-  animation-delay: 0s;
+.collageCard {
+  position: absolute;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px -8px rgba(139, 92, 246, 0.15),
+              0 4px 12px -4px rgba(0, 0, 0, 0.06);
+  padding: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(139, 92, 246, 0.08);
 }
 
-.card.float-2 {
-  animation: float 3s ease-in-out infinite;
-  animation-delay: 0.5s;
+.collageCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px -10px rgba(139, 92, 246, 0.2),
+              0 8px 20px -6px rgba(0, 0, 0, 0.1);
 }
 
-.card.float-3 {
-  animation: float 3s ease-in-out infinite;
-  animation-delay: 1s;
-}
-
-/* ==================== HOVER EFFECTS ==================== */
-
-.card:hover {
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-}
-
-/* ==================== CARD HEADER ==================== */
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.card-label {
-  color: #94a3b8; /* slate-400 */
-  font-size: 0.75rem; /* 12px */
-}
-
-/* ==================== DOTS ==================== */
-
-.dot {
-  width: 1.5rem; /* 24px */
-  height: 1.5rem; /* 24px */
-  border-radius: 9999px;
-}
-
-.dot-purple {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.dot-orange {
-  background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
-}
-
-/* ==================== BALANCE TEXT ==================== */
-
-.balance-text {
-  font-size: 2.25rem; /* 36px */
-  font-weight: 700;
-  color: #7B3FE4;
-  background-clip: text;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
-}
-
-/* ==================== FLOW TEXT ==================== */
-
-.flow-text {
-  font-size: 1.875rem; /* 30px */
-  font-weight: 700;
-  color: #0f172a; /* slate-900 */
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
-}
-
-.percentage {
-  color: #22c55e; /* green-500 */
-  font-size: 0.875rem; /* 14px */
-  margin-left: 0.5rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
-}
-
-/* ==================== PROGRESS BARS CONTAINER ==================== */
-
-.bars-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.bar-row {
+/* Health Score Card */
+.healthCard {
+  width: 280px;
+  top: 0;
+  left: 0;
+  z-index: 3;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 14px;
 }
 
-/* ==================== BAR DOTS ==================== */
-
-.bar-dot {
-  width: 0.625rem; /* 10px */
-  height: 0.625rem; /* 10px */
-  border-radius: 9999px;
+.healthScoreCircle {
+  position: relative;
+  width: 70px;
+  height: 70px;
   flex-shrink: 0;
 }
 
-.bar-dot-purple {
-  background: #667eea;
+.scoreRing {
+  width: 100%;
+  height: 100%;
 }
 
-.bar-dot-cyan {
-  background: #06b6d4;
+.scoreValue {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  font-size: 20px;
+  font-weight: 700;
+  color: #8B5CF6;
 }
 
-.bar-dot-orange {
-  background: #f59e0b;
+.scoreLabel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 60%);
+  font-size: 8px;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
 }
 
-/* ==================== BAR BACKGROUNDS ==================== */
+.healthInfo h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a0b2e;
+  margin: 0 0 4px 0;
+}
 
-.bar-bg {
-  flex: 1 1 0%;
-  height: 0.625rem; /* 10px */
-  background-color: #f1f5f9; /* slate-100 */
-  border-radius: 9999px;
+.healthInfo p {
+  font-size: 11px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Balance Card */
+.balanceCard {
+  width: 180px;
+  top: 10px;
+  right: 20px;
+  z-index: 2;
+}
+
+.balanceHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.balanceHeader span {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.balanceDot {
+  width: 8px;
+  height: 8px;
+  background: #8B5CF6;
+  border-radius: 50%;
+}
+
+.balanceAmount {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a0b2e;
+}
+
+.balanceUpdated {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+/* Safe to Spend Card */
+.safeSpendCard {
+  width: 160px;
+  right: 0;
+  top: 130px;
+  z-index: 4;
+  text-align: center;
+}
+
+.safeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.safeHeader span:first-child {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.weeklyBadge {
+  font-size: 9px;
+  background: #F3E8FF;
+  color: #8B5CF6;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.safeCircle {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 8px;
+}
+
+.safeRing {
+  width: 100%;
+  height: 100%;
+}
+
+.safePercent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a0b2e;
+}
+
+.safeAmount {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a0b2e;
+}
+
+.safeStatus {
+  font-size: 10px;
+  color: #00D4FF;
+  margin-top: 4px;
+}
+
+/* Monthly Summary Card */
+.summaryCard {
+  width: 280px;
+  bottom: 0;
+  left: 20px;
+  z-index: 2;
+}
+
+.summaryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.summaryHeader span:first-child {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a0b2e;
+}
+
+.monthBadge {
+  font-size: 9px;
+  background: #F1F5F9;
+  color: #64748b;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.summaryRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.summaryIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.incomeIcon {
+  background: #D1FAE5;
+}
+
+.expenseIcon {
+  background: #FEE2E2;
+}
+
+.summaryText {
+  display: flex;
+  flex-direction: column;
+}
+
+.summaryLabel {
+  font-size: 9px;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.3px;
+}
+
+.summaryText span:last-child {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.summaryText strong {
+  color: #1a0b2e;
+}
+
+/* Financial Goals Card */
+.goalsCard {
+  width: 200px;
+  bottom: 110px;
+  right: 0;
+  z-index: 3;
+}
+
+.goalsHeader {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a0b2e;
+  margin-bottom: 12px;
+}
+
+.goalsRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.goalCircle {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+}
+
+.goalCircle svg {
+  width: 100%;
+  height: 100%;
+}
+
+.goalPercent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: 700;
+  color: #8B5CF6;
+}
+
+.goalInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.goalName {
+  font-size: 11px;
+  font-weight: 600;
+  color: #1a0b2e;
+}
+
+.goalAmount {
+  font-size: 10px;
+  color: #64748b;
+}
+
+/* Cash Flow Timeline Chart Card */
+.chartCard {
+  width: 300px;
+  top: 150px;
+  left: 0;
+  z-index: 2;
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.chartTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a0b2e;
+}
+
+.chartBadge {
+  font-size: 9px;
+  background: #F1F5F9;
+  color: #64748b;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.chartArea {
+  background: #fafbfc;
+  border-radius: 8px;
+  padding: 12px 8px;
+  margin-bottom: 10px;
+}
+
+.lineChart {
+  width: 100%;
+  height: auto;
+}
+
+.chartLegend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: #64748b;
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* ==================== FEATURES SECTION ==================== */
+
+.featuresSection {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 40px;
+}
+
+.featuresHeader {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.featuresTitle {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #1a0b2e;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.featuresSubtitle {
+  font-size: 16px;
+  color: #64748b;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto auto;
+  gap: 24px;
+}
+
+.featureCard {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px -8px rgba(139, 92, 246, 0.15);
+}
+
+.featureCardLarge {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.featureCardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a0b2e;
+  margin-bottom: 8px;
+}
+
+.featureCardDesc {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+/* CSV Import Visual */
+.featureVisual {
+  margin-top: auto;
+}
+
+.csvVisual {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #FAF5FF 0%, #F5F3FF 100%);
+  border-radius: 12px;
+  min-height: 140px;
+}
+
+.csvIconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.csvIcon {
+  width: 64px;
+  height: 64px;
+}
+
+.csvBars {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 100px;
+}
+
+.csvBar {
+  width: 24px;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.3s ease;
+}
+
+/* Gauge Visual */
+.gaugeVisual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #FAF5FF 0%, #F5F3FF 100%);
+  border-radius: 12px;
+}
+
+.gaugeChart {
+  width: 160px;
+  height: 100px;
+}
+
+.gaugeLabels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.gaugeScore {
+  font-size: 24px;
+  font-weight: 700;
+  color: #8B5CF6;
+}
+
+/* Budget Visual */
+.budgetVisual {
+  padding: 20px;
+  background: linear-gradient(135deg, #FAF5FF 0%, #F5F3FF 100%);
+  border-radius: 12px;
+}
+
+.budgetStats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.budgetStat {
+  display: flex;
+  flex-direction: column;
+}
+
+.budgetStatLabel {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.budgetStatValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a0b2e;
+}
+
+.budgetRemaining {
+  color: #00D4FF;
+}
+
+.budgetProgress {
+  margin-bottom: 24px;
+}
+
+.budgetProgressLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.budgetProgressBar {
+  height: 8px;
+  background: #E9D5FF;
+  border-radius: 4px;
   overflow: hidden;
 }
 
-/* ==================== BAR FILLS ==================== */
-
-.bar-fill {
+.budgetProgressFill {
   height: 100%;
-  border-radius: 9999px;
-  animation: fillBar 2s ease-out forwards;
+  background: linear-gradient(90deg, #8B5CF6 0%, #00D4FF 50%, #FB923C 100%);
+  border-radius: 4px;
+  transition: width 0.5s ease;
 }
 
-.bar-fill-purple {
-  background: linear-gradient(90deg, #667eea 0%, #06b6d4 100%);
-  width: 70%;
+.budgetChart {
+  margin-top: 16px;
 }
 
-.bar-fill-cyan {
-  background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 100%);
-  width: 45%;
+.budgetChartBars {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 80px;
+  gap: 12px;
 }
 
-.bar-fill-orange {
-  background: linear-gradient(90deg, #f59e0b 0%, #ef4444 100%);
-  width: 28%;
+.budgetChartBar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
 }
 
-/* ==================== RESPONSIVE ==================== */
-
-@media (max-width: 640px) {
-  .homeSection-main {
-    padding: 40px 20px;
-    gap: 40px;
-  }
-
-  .homeContent {
-    gap: 24px;
-    align-items: center;
-    text-align: center;
-  }
-
-  .cashflowSpan {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
-
-  .cashflowSpan img {
-    width: 12px;
-    height: 12px;
-  }
-
-  .bigTitles {
-    font-size: 2.5rem;
-    line-height: 1.1;
-  }
-
-  .regularText {
-    font-size: 15px;
-    max-width: 90%;
-  }
-
-  .googleAndGithub {
-    flex-direction: column;
-    width: 100%;
-    gap: 12px;
-  }
-
-  .darkButton,
-  .whiteButton {
-    width: 100%;
-    padding: 12px 20px;
-    font-size: 14px;
-    justify-content: center;
-  }
-
-  .floating-cards-wrapper {
-    max-width: 100%;
-    padding: 0 20px;
-  }
-
-  .floating-cards-container {
-    padding: 1rem;
-  }
-
-  .card {
-    padding: 1.25rem;
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 0.75rem;
-  }
-
-  .balance-text {
-    font-size: 2rem;
-  }
-
-  .flow-text {
-    font-size: 1.5rem;
-  }
-
-  .card-label {
-    font-size: 0.7rem;
-  }
-
-  .percentage {
-    font-size: 0.8rem;
-  }
+.budgetChartBar .barFill {
+  width: 100%;
+  max-width: 40px;
+  background: #8B5CF6;
+  border-radius: 4px 4px 0 0;
+  margin-top: auto;
+  transition: height 0.3s ease;
 }
+
+.budgetChartBar span {
+  font-size: 10px;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+/* Bills Visual */
+.billsVisual {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.billItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.billItem:hover {
+  background: #f1f5f9;
+}
+
+.billIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.billInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.billName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a0b2e;
+}
+
+.billDate {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.billAmount {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a0b2e;
+}
+
+/* Goals Visual */
+.goalsVisual {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, #FAF5FF 0%, #F5F3FF 100%);
+  border-radius: 12px;
+}
+
+.goalProgressItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.goalProgressCircle {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+}
+
+.goalProgressCircle svg {
+  width: 100%;
+  height: 100%;
+}
+
+.goalProgressPercent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a0b2e;
+}
+
+.goalProgressInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.goalProgressName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a0b2e;
+}
+
+.goalProgressAmount {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* ==================== UTILITY CLASSES ==================== */
 
 .smallerText{
   font-size: 14px;
@@ -848,96 +1294,298 @@ html, body {
   mask-size: 100% 100%;
 }
 
-/*--Mobile Navigation --*/
-@media (max-width: 640px){
-  .bigTitles{
-    font-size: 2.5rem;
+/* ==================== RESPONSIVE BREAKPOINTS ==================== */
+
+/* Large screens (1100px and below) - Scale down collage */
+@media (max-width: 1100px) {
+  .heroCollage {
+    max-width: 450px;
+    height: 500px;
   }
 
-  .smallText{
-    font-size: 14px;
-    max-width: 300px;
+  .healthCard {
+    width: 240px;
   }
 
-  .whiteButton{
-    padding: 6px 8px;
-    font-size: 12px;
+  .balanceCard {
+    width: 160px;
   }
 
-  .smallerText{
-    font-size: 12px;
-    width: 300px;
-    text-align: center;
+  .safeSpendCard {
+    width: 140px;
+    top: 110px;
   }
 
-  .mainMessageBoxBtns{
-    display: flex;
-    flex-wrap: wrap;
+  .summaryCard {
+    width: 240px;
+    bottom: 0;
+    left: 10px;
   }
 
-  .footerBox{
-    width: 100%;
-    padding: 30px 20px;
-    justify-content: center;
-    flex-wrap: wrap;
+  .goalsCard {
+    width: 170px;
+    right: 0;
+    bottom: 100px;
+  }
+
+  .chartCard {
+    width: 250px;
+    top: 140px;
+  }
+
+  .homeSection-main {
+    gap: 40px;
+    padding: 60px 40px;
+  }
+
+  .bigTitles {
+    font-size: 3.2rem;
+  }
+
+  /* Features Section */
+  .featuresSection {
+    padding: 60px 30px;
+  }
+
+  .featuresTitle {
+    font-size: 2.4rem;
+  }
+
+  .featuresGrid {
     gap: 20px;
-    text-align: center;
   }
 
-  .footerText{
-    font-size: 10px;
-  }
-
-  .card {
-    width: 100%;
-    max-width: 100%;
+  .featureCard {
+    padding: 24px;
   }
 }
 
-/* Extra small screens (480px and below) */
-@media (max-width: 480px) {
+/* Medium screens (900px and below) - Hide collage, center content */
+@media (max-width: 900px) {
+  .heroCollage {
+    display: none;
+  }
+
   .homeSection-main {
-    padding: 30px 16px;
+    justify-content: center;
+    padding: 50px 30px;
+  }
+
+  .homeContent {
+    align-items: center;
+    text-align: center;
+    max-width: 600px;
+  }
+
+  .bigTitles {
+    font-size: 3rem;
+    max-width: 100%;
+  }
+
+  .regularText {
+    text-align: center;
+  }
+
+  .googleAndGithub {
+    justify-content: center;
+  }
+
+  /* Features Section */
+  .featuresSection {
+    padding: 50px 24px;
+  }
+
+  .featuresHeader {
+    margin-bottom: 40px;
+  }
+
+  .featuresTitle {
+    font-size: 2.2rem;
+  }
+
+  .featuresSubtitle {
+    font-size: 15px;
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .featureCardLarge {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .budgetStats {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+}
+
+/* Tablet screens (768px and below) */
+@media (max-width: 768px) {
+  .gradient {
+    padding-top: 60px;
+  }
+
+  .homeSection-main {
+    padding: 40px 24px;
     gap: 30px;
   }
 
   .homeContent {
-    gap: 20px;
-  }
-
-  .cashflowSpan {
-    padding: 5px 8px;
-    font-size: 12px;
-  }
-
-  .cashflowSpan img {
-    width: 11px;
-    height: 11px;
+    gap: 28px;
   }
 
   .bigTitles {
+    font-size: 2.6rem;
+    line-height: 1.1;
+  }
+
+  .regularText {
+    font-size: 15px;
+    max-width: 480px;
+  }
+
+  .smallText {
+    font-size: 14px;
+    max-width: 400px;
+  }
+
+  .googleAndGithub {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .darkButton,
+  .whiteButton {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+
+  .footerBox {
+    padding: 40px 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .footerLabels {
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .footerText {
+    font-size: 12px;
+  }
+
+  /* Features Section */
+  .featuresSection {
+    padding: 40px 20px;
+  }
+
+  .featuresHeader {
+    margin-bottom: 32px;
+  }
+
+  .featuresTitle {
     font-size: 2rem;
+  }
+
+  .featuresSubtitle {
+    font-size: 14px;
+  }
+
+  .featureCard {
+    padding: 20px;
+  }
+
+  .featureCardTitle {
+    font-size: 1.1rem;
+  }
+
+  .featureCardDesc {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .budgetStatValue {
+    font-size: 20px;
+  }
+
+  .csvIcon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .csvBar {
+    width: 20px;
+  }
+}
+
+/* Small screens (640px and below) - Mobile landscape / large phones */
+@media (max-width: 640px) {
+  .gradient {
+    padding-top: 50px;
+  }
+
+  .homeSection-main {
+    padding: 36px 20px;
+    gap: 24px;
+  }
+
+  .homeContent {
+    gap: 24px;
+  }
+
+  .cashflowSpan {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .cashflowSpan img {
+    width: 12px;
+    height: 12px;
+  }
+
+  .bigTitles {
+    font-size: 2.2rem;
     line-height: 1.15;
   }
 
   .regularText {
     font-size: 14px;
-    max-width: 95%;
+    max-width: 90%;
   }
 
   .smallText {
+    font-size: 13px;
+    max-width: 320px;
+  }
+
+  .smallerText {
     font-size: 12px;
-    max-width: 280px;
+    max-width: 300px;
+    text-align: center;
   }
 
   .googleAndGithub {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
     gap: 10px;
   }
 
   .darkButton,
   .whiteButton {
-    padding: 10px 16px;
-    font-size: 13px;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
+    justify-content: center;
   }
 
   .darkButton img,
@@ -946,55 +1594,150 @@ html, body {
     height: 20px;
   }
 
-  .floating-cards-wrapper {
-    padding: 0 16px;
-  }
-
-  .card {
-    padding: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .balance-text {
-    font-size: 1.75rem;
-  }
-
-  .flow-text {
-    font-size: 1.35rem;
-  }
-
-  .dot {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-
-  .card-label {
-    font-size: 0.65rem;
-  }
-
-  .percentage {
-    font-size: 0.75rem;
-  }
-
-  .bar-row {
-    gap: 0.5rem;
-  }
-}
-
-/* Very small screens (320px and below) */
-@media (max-width: 360px) {
-  .homeSection-main {
-    padding: 24px 12px;
-    gap: 24px;
-  }
-
-  .homeContent {
+  .footerBox {
+    padding: 30px 20px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 16px;
   }
 
-  .cashflowSpan {
-    padding: 4px 6px;
+  .footerLabels {
+    gap: 20px;
+  }
+
+  .footerText {
     font-size: 11px;
+  }
+
+  /* Features Section */
+  .featuresSection {
+    padding: 36px 16px;
+  }
+
+  .featuresHeader {
+    margin-bottom: 28px;
+  }
+
+  .featuresTitle {
+    font-size: 1.75rem;
+  }
+
+  .featuresSubtitle {
+    font-size: 13px;
+  }
+
+  .featuresGrid {
+    gap: 16px;
+  }
+
+  .featureCard {
+    padding: 18px;
+  }
+
+  .featureCardTitle {
+    font-size: 1rem;
+  }
+
+  .featureCardDesc {
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+
+  .csvVisual {
+    flex-direction: column;
+    align-items: center;
+    min-height: 160px;
+    padding: 16px;
+  }
+
+  .csvBars {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .gaugeChart {
+    width: 140px;
+    height: 90px;
+  }
+
+  .gaugeScore {
+    font-size: 20px;
+  }
+
+  .budgetStatValue {
+    font-size: 18px;
+  }
+
+  .budgetChartBars {
+    height: 70px;
+    gap: 8px;
+  }
+
+  .billItem {
+    padding: 10px;
+  }
+
+  .billIcon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .billName {
+    font-size: 12px;
+  }
+
+  .billAmount {
+    font-size: 13px;
+  }
+
+  /* Goals Visual */
+  .goalsVisual {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .goalProgressItem {
+    padding: 8px;
+    gap: 12px;
+  }
+
+  .goalProgressCircle {
+    width: 44px;
+    height: 44px;
+  }
+
+  .goalProgressPercent {
+    font-size: 10px;
+  }
+
+  .goalProgressName {
+    font-size: 12px;
+  }
+
+  .goalProgressAmount {
+    font-size: 10px;
+  }
+}
+
+/* Extra small screens (480px and below) - Standard phones */
+@media (max-width: 480px) {
+  .gradient {
+    padding-top: 40px;
+  }
+
+  .homeSection-main {
+    padding: 30px 16px;
+    gap: 20px;
+  }
+
+  .homeContent {
+    gap: 20px;
+  }
+
+  .cashflowSpan {
+    padding: 5px 8px;
+    font-size: 10px;
   }
 
   .cashflowSpan img {
@@ -1003,27 +1746,34 @@ html, body {
   }
 
   .bigTitles {
-    font-size: 1.75rem;
+    font-size: 1.9rem;
     line-height: 1.2;
   }
 
   .regularText {
     font-size: 13px;
+    max-width: 95%;
   }
 
   .smallText {
+    font-size: 12px;
+    max-width: 280px;
+  }
+
+  .smallerText {
     font-size: 11px;
     max-width: 260px;
   }
 
   .googleAndGithub {
+    max-width: 280px;
     gap: 8px;
   }
 
   .darkButton,
   .whiteButton {
-    padding: 9px 14px;
-    font-size: 12px;
+    padding: 11px 18px;
+    font-size: 13px;
   }
 
   .darkButton img,
@@ -1032,48 +1782,689 @@ html, body {
     height: 18px;
   }
 
-  .floating-cards-wrapper {
-    padding: 0 12px;
+  .footerBox {
+    padding: 24px 16px;
+    gap: 14px;
   }
 
-  .card {
-    padding: 0.875rem;
-    margin-bottom: 0.5rem;
+  .footerLabels {
+    gap: 16px;
   }
 
-  .balance-text {
+  .footerText {
+    font-size: 10px;
+  }
+
+  /* Features Section */
+  .featuresSection {
+    padding: 30px 14px;
+  }
+
+  .featuresHeader {
+    margin-bottom: 24px;
+  }
+
+  .featuresTitle {
     font-size: 1.5rem;
   }
 
-  .flow-text {
+  .featuresSubtitle {
+    font-size: 12px;
+  }
+
+  .featuresGrid {
+    gap: 14px;
+  }
+
+  .featureCard {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .featureCardTitle {
+    font-size: 0.95rem;
+  }
+
+  .featureCardDesc {
+    font-size: 11px;
+    margin-bottom: 14px;
+  }
+
+  .csvIcon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .csvBar {
+    width: 16px;
+  }
+
+  .csvBars {
+    height: 80px;
+  }
+
+  .gaugeChart {
+    width: 120px;
+    height: 80px;
+  }
+
+  .gaugeLabels {
+    font-size: 10px;
+  }
+
+  .gaugeScore {
+    font-size: 18px;
+  }
+
+  .budgetStats {
+    gap: 12px;
+  }
+
+  .budgetStatLabel {
+    font-size: 11px;
+  }
+
+  .budgetStatValue {
+    font-size: 16px;
+  }
+
+  .budgetProgressLabel {
+    font-size: 11px;
+  }
+
+  .budgetChartBars {
+    height: 60px;
+  }
+
+  .budgetChartBar span {
+    font-size: 9px;
+  }
+
+  .billIcon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .billIcon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .billName {
+    font-size: 11px;
+  }
+
+  .billDate {
+    font-size: 10px;
+  }
+
+  .billAmount {
+    font-size: 12px;
+  }
+
+  /* Goals Visual */
+  .goalsVisual {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .goalProgressItem {
+    padding: 8px;
+    gap: 10px;
+  }
+
+  .goalProgressCircle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .goalProgressPercent {
+    font-size: 9px;
+  }
+
+  .goalProgressName {
+    font-size: 11px;
+  }
+
+  .goalProgressAmount {
+    font-size: 9px;
+  }
+}
+
+/* Small phones (400px and below) */
+@media (max-width: 400px) {
+  .gradient {
+    padding-top: 36px;
+  }
+
+  .homeSection-main {
+    padding: 26px 14px;
+    gap: 18px;
+  }
+
+  .homeContent {
+    gap: 18px;
+  }
+
+  .cashflowSpan {
+    padding: 4px 7px;
+    font-size: 9px;
+  }
+
+  .cashflowSpan img {
+    width: 9px;
+    height: 9px;
+  }
+
+  .bigTitles {
+    font-size: 1.7rem;
+    line-height: 1.2;
+  }
+
+  .regularText {
+    font-size: 12px;
+  }
+
+  .smallText {
+    font-size: 11px;
+    max-width: 260px;
+  }
+
+  .smallerText {
+    font-size: 10px;
+    max-width: 240px;
+  }
+
+  .googleAndGithub {
+    max-width: 260px;
+    gap: 8px;
+  }
+
+  .darkButton,
+  .whiteButton {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+
+  .darkButton img,
+  .whiteButton img {
+    width: 16px;
+    height: 16px;
+  }
+
+  .footerBox {
+    padding: 20px 14px;
+    gap: 12px;
+  }
+
+  .footerLabels {
+    gap: 14px;
+  }
+
+  .footerText {
+    font-size: 9px;
+  }
+
+  /* Features Section */
+  .featuresSection {
+    padding: 26px 12px;
+  }
+
+  .featuresTitle {
+    font-size: 1.35rem;
+  }
+
+  .featuresSubtitle {
+    font-size: 11px;
+  }
+
+  .featuresGrid {
+    gap: 12px;
+  }
+
+  .featureCard {
+    padding: 14px;
+  }
+
+  .featureCardTitle {
+    font-size: 0.9rem;
+  }
+
+  .featureCardDesc {
+    font-size: 10px;
+    margin-bottom: 12px;
+  }
+
+  .csvVisual,
+  .gaugeVisual,
+  .budgetVisual,
+  .goalsVisual {
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  .budgetStatValue {
+    font-size: 14px;
+  }
+
+  .billItem {
+    padding: 8px;
+    gap: 10px;
+  }
+
+  /* Goals Visual */
+  .goalProgressItem {
+    padding: 6px;
+    gap: 8px;
+  }
+
+  .goalProgressCircle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .goalProgressPercent {
+    font-size: 8px;
+  }
+
+  .goalProgressName {
+    font-size: 10px;
+  }
+
+  .goalProgressAmount {
+    font-size: 8px;
+  }
+}
+
+/* Very small phones (360px and below) */
+@media (max-width: 360px) {
+  .gradient {
+    padding-top: 32px;
+  }
+
+  .homeSection-main {
+    padding: 24px 12px;
+    gap: 16px;
+  }
+
+  .homeContent {
+    gap: 16px;
+  }
+
+  .cashflowSpan {
+    padding: 4px 6px;
+    font-size: 9px;
+  }
+
+  .cashflowSpan img {
+    width: 8px;
+    height: 8px;
+  }
+
+  .bigTitles {
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+
+  .regularText {
+    font-size: 11px;
+  }
+
+  .smallText {
+    font-size: 10px;
+    max-width: 240px;
+  }
+
+  .smallerText {
+    font-size: 9px;
+    max-width: 220px;
+  }
+
+  .googleAndGithub {
+    max-width: 240px;
+    gap: 6px;
+  }
+
+  .darkButton,
+  .whiteButton {
+    padding: 9px 14px;
+    font-size: 11px;
+  }
+
+  .darkButton img,
+  .whiteButton img {
+    width: 15px;
+    height: 15px;
+  }
+
+  .footerBox {
+    padding: 18px 12px;
+    gap: 10px;
+  }
+
+  .footerLabels {
+    gap: 12px;
+  }
+
+  .footerText {
+    font-size: 8px;
+  }
+
+  /* Features Section */
+  .featuresSection {
+    padding: 22px 10px;
+  }
+
+  .featuresHeader {
+    margin-bottom: 20px;
+  }
+
+  .featuresTitle {
     font-size: 1.25rem;
   }
 
-  .dot {
-    width: 1rem;
-    height: 1rem;
+  .featuresSubtitle {
+    font-size: 10px;
   }
 
-  .card-label {
-    font-size: 0.625rem;
+  .featuresGrid {
+    gap: 10px;
   }
 
-  .percentage {
-    font-size: 0.7rem;
-    margin-left: 0.35rem;
+  .featureCard {
+    padding: 12px;
+    border-radius: 10px;
   }
 
-  .bar-row {
-    gap: 0.5rem;
+  .featureCardTitle {
+    font-size: 0.85rem;
   }
 
-  .bar-dot {
-    width: 0.5rem;
-    height: 0.5rem;
+  .featureCardDesc {
+    font-size: 9px;
+    margin-bottom: 10px;
+    line-height: 1.4;
   }
 
-  .bar-bg {
-    height: 0.5rem;
+  .csvIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .csvBar {
+    width: 14px;
+  }
+
+  .csvBars {
+    height: 60px;
+    gap: 6px;
+  }
+
+  .gaugeChart {
+    width: 100px;
+    height: 70px;
+  }
+
+  .gaugeLabels {
+    font-size: 9px;
+  }
+
+  .gaugeScore {
+    font-size: 16px;
+  }
+
+  .budgetStatLabel {
+    font-size: 10px;
+  }
+
+  .budgetStatValue {
+    font-size: 13px;
+  }
+
+  .budgetChartBars {
+    height: 50px;
+  }
+
+  .budgetChartBar span {
+    font-size: 8px;
+  }
+
+  .billIcon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .billName {
+    font-size: 10px;
+  }
+
+  .billDate {
+    font-size: 9px;
+  }
+
+  .billAmount {
+    font-size: 11px;
+  }
+}
+
+/* Minimum width phones (320px and below) */
+@media (max-width: 320px) {
+  .gradient {
+    padding-top: 28px;
+  }
+
+  .homeSection-main {
+    padding: 20px 10px;
+    gap: 14px;
+  }
+
+  .homeContent {
+    gap: 14px;
+  }
+
+  .cashflowSpan {
+    padding: 3px 5px;
+    font-size: 8px;
+  }
+
+  .cashflowSpan img {
+    width: 7px;
+    height: 7px;
+  }
+
+  .bigTitles {
+    font-size: 1.35rem;
+    line-height: 1.3;
+  }
+
+  .regularText {
+    font-size: 10px;
+  }
+
+  .smallText {
+    font-size: 9px;
+    max-width: 220px;
+  }
+
+  .smallerText {
+    font-size: 8px;
+    max-width: 200px;
+  }
+
+  .googleAndGithub {
+    max-width: 220px;
+    gap: 6px;
+  }
+
+  .darkButton,
+  .whiteButton {
+    padding: 8px 12px;
+    font-size: 10px;
+    border-radius: 6px;
+  }
+
+  .darkButton img,
+  .whiteButton img {
+    width: 14px;
+    height: 14px;
+  }
+
+  .footerBox {
+    padding: 16px 10px;
+    gap: 8px;
+  }
+
+  .footerLabels {
+    gap: 10px;
+  }
+
+  .footerText {
+    font-size: 7px;
+  }
+
+  .navbar {
+    padding: 12px 10px;
+  }
+
+  .tallyMainTitle {
+    font-size: 18px;
+  }
+
+  .navLink {
+    font-size: 14px;
+    gap: 6px;
+  }
+
+  /* Features Section */
+  .featuresSection {
+    padding: 18px 8px;
+  }
+
+  .featuresHeader {
+    margin-bottom: 16px;
+  }
+
+  .featuresTitle {
+    font-size: 1.1rem;
+  }
+
+  .featuresSubtitle {
+    font-size: 9px;
+  }
+
+  .featuresGrid {
+    gap: 8px;
+  }
+
+  .featureCard {
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .featureCardTitle {
+    font-size: 0.8rem;
+  }
+
+  .featureCardDesc {
+    font-size: 8px;
+    margin-bottom: 8px;
+  }
+
+  .csvVisual,
+  .gaugeVisual,
+  .budgetVisual {
+    padding: 10px;
+    border-radius: 8px;
+    min-height: auto;
+  }
+
+  .csvIcon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .csvBar {
+    width: 12px;
+  }
+
+  .csvBars {
+    height: 50px;
+    gap: 4px;
+  }
+
+  .gaugeChart {
+    width: 90px;
+    height: 60px;
+  }
+
+  .gaugeLabels {
+    font-size: 8px;
+  }
+
+  .gaugeScore {
+    font-size: 14px;
+  }
+
+  .budgetStats {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .budgetStatLabel {
+    font-size: 9px;
+  }
+
+  .budgetStatValue {
+    font-size: 12px;
+  }
+
+  .budgetProgressLabel {
+    font-size: 9px;
+  }
+
+  .budgetProgressBar {
+    height: 6px;
+  }
+
+  .budgetChartBars {
+    height: 40px;
+  }
+
+  .budgetChartBar span {
+    font-size: 7px;
+    margin-top: 4px;
+  }
+
+  .billsVisual {
+    gap: 8px;
+  }
+
+  .billItem {
+    padding: 6px;
+    gap: 8px;
+    border-radius: 8px;
+  }
+
+  .billIcon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .billIcon svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .billName {
+    font-size: 9px;
+  }
+
+  .billDate {
+    font-size: 8px;
+  }
+
+  .billAmount {
+    font-size: 10px;
   }
 }
 
