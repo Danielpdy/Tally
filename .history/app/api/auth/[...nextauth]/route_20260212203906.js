@@ -42,6 +42,7 @@ export const {
 
         const user = res?.user;
         if (!user) {
+          console.log("No user found in response");
           return null;
         }
 

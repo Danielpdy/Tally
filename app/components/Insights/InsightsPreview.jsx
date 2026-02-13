@@ -5,10 +5,12 @@ import styles from './insightsPreview.module.css';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 const InsightsPreview = () => {
     const [hoveredSection, setHoveredSection] = useState(null);
     const router = useRouter();
+    const pathname = usePathname();
 
     // Hardcoded sample data
     const healthScore = 78;
@@ -28,7 +30,7 @@ const InsightsPreview = () => {
     ];
 
     const handleGetStarted = () => {
-        router.push("/LoginSignup");
+        router.push(`/LoginSignup?callbackUrl=${pathname}`);
     };
 
     const LockOverlay = ({ message }) => (

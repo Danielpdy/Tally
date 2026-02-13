@@ -35,6 +35,7 @@ export const {
 
         try{
         
+        console.log("Attempting login with:", credentials.email);
         const res = await createSession({
           email: credentials.email,
           password: credentials.password,
@@ -42,6 +43,7 @@ export const {
 
         const user = res?.user;
         if (!user) {
+          console.log("No user found in response");
           return null;
         }
 

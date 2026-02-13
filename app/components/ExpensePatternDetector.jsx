@@ -115,6 +115,7 @@ const ExpensePatternDetector = ({ transactions = [], preview = false }) => {
     }, []);
 
     const hasData = transactions.length > 0 || preview;
+    const hasEnoughData = topMerchants.length > 0 || dayOfWeekPattern.length > 0;
 
     if (!hasData) {
         return (
@@ -125,46 +126,44 @@ const ExpensePatternDetector = ({ transactions = [], preview = false }) => {
                     </div>
                     <span className={styles.monthlyBadge}>{currentMonthName}</span>
                 </div>
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '60px 20px',
-                    gap: '12px',
-                    minHeight: '300px'
-                }}>
-                    <div style={{
-                        width: '60px',
-                        height: '60px',
-                        background: 'linear-gradient(135deg, #FEF3C7 0%, #FFFBEB 100%)',
-                        borderRadius: '12px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginBottom: '4px'
-                    }}>
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <div className={dashboardStyles.emptyStateContainer}>
+                    <div className={dashboardStyles.emptyStateIcon}>
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8B4FFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="12" cy="12" r="10"/>
                             <line x1="12" y1="8" x2="12" y2="12"/>
                             <line x1="12" y1="16" x2="12.01" y2="16"/>
                         </svg>
                     </div>
-                    <h4 style={{
-                        fontSize: '16px',
-                        fontWeight: 600,
-                        color: '#1a0b2e',
-                        margin: 0
-                    }}>No Patterns Yet</h4>
-                    <p style={{
-                        fontSize: '14px',
-                        color: '#6b7280',
-                        textAlign: 'center',
-                        maxWidth: '320px',
-                        lineHeight: '1.5',
-                        margin: 0
-                    }}>
-                        Add more expense transactions to discover your spending patterns and recurring habits
+                    <h4 className={dashboardStyles.emptyStateTitle}>No Patterns Yet</h4>
+                    <p className={dashboardStyles.emptyStateMessage}>
+                        Start adding expense transactions to discover your <span className={dashboardStyles.emptyStateHighlight}>spending patterns</span> and recurring habits.
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!preview && !hasEnoughData) {
+        return (
+            <div className={styles.insightCardLarge}>
+                <div className={styles.cardHeader}>
+                    <div className={styles.cardTitleRow}>
+                        <h3 className={dashboardStyles.spendingChartTitle}>Expense Pattern Detector</h3>
+                    </div>
+                    <span className={styles.monthlyBadge}>{currentMonthName}</span>
+                </div>
+                <div className={dashboardStyles.emptyStateContainer}>
+                    <div className={dashboardStyles.emptyStateIcon}>
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8B4FFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M3 3v16a2 2 0 0 0 2 2h16"/>
+                            <path d="M18 17V9"/>
+                            <path d="M13 17V5"/>
+                            <path d="M8 17v-3"/>
+                        </svg>
+                    </div>
+                    <h4 className={dashboardStyles.emptyStateTitle}>Almost There!</h4>
+                    <p className={dashboardStyles.emptyStateMessage}>
+                        You're off to a great start! Keep logging your expenses and we'll uncover your <span className={dashboardStyles.emptyStateHighlight}>spending patterns</span> in no time.
                     </p>
                 </div>
             </div>

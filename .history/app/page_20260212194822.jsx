@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import Homepage from '@app/components/homepage/Homepage'
-import HomepageSkeleton from '@app/components/homepage/HomepageSkeleton'
-
+import DashboardPreview from '@app/components/dashboard/DashboardPreview';
+import Dashboard from '@app/components/dashboard/Dashboard';
+import DashboardSkeleton from '@app/components/dashboard/DashboardSkeleton';
 
 const page = () => {
     const { data: session, status } = useSession();
@@ -23,9 +23,11 @@ const page = () => {
         }
     }, [status]);
 
-    if (status === "loading" || isTransitioning) return <HomepageSkeleton />
+    if (status === "loading" || isTransitioning) return <DashboardSkeleton />
 
-    return <Homepage  />
+    if (!session) return <DashboardPreview />
+
+    return <Dashboard />
 }
 
 export default page

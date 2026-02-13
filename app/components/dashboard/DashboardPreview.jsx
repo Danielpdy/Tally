@@ -10,10 +10,12 @@ import FinancialGoals from '@app/components/FinancialGoals';
 import MonthlySummary from '@app/components/MonthlySummary';
 import ExpensePatternDetector from '@app/components/ExpensePatternDetector';
 import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 const DashboardPreview = () => {
     const [hoveredSection, setHoveredSection] = useState(null);
     const router = useRouter();
+    const pathname = usePathname();
 
     // Hardcoded data
     const balance = 24322;
@@ -21,7 +23,7 @@ const DashboardPreview = () => {
     const spendings = 3890;
 
     const handleGetStarted = () => {
-        router.push("/LoginSignup");
+        router.push(`/LoginSignup?callbackUrl=${pathname}`);
     };
 
     const LockOverlay = ({ message }) => (

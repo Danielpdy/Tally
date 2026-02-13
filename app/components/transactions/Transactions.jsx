@@ -271,15 +271,6 @@ const Transactions = () => {
                                     />
                                     Add Transaction
                                 </button>
-                                <button className={styles.viewDemoButton}>
-                                    <Image
-                                        src='/assets/icons/export.svg'
-                                        width={20}
-                                        height={20}
-                                        alt='export'
-                                    />
-                                    Export
-                                </button>
                             </div>
                         </section>
 

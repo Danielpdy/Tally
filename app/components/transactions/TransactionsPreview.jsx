@@ -3,7 +3,6 @@
 import React, { useState } from 'react'
 import styles from './transactionsPreview.module.css'
 import Image from '@node_modules/next/image'
-import Link from '@node_modules/next/link'
 import SevendayOverviewPreview from '../SevendayOverviewPreview'
 import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
@@ -25,7 +24,7 @@ const TransactionsPreview = () => {
   }
 
   const handleGetStarted = () => {
-    router.push("/LoginSignup");
+    router.push(`/LoginSignup?callbackUrl=${pathname}`);
   }
 
   const LockOverlay = ({ message }) => (
@@ -180,9 +179,11 @@ const TransactionsPreview = () => {
                     </div>
 
                     <div className={styles.buttonGroup}>
-                        <Link href="/LoginSignup" className={styles.getStartedButton}>
+                        <button className={styles.getStartedButton}
+                            onClick={() => router.push(`/LoginSignup?callbackUrl=${pathname}`)}
+                        >
                             Sign Up For Full Access
-                        </Link>
+                        </button>
                         <span className={styles.orText}>or</span>
                         <button className={styles.viewDemoButton}
                             onClick={() => router.push(`/LoginSignup?callbackUrl=${pathname}`)}

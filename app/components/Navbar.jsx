@@ -98,9 +98,13 @@ useEffect(() => {
 
                        
                         
-                        <Link href="/getStarted" className="darkButton disNone">
+                        {!session && (
+                        <button className="darkButton disNone"
+                            onClick={() => router.push(`/LoginSignup?callbackUrl=${pathname}`)}
+                        >
                             Get Started
-                        </Link>
+                        </button>
+                        )}
                     
                         <button href="/profile" className="disNone profileIcon"
                             ref={profileButtonRef}
@@ -109,11 +113,10 @@ useEffect(() => {
                             aria-controls="mainMenu"
                             aria-haspopup="menu"
                             >
-                            <img src="/assets/icons/profileIcon.png" 
-                            alt="" 
-                            width={40}
-                            height={40}
-                            />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
                         </button>
 
                         <div className={`profileMenu ${profileOpen ? "open" : ""}`}
@@ -125,124 +128,39 @@ useEffect(() => {
                             {session ? (
                                 <>
                                 <p>Welcome, {session.user.name}</p>
-
-                                <Link href="/">
+                                <Link href="/settings">
                                     <div className="flex">
-                                        <Image src="/assets/icons/tallyappIcon.svg"
-                                        width={20}
-                                        height={20}
-                                        alt="Home"/>
-                                        <span>Home</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/>
+                                        </svg>
+                                        <span>Profile</span>
                                     </div>
                                 </Link>
-                                <Link href="/dashboard">
-                                    <div className="flex">
-                                        <Image src="/assets/icons/dashboardIcon.svg"
-                                        width={20}
-                                        height={20}
-                                        alt="Dashboard"/>
-                                        <span>Dashboard</span>
-                                    </div>
-                                </Link>
-                                <Link href="/transactions">
-                                    <div className="flex">
-                                        <Image src="/assets/icons/transactionsIcon.svg"
-                                        width={20}
-                                        height={20}
-                                        alt="Transactions"/>
-                                        <span>Transactions</span>
-                                    </div>
-                                </Link>
-                                <Link href="/Budgets">
-                                    <div className="flex">
-                                        <Image src="/assets/icons/transactionsIcon.svg"
-                                        width={20}
-                                        height={20}
-                                        alt="Budgets"/>
-                                        <span>Budgets</span>
-                                    </div>
-                                </Link>
-                                <Link href="/transactions">
-                                    <div className="flex">
-                                        <Image src="/assets/icons/insightsIcon.svg"
-                                        width={20}
-                                        height={20}
-                                        alt="Insights"/>
-                                        <span>Insights</span>
-                                    </div>
-                                </Link>
-                                <Link href="/transactions">
-                                    <div className="flex">
-                                        <Image src="/assets/icons/settingsIcon.svg"
-                                        width={20}
-                                        height={20}
-                                        alt="Settings"/>
-                                        <span>Settings</span>
-                                    </div>
-                                </Link>
-                                <button className="darkButton" onClick={() => signOut()}>Sign out</button>   
+                                <button className="menuLink flex" onClick={() => signOut()}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                </svg>
+                                Sign out
+                            </button>
                                 </>
                             ) : (
                                 <>
-                                <Link href="/">
+                                <Link href="/settings">
                                     <div className="flex">
-                                        <Image src="/assets/icons/tallyappIcon.svg"
-                                        width={20}
-                                        height={20}
-                                        alt="Home"/>
-                                        <span>Home</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/>
+                                        </svg>
+                                        <span>Profile</span>
                                     </div>
                                 </Link>
-                                <Link href="/dashboard">
-                                    <div className="flex">
-                                        <Image src="/assets/icons/dashboardIcon.svg"
-                                        width={20}
-                                        height={20}
-                                        alt="Dashboard"/>
-                                        <span>Dashboard</span>
-                                    </div>
-                                </Link>
-                                <Link href="/transactions">
-                                    <div className="flex">
-                                        <Image src="/assets/icons/transactionsIcon.svg"
-                                        width={20}
-                                        height={20}
-                                        alt="Transactions"/>
-                                        <span>Transactions</span>
-                                    </div>
-                                </Link>
-                                <Link href="/budgets">
-                                    <div className="flex">
-                                        <Image src="/assets/icons/transactionsIcon.svg"
-                                        width={20}
-                                        height={20}
-                                        alt="Budgets"/>
-                                        <span>Budgets</span>
-                                    </div>
-                                </Link>
-                                <Link href="/transactions">
-                                    <div className="flex">
-                                        <Image src="/assets/icons/insightsIcon.svg"
-                                        width={20}
-                                        height={20}
-                                        alt="Insights"/>
-                                        <span>Insights</span>
-                                    </div>
-                                </Link>
-                                <Link href="/transactions">
-                                    <div className="flex">
-                                        <Image src="/assets/icons/settingsIcon.svg"
-                                        width={20}
-                                        height={20}
-                                        alt="Settings"/>
-                                        <span>Settings</span>
-                                    </div>
-                                </Link>
-                                
-                                <button className="darkButton"
+                                <button className="menuLink flex"
                                     onClick={() => router.push(`/LoginSignup?callbackUrl=${pathname}`)}
-                                >Sign in </button>
-                                
+                                >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="m10 17 5-5-5-5"/><path d="M15 12H3"/><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                                </svg>
+                                Login
+                            </button>
                                 </>
                             )}
                         </div>
@@ -279,92 +197,93 @@ useEffect(() => {
 
                             <Link href="/">
                                 <div className="flex">
-                                    <Image src="/assets/icons/tallyappIcon.svg"
-                                    width={20}
-                                    height={20}
-                                    alt="Home"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                    </svg>
                                     <span>Home</span>
                                 </div>
                             </Link>
                             <Link href="/dashboard">
                                 <div className="flex">
-                                    <Image src="/assets/icons/dashboardIcon.svg"
-                                    width={20}
-                                    height={20}
-                                    alt="Dashboard"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
+                                    </svg>
                                     <span>Dashboard</span>
                                 </div>
                             </Link>
                             <Link href="/transactions">
                                 <div className="flex">
-                                    <Image src="/assets/icons/transactionsIcon.svg"
-                                    width={20}
-                                    height={20}
-                                    alt="Transactions"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/>
+                                    </svg>
                                     <span>Transactions</span>
                                 </div>
                             </Link>
-                            <Link href="/transactions">
+                            <Link href="/insights">
                                 <div className="flex">
-                                    <Image src="/assets/icons/insightsIcon.svg"
-                                    width={20}
-                                    height={20}
-                                    alt="Insights"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16h8"/><path d="M7 11h12"/><path d="M7 6h3"/>
+                                    </svg>
                                     <span>Insights</span>
                                 </div>
                             </Link>
-                            <Link href="/transactions">
+                            <Link href="/settings">
                                 <div className="flex">
-                                    <Image src="/assets/icons/settingsIcon.svg"
-                                    width={20}
-                                    height={20}
-                                    alt="Settings"/>
-                                    <span>Settings</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/>
+                                    </svg>
+                                    <span>Profile</span>
                                 </div>
                             </Link>
-                            <button className="darkButton" onClick={() => signOut()}>Sign out</button>
+                            <button className="menuLink flex" onClick={() => signOut()}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                </svg>
+                                Sign out
+                            </button>
                             </>
                         ) : (
                             <>
                             <Link href="/">
                                 <div className="flex">
-                                    <Image src="/assets/icons/tallyappIcon.svg"
-                                    width={20}
-                                    height={20}
-                                    alt="Home"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                    </svg>
                                     <span>Home</span>
                                 </div>
                             </Link>
                             <Link href="/dashboard">
                                 <div className="flex">
-                                    <Image src="/assets/icons/dashboardIcon.svg"
-                                    width={20}
-                                    height={20}
-                                    alt="Dashboard"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
+                                    </svg>
                                     <span>Dashboard</span>
                                 </div>
                             </Link>
                             <Link href="/transactions">
                                 <div className="flex">
-                                    <Image src="/assets/icons/transactionsIcon.svg"
-                                    width={20}
-                                    height={20}
-                                    alt="Transactions"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/>
+                                    </svg>
                                     <span>Transactions</span>
                                 </div>
                             </Link>
-                            <Link href="/transactions">
+                            <Link href="/insights">
                                 <div className="flex">
-                                    <Image src="/assets/icons/insightsIcon.svg"
-                                    width={20}
-                                    height={20}
-                                    alt="Transactions"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16h8"/><path d="M7 11h12"/><path d="M7 6h3"/>
+                                    </svg>
                                     <span>Insights</span>
                                 </div>
                             </Link>
-                            <button className="darkButton"
+                            <button className="menuLink flex"
                                 onClick={() => router.push(`/LoginSignup?callbackUrl=${pathname}`)}
-                            >Sign in</button>
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="m10 17 5-5-5-5"/><path d="M15 12H3"/><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                                </svg>
+                                Login
+                            </button>
                             </>
                         )}
                     </div>

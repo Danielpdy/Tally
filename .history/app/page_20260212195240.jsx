@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Homepage from '@app/components/homepage/Homepage'
-import HomepageSkeleton from '@app/components/homepage/HomepageSkeleton'
 
 
 const page = () => {
@@ -23,7 +22,7 @@ const page = () => {
         }
     }, [status]);
 
-    if (status === "loading" || isTransitioning) return <HomepageSkeleton />
+    if (status === "loading" || isTransitioning) return 
 
     return <Homepage  />
 }

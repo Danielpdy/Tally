@@ -430,6 +430,35 @@ html, body {
 .profileIcon{
   border: none;
   background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.profileIcon:hover{
+  background-color: #f3f4f6;
+  color: #8B5CF6;
+}
+
+.menuLink{
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #111;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.menuLink:hover{
+  background: #f3f4f6;
 }
 
 .menuWidth{
@@ -438,7 +467,7 @@ html, body {
 }
 
 /* --- Desktop breakpoint --- */
-@media (min-width: 768px) {
+@media (min-width: 1200px) {
   /* hide the mobile menu and button on desktop */
   .menuPanel {
     display: none !important;
@@ -464,7 +493,7 @@ html, body {
 
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .navbar {
     padding: 16px 20px;
   }
@@ -912,7 +941,7 @@ html, body {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 80px 40px;
+  padding: 120px 40px 80px;
 }
 
 .featuresHeader {
@@ -976,6 +1005,20 @@ html, body {
   margin-bottom: 24px;
 }
 
+.featureCardLink {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8B5CF6;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.featureCardLink:hover {
+  color: #7C3AED;
+}
+
 /* CSV Import Visual */
 .featureVisual {
   margin-top: auto;
@@ -1021,7 +1064,7 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 28px 24px;
   background: linear-gradient(135deg, #FAF5FF 0%, #F5F3FF 100%);
   border-radius: 12px;
 }
@@ -1033,17 +1076,25 @@ html, body {
 
 .gaugeLabels {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   margin-top: 8px;
-  font-size: 11px;
-  color: #64748b;
+  gap: 6px;
 }
 
 .gaugeScore {
   font-size: 24px;
   font-weight: 700;
-  color: #8B5CF6;
+  color: #1a0b2e;
+}
+
+.gaugeTextLabels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 /* Budget Visual */
@@ -1101,7 +1152,7 @@ html, body {
 
 .budgetProgressFill {
   height: 100%;
-  background: linear-gradient(90deg, #8B5CF6 0%, #00D4FF 50%, #FB923C 100%);
+  background: #8B5CF6;
   border-radius: 4px;
   transition: width 0.5s ease;
 }
@@ -1252,6 +1303,204 @@ html, body {
 
 .goalProgressAmount {
   font-size: 11px;
+  color: #64748b;
+}
+
+/* ==================== WHY CHOOSE US SECTION ==================== */
+
+.whyChooseSection {
+  width: 100%;
+  background: linear-gradient(135deg, #FAF5FF 0%, #F5F3FF 40%, #ffffff 100%);
+  padding: 100px 60px;
+}
+
+.whyChooseContainer {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.whyChooseTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a0b2e;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.whyChooseTitleAccent {
+  font-style: italic;
+  color: #8B5CF6;
+}
+
+.whyChooseSubtitle {
+  font-size: 15px;
+  color: #64748b;
+  text-align: center;
+  max-width: 520px;
+  line-height: 1.6;
+  margin-bottom: 48px;
+}
+
+.whyChooseContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  margin-bottom: 48px;
+}
+
+.whyChooseCards {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  flex: 1;
+  max-width: 260px;
+}
+
+.whyChooseCard {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.whyChooseIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.whyChooseCardTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a0b2e;
+  margin-bottom: 8px;
+}
+
+.whyChooseCardDesc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.whyChooseImageWrapper {
+  flex-shrink: 0;
+}
+
+.whyChooseImageFrame {
+  width: 320px;
+  height: 320px;
+}
+
+.whyChooseImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.whyChooseCTA {
+  display: inline-block;
+  padding: 14px 36px;
+  background: #8B5CF6;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.whyChooseCTA:hover {
+  background: #7C3AED;
+  transform: translateY(-2px);
+}
+
+/* ==================== FINAL CTA SECTION ==================== */
+
+.finalCTA {
+  width: 100%;
+  background: #1a0b2e;
+  padding: 80px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.finalCTAGlow {
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.finalCTAContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.finalCTALeft {
+  flex: 1;
+}
+
+.finalCTATitle {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.finalCTADesc {
+  font-size: 16px;
+  color: #a78bfa;
+  line-height: 1.7;
+  max-width: 480px;
+}
+
+.finalCTARight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.finalCTAButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+}
+
+.finalCTAButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(139, 92, 246, 0.5);
+}
+
+.finalCTANote {
+  font-size: 13px;
   color: #64748b;
 }
 
@@ -1421,6 +1670,23 @@ html, body {
     flex-wrap: wrap;
     gap: 16px;
   }
+
+  /* Why Choose Us */
+  .whyChooseContent {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .whyChooseCards {
+    flex-direction: row;
+    max-width: 100%;
+    gap: 24px;
+  }
+
+  .whyChooseImageFrame {
+    width: 240px;
+    height: 300px;
+  }
 }
 
 /* Tablet screens (768px and below) */
@@ -1524,6 +1790,37 @@ html, body {
 
   .csvBar {
     width: 20px;
+  }
+
+  /* Why Choose Us */
+  .whyChooseSection {
+    padding: 60px 24px;
+  }
+
+  .whyChooseTitle {
+    font-size: 2rem;
+  }
+
+  .whyChooseSubtitle {
+    font-size: 14px;
+  }
+
+  .whyChooseImageFrame {
+    width: 220px;
+    height: 280px;
+  }
+
+  /* Final CTA */
+  .finalCTA {
+    padding: 60px 30px;
+  }
+
+  .finalCTATitle {
+    font-size: 2rem;
+  }
+
+  .finalCTAContent {
+    gap: 40px;
   }
 }
 
@@ -1717,6 +2014,63 @@ html, body {
 
   .goalProgressAmount {
     font-size: 10px;
+  }
+
+  /* Why Choose Us */
+  .whyChooseSection {
+    padding: 50px 16px;
+  }
+
+  .whyChooseTitle {
+    font-size: 1.75rem;
+  }
+
+  .whyChooseSubtitle {
+    font-size: 13px;
+    margin-bottom: 36px;
+  }
+
+  .whyChooseCards {
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .whyChooseImageFrame {
+    width: 200px;
+    height: 260px;
+  }
+
+  .whyChooseCardTitle {
+    font-size: 15px;
+  }
+
+  .whyChooseCardDesc {
+    font-size: 12px;
+  }
+
+  .whyChooseCTA {
+    padding: 12px 28px;
+    font-size: 14px;
+  }
+
+  /* Final CTA */
+  .finalCTA {
+    padding: 50px 20px;
+  }
+
+  .finalCTAContent {
+    flex-direction: column;
+    text-align: center;
+    gap: 32px;
+  }
+
+  .finalCTATitle {
+    font-size: 1.75rem;
+  }
+
+  .finalCTADesc {
+    font-size: 14px;
+    max-width: 100%;
   }
 }
 
@@ -1929,6 +2283,76 @@ html, body {
   .goalProgressAmount {
     font-size: 9px;
   }
+
+  /* Why Choose Us */
+  .whyChooseSection {
+    padding: 40px 14px;
+  }
+
+  .whyChooseTitle {
+    font-size: 1.5rem;
+  }
+
+  .whyChooseSubtitle {
+    font-size: 12px;
+    margin-bottom: 30px;
+  }
+
+  .whyChooseContent {
+    gap: 24px;
+    margin-bottom: 36px;
+  }
+
+  .whyChooseIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+
+  .whyChooseIcon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .whyChooseCardTitle {
+    font-size: 14px;
+  }
+
+  .whyChooseCardDesc {
+    font-size: 11px;
+  }
+
+  .whyChooseImageFrame {
+    width: 180px;
+    height: 230px;
+  }
+
+  .whyChooseCTA {
+    padding: 11px 24px;
+    font-size: 13px;
+  }
+
+  /* Final CTA */
+  .finalCTA {
+    padding: 40px 16px;
+  }
+
+  .finalCTATitle {
+    font-size: 1.5rem;
+  }
+
+  .finalCTADesc {
+    font-size: 13px;
+  }
+
+  .finalCTAButton {
+    padding: 14px 32px;
+    font-size: 14px;
+  }
+
+  .finalCTANote {
+    font-size: 12px;
+  }
 }
 
 /* Small phones (400px and below) */
@@ -2073,6 +2497,70 @@ html, body {
 
   .goalProgressAmount {
     font-size: 8px;
+  }
+
+  /* Why Choose Us */
+  .whyChooseSection {
+    padding: 32px 12px;
+  }
+
+  .whyChooseTitle {
+    font-size: 1.35rem;
+  }
+
+  .whyChooseSubtitle {
+    font-size: 11px;
+    margin-bottom: 24px;
+  }
+
+  .whyChooseContent {
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .whyChooseCards {
+    gap: 20px;
+  }
+
+  .whyChooseCardTitle {
+    font-size: 13px;
+  }
+
+  .whyChooseCardDesc {
+    font-size: 10px;
+  }
+
+  .whyChooseImageFrame {
+    width: 160px;
+    height: 210px;
+  }
+
+  .whyChooseCTA {
+    padding: 10px 22px;
+    font-size: 12px;
+  }
+
+  /* Final CTA */
+  .finalCTA {
+    padding: 36px 14px;
+  }
+
+  .finalCTATitle {
+    font-size: 1.35rem;
+  }
+
+  .finalCTADesc {
+    font-size: 12px;
+  }
+
+  .finalCTAButton {
+    padding: 12px 28px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .finalCTANote {
+    font-size: 11px;
   }
 }
 
@@ -2244,6 +2732,86 @@ html, body {
 
   .billAmount {
     font-size: 11px;
+  }
+
+  /* Why Choose Us */
+  .whyChooseSection {
+    padding: 28px 10px;
+  }
+
+  .whyChooseTitle {
+    font-size: 1.25rem;
+  }
+
+  .whyChooseSubtitle {
+    font-size: 10px;
+    margin-bottom: 20px;
+  }
+
+  .whyChooseContent {
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+
+  .whyChooseCards {
+    gap: 18px;
+  }
+
+  .whyChooseIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+  }
+
+  .whyChooseIcon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .whyChooseCardTitle {
+    font-size: 12px;
+  }
+
+  .whyChooseCardDesc {
+    font-size: 9px;
+  }
+
+  .whyChooseImageFrame {
+    width: 140px;
+    height: 180px;
+    padding: 8px;
+  }
+
+  .whyChooseCTA {
+    padding: 9px 20px;
+    font-size: 11px;
+    border-radius: 8px;
+  }
+
+  /* Final CTA */
+  .finalCTA {
+    padding: 30px 10px;
+  }
+
+  .finalCTAContent {
+    gap: 24px;
+  }
+
+  .finalCTATitle {
+    font-size: 1.2rem;
+  }
+
+  .finalCTADesc {
+    font-size: 11px;
+  }
+
+  .finalCTAButton {
+    padding: 11px 24px;
+    font-size: 12px;
+  }
+
+  .finalCTANote {
+    font-size: 10px;
   }
 }
 
@@ -2465,6 +3033,87 @@ html, body {
 
   .billAmount {
     font-size: 10px;
+  }
+
+  /* Why Choose Us */
+  .whyChooseSection {
+    padding: 22px 8px;
+  }
+
+  .whyChooseTitle {
+    font-size: 1.1rem;
+  }
+
+  .whyChooseSubtitle {
+    font-size: 9px;
+    margin-bottom: 16px;
+  }
+
+  .whyChooseContent {
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .whyChooseCards {
+    gap: 14px;
+  }
+
+  .whyChooseIcon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .whyChooseIcon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .whyChooseCardTitle {
+    font-size: 11px;
+  }
+
+  .whyChooseCardDesc {
+    font-size: 8px;
+  }
+
+  .whyChooseImageFrame {
+    width: 120px;
+    height: 160px;
+    padding: 6px;
+    border-radius: 10px;
+  }
+
+  .whyChooseCTA {
+    padding: 8px 16px;
+    font-size: 10px;
+    border-radius: 6px;
+  }
+
+  /* Final CTA */
+  .finalCTA {
+    padding: 24px 8px;
+  }
+
+  .finalCTAContent {
+    gap: 20px;
+  }
+
+  .finalCTATitle {
+    font-size: 1.1rem;
+  }
+
+  .finalCTADesc {
+    font-size: 10px;
+  }
+
+  .finalCTAButton {
+    padding: 10px 20px;
+    font-size: 11px;
+    border-radius: 8px;
+  }
+
+  .finalCTANote {
+    font-size: 9px;
   }
 }
 
