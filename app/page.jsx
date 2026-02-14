@@ -1,31 +1,16 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSession } from 'next-auth/react';
 import Homepage from '@app/components/homepage/Homepage'
 import HomepageSkeleton from '@app/components/homepage/HomepageSkeleton'
 
-
 const page = () => {
-    const { data: session, status } = useSession();
-    const [isTransitioning, setIsTransitioning] = useState(false);
+    const { status } = useSession();
 
-    useEffect(() => {
-        if (status === "loading"){
-            setIsTransitioning(true);
-        } else if (status === "authenticated"){
-            const timer = setTimeout(() => {
-                setIsTransitioning(false);
-            }, 300);
-            return () => clearTimeout(timer);
-        } else {
-            setIsTransitioning(false);
-        }
-    }, [status]);
+    if (status === "loading") return <HomepageSkeleton />
 
-    if (status === "loading" || isTransitioning) return <HomepageSkeleton />
-
-    return <Homepage  />
+    return <Homepage />
 }
 
 export default page

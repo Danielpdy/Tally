@@ -16,7 +16,7 @@ const [toggler, setToggler] = useState(false);
 const panelRef = useRef(null);
 const buttonRef = useRef(null);
 const pathname = usePathname();
-const hide = pathname === "/LoginSignup"; 
+const hide = pathname === "/LoginSignup" || pathname === "/profile";
 
 const [ profileOpen, setProfileOpen ] = useState(false);
 const profileButtonRef = useRef(null);
@@ -95,40 +95,28 @@ useEffect(() => {
                 <div className="navbarContent">
 
                 <div className="profileWrapper disNone">
-
-                       
-                        
-                        {!session && (
-                        <button className="darkButton disNone"
-                            onClick={() => router.push(`/LoginSignup?callbackUrl=${pathname}`)}
-                        >
-                            Get Started
-                        </button>
-                        )}
-                    
-                        <button href="/profile" className="disNone profileIcon"
-                            ref={profileButtonRef}
-                            onClick={() => setProfileOpen(v => !v)}
-                            aria-expanded={profileOpen}
-                            aria-controls="mainMenu"
-                            aria-haspopup="menu"
+                    {session ? (
+                        <>
+                            <button href="/profile" className="disNone profileIcon"
+                                ref={profileButtonRef}
+                                onClick={() => setProfileOpen(v => !v)}
+                                aria-expanded={profileOpen}
+                                aria-controls="mainMenu"
+                                aria-haspopup="menu"
                             >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
-                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
-                            </svg>
-                        </button>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </button>
 
-                        <div className={`profileMenu ${profileOpen ? "open" : ""}`}
-                            id="mainMenu"
-                            ref={profilePanelRef}
-                            role="menu"
+                            <div className={`profileMenu ${profileOpen ? "open" : ""}`}
+                                id="mainMenu"
+                                ref={profilePanelRef}
+                                role="menu"
                             >
-                                
-                            {session ? (
-                                <>
                                 <p>Welcome, {session.user.name}</p>
-                                <Link href="/settings">
+                                <Link href="/profile">
                                     <div className="flex">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                             <path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/>
@@ -137,33 +125,28 @@ useEffect(() => {
                                     </div>
                                 </Link>
                                 <button className="menuLink flex" onClick={() => signOut()}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                                </svg>
-                                Sign out
-                            </button>
-                                </>
-                            ) : (
-                                <>
-                                <Link href="/settings">
-                                    <div className="flex">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/>
-                                        </svg>
-                                        <span>Profile</span>
-                                    </div>
-                                </Link>
-                                <button className="menuLink flex"
-                                    onClick={() => router.push(`/LoginSignup?callbackUrl=${pathname}`)}
-                                >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="m10 17 5-5-5-5"/><path d="M15 12H3"/><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                                </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                    </svg>
+                                    Sign out
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <button className="darkButton disNone"
+                                onClick={() => router.push(`/LoginSignup?callbackUrl=${pathname}`)}
+                            >
                                 Login
                             </button>
-                                </>
-                            )}
-                        </div>
+                            <button className="whiteButton disNone"
+                                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                                onClick={() => router.push(`/LoginSignup?callbackUrl=${pathname}`)}
+                            >
+                                Sign up
+                            </button>
+                        </>
+                    )}
                     </div>
                 </div>
                 
@@ -227,7 +210,7 @@ useEffect(() => {
                                     <span>Insights</span>
                                 </div>
                             </Link>
-                            <Link href="/settings">
+                            <Link href="/profile">
                                 <div className="flex">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/>

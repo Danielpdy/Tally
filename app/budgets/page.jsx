@@ -1,34 +1,19 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
-import Budgets from '@app/components/budgets/Budgets'
-import { useSession } from '@node_modules/next-auth/react'
+import React from 'react';
+import { useSession } from 'next-auth/react';
+import Budgets from '@app/components/budgets/Budgets';
 import BudgetsPreview from '@app/components/budgets/BudgetsPreview';
 import BudgetSkeleton from '@app/components/budgets/BudgetSkeleton';
 
 const page = () => {
-  const { data: session, status } = useSession();
-  const [isTransitioning, setIsTransitioning] = useState(false);
+    const { data: session, status } = useSession();
 
-  useEffect(() => {
-    if (status === "loading"){
-      setIsTransitioning(true);
-    } else if (status === "authenticated"){
-      const timer = setTimeout(() => {
-        setIsTransitioning(false)
-      }, 300);
-      return () => clearTimeout(timer);
-    } else{
-      setIsTransitioning(false);
-    }
-  }, [status]);
+    if (status === "loading") return <BudgetSkeleton />
 
-  if (status === "loading" || isTransitioning) return <BudgetSkeleton />
-  
-  if (!session) return <BudgetsPreview />
+    if (!session) return <BudgetsPreview />
 
-  return <Budgets />
-  
+    return <Budgets />
 }
 
 export default page

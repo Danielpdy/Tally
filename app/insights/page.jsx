@@ -1,33 +1,19 @@
 "use client"
 
+import React from 'react';
+import { useSession } from 'next-auth/react';
 import Insights from '@app/components/Insights/Insights';
 import InsightsPreview from '@app/components/Insights/InsightsPreview';
 import InsightsSkeleton from '@app/components/Insights/InsightsSkeleton';
-import { useSession } from '@node_modules/next-auth/react'
-import React, { useState, useEffect } from 'react'
 
 const page = () => {
-  const { data: session, status } = useSession();
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  
-    useEffect(() => {
-      if (status === "loading") {
-        setIsTransitioning(true);
-      } else if (status === "authenticated") {
-        const timer = setTimeout(() => {
-          setIsTransitioning(false);
-        }, 300);
-        return () => clearTimeout(timer);
-      } else {
-        setIsTransitioning(false);
-      }
-    }, [status]);
+    const { data: session, status } = useSession();
 
-  if (status === "loading" || isTransitioning) return <InsightsSkeleton />
+    if (status === "loading") return <InsightsSkeleton />
 
-  if (!session) return <InsightsPreview />
+    if (!session) return <InsightsPreview />
 
-  return <Insights />
+    return <Insights />
 }
 
 export default page
