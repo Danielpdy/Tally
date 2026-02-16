@@ -27,10 +27,8 @@ const [formLogin, setFormLogin] = useState({
     email: "",
     password: "",
 });
-const [status, setStatus] = useState("idle");
 const [isCreated, setIsCreated] = useState(false);
-const [signupBtn, setSignupBtn] = useState("Create Account")
-const [loginBtn, setLoginBtn] = useState("Sign in");
+const [isLoading, setIsLoading] = useState(false);
 const params = useSearchParams();
 const callbackUrl = params.get("callbackUrl") || "/dashboard";
 
@@ -55,25 +53,24 @@ function handleOnchangesLogin(e) {
 }
 
 async function handleSubmit(e) {
+    e.preventDefault();
+    setIsLoading(true);
 
-        if (toggleForm === false){
-        e.preventDefault();
+    if (toggleForm === false){
         try{
-            setSignupBtn(<span class="svg-spinners--180-ring"></span>);
             await createUser(formSignup);
             setFormSignup({ name: "", email: "", password: "", phonenumber: ""});
-            setSignupBtn("Create Account");
             setIsCreated(true);
 
             setTimeout(() => {
                 setIsCreated(false);
             }, 1000);
         } catch (err) {
-            setStatus(`error: ${err.message}`);
+            console.error(err.message);
+        } finally {
+            setIsLoading(false);
         }
     } else {
-        e.preventDefault();
-        setLoginBtn(<span class="svg-spinners--180-ring"></span>);
         await signIn("credentials", {
             ...formLogin,
             callbackUrl,
@@ -294,8 +291,8 @@ async function handleSubmit(e) {
                                 </Link>
                             </div>
 
-                            <button type="submit" className={styles.submitButton}                                >
-                                {loginBtn}
+                            <button type="submit" className={styles.submitButton} disabled={isLoading}>
+                                {isLoading ? <span class="svg-spinners--180-ring"></span> : "Sign in"}
                             </button>
 
                             <div className={styles.divider}>
@@ -418,9 +415,9 @@ async function handleSubmit(e) {
 
                             <button type="submit"
                                 className={styles.submitButtonSignup}
-                                disabled={status === "submiting"}
+                                disabled={isLoading}
                                 >
-                                {signupBtn}
+                                {isLoading ? <span class="svg-spinners--180-ring"></span> : "Create Account"}
                             </button>
 
                             <div className={styles.divider}>

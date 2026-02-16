@@ -15,6 +15,11 @@ export const createSession = (session) =>
         method: "POST",
         body: JSON.stringify(session),
     });
+export const refreshAcessToken = (refreshToken) => 
+    apiRequest("/users/refresh", {
+        method: "POST",
+        body: JSON.stringify({ refreshToken })
+    })
 export const updateUser = (id, user) =>
     apiRequest(`/users${id}`, {
         method: "PUT",

@@ -6,6 +6,8 @@ using backendTally.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using backendTally.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
 
 namespace backendTally.Controllers
 {
@@ -73,11 +75,65 @@ namespace backendTally.Controllers
             if (!valid) return Unauthorized("Invalid email or password");
 
             var token = _jwtService.GenerateToken(user);
+            var refreshToken = _jwtService.GenerateRefreshToken();
+            
+            _context.RefreshTokens.Add(new RefreshToken
+            {
+                Token = refreshToken,
+                UserId = user.Id,
+                ExpirestAt = DateTime.UtcNow.AddDays(1),
+                CreatedAt = DateTime.UtcNow,
+                IsRevoked = false
+            });
+            await _context.SaveChangesAsync();
 
             return Ok(new
             {
                 message = "Login succesful",
-                user = new { user.Id, user.Email, user.Name, token }
+                user = new { user.Id, user.Email, user.Name, token },
+                refreshToken,
+                expiresIn = 900
+            });
+        }
+
+        [HttpPost("refresh")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Refresh([FromBody] RefreshRequest request)
+        {
+            var storedToken = await _context.RefreshTokens
+                .Include(r => r.User)
+                .FirstOrDefaultAsync(r => r.Token == request.RefreshToken);
+
+            if (storedToken == null || storedToken.IsRevoked || storedToken.ExpirestAt < DateTime.UtcNow)
+                return Unauthorized("Invalid or expired refresh token");
+            
+            storedToken.IsRevoked = true;
+
+            var newAccessToken = _jwtService.GenerateToken(storedToken.User);
+            var newRefreshToken = _jwtService.GenerateRefreshToken();
+
+            _context.RefreshTokens.Add(new RefreshToken
+            {
+                Token = newRefreshToken,
+                UserId = storedToken.UserId,
+                ExpirestAt = DateTime.UtcNow.AddDays(1),
+                CreatedAt = DateTime.UtcNow,
+                IsRevoked = false
+            });
+
+            await _context.SaveChangesAsync();
+
+            // Clean up old expired/revoked tokens for this user
+            await _context.RefreshTokens
+                .Where(r => r.UserId == storedToken.UserId
+                    && (r.IsRevoked || r.ExpirestAt < DateTime.UtcNow))
+                .ExecuteDeleteAsync();
+
+            return Ok(new
+            {
+                token = newAccessToken,
+                expiresIn = 900,
+                refreshToken = newRefreshToken
             });
         }
 

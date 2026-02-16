@@ -3,7 +3,8 @@ import Google from "next-auth/providers/google";
 import GitHub from  "next-auth/providers/github";
 import Twitter from "next-auth/providers/twitter"
 import CredentialsProvider from "next-auth/providers/credentials";
-import { createSession } from "@services/userService";
+import { createSession, refreshAcessToken } from "@services/userService";
+import { refresh } from "@node_modules/next/cache";
 
 export const {
   handlers,
@@ -41,15 +42,15 @@ export const {
         });
 
         const user = res?.user;
-        if (!user) {
-          return null;
-        }
+        if (!user) return null;
 
           return {
             id: user.id,
             email: user.email,
             name: user.name,
             accessToken: user.token,
+            refreshToken: res.refreshToken,
+            expiresIn: res.expiresIn,
           }
 
         } catch (err) {
@@ -80,12 +81,33 @@ export const {
 
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
-        token.email = user.email
-        token.name = user.name
-        token.accessToken = user.accessToken
+        return{
+          ...token,
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          accessToken: user.accessToken,
+          refreshToken: user.refreshToken,
+          accessTokenExpires: Date.now() + (user.expiresIn * 1000),
+        }
       }
-      return token;
+
+      if(Date.now() < token.accessTokenExpires){
+        return token
+      }
+
+      try{
+        const res = await refreshAcessToken(token.refreshToken)
+
+        return {
+          ...token,
+          accessToken: res.token,
+          refreshToken: res.refreshToken ?? token.refreshToken,
+          accessTokenExpires: Date.now() + (res.expiresIn * 1000),
+        }
+      } catch(error){
+        return {...token, error: "RefreshTokenError"}
+      }
     },
 
     async session({ session, token }) {
@@ -93,6 +115,7 @@ export const {
       session.user.email = token.email
       session.user.name = token.name
       session.accessToken = token.accessToken
+      session.error = token.error
       return session
     },
   },
