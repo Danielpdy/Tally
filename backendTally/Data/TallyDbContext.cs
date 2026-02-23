@@ -18,6 +18,7 @@ namespace backendTally.Data
         public DbSet<BillPayment> BillPayments { get; set; }
         public DbSet<FinantialGoal> FinantialGoals { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
         
     }
 }

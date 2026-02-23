@@ -1,13 +1,20 @@
 "use client"
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { SessionProvider, useSession, signOut } from 'next-auth/react'
 
 function SessionGuard({ children }) {
   const { data: session } = useSession()
+  const signingOut = useRef(false)
 
   useEffect(() => {
-    if (session?.error === "RefreshTokenError") {
+    if (signingOut.current) return
+
+    if (session?.error === "AccountDeactivated") {
+      signingOut.current = true
+      signOut({ callbackUrl: "/LoginSignup?error=deactivated" })
+    } else if (session?.error === "RefreshTokenError") {
+      signingOut.current = true
       signOut()
     }
   }, [session])

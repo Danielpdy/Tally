@@ -15,15 +15,36 @@ export const createSession = (session) =>
         method: "POST",
         body: JSON.stringify(session),
     });
-export const refreshAcessToken = (refreshToken) => 
+export const refreshAcessToken = (refreshToken) =>
     apiRequest("/users/refresh", {
         method: "POST",
-        body: JSON.stringify({ refreshToken })
+        body: JSON.stringify({ refreshToken }),
+        timeout: 5000,
     })
-export const updateUser = (id, user) =>
-    apiRequest(`/users${id}`, {
+export const updateUser = (id, data) =>
+    apiRequest(`/users/${id}`, {
         method: "PUT",
-        body: JSON.stringify(user),
+        body: JSON.stringify(data),
+    })
+export const changePassword = (id, currentPassword, newPassword) =>
+    apiRequest(`/users/${id}/password`, {
+        method: "PUT",
+        body: JSON.stringify({ currentPassword, newPassword }),
     })
 export const deleteuser = (id) =>
     apiRequest(`/users/${id}`, { method: "DELETE"});
+export const forgotPassword = (email) =>
+    apiRequest("/users/forgot-password", {
+        method: "POST",
+        body: JSON.stringify({ email }),
+    });
+export const resetPassword = (token, newPassword) =>
+    apiRequest("/users/reset-password", {
+        method: "POST",
+        body: JSON.stringify({ token, newPassword }),
+    });
+export const oauthLogin = (email, name, provider) =>
+    apiRequest("/users/oauth", {
+        method: "POST",
+        body: JSON.stringify({ email, name, provider }),
+    });

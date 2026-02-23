@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './profile.module.css';
+import { updateUser, changePassword, deleteuser } from '@services/userService';
 
 const Profile = () => {
     const { data: session } = useSession();
@@ -14,11 +15,21 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState('personal');
 
     // Personal info state
-    const nameParts = session?.user?.name?.split(' ') || ['', ''];
-    const [firstName, setFirstName] = useState(nameParts[0] || '');
-    const [lastName, setLastName] = useState(nameParts.slice(1).join(' ') || '');
-    const [email, setEmail] = useState(session?.user?.email || '');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
+    const initialized = useRef(false);
+
+    useEffect(() => {
+        if (session?.user && !initialized.current) {
+            const nameParts = session.user.name?.split(' ') || [''];
+            setFirstName(nameParts[0] || '');
+            setLastName(nameParts.slice(1).join(' ') || '');
+            setEmail(session.user.email || '');
+            initialized.current = true;
+        }
+    }, [session]);
     const [savingPersonal, setSavingPersonal] = useState(false);
     const [personalSaved, setPersonalSaved] = useState(false);
 
@@ -40,16 +51,30 @@ const Profile = () => {
     // Delete account state
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-    const handleSavePersonal = () => {
+    const [personalError, setPersonalError] = useState('');
+
+    const handleSavePersonal = async () => {
+        setPersonalError('');
         setSavingPersonal(true);
-        setTimeout(() => {
-            setSavingPersonal(false);
+        try {
+            const fullName = `${firstName} ${lastName}`.trim();
+            await updateUser(session.user.id, {
+                name: fullName || undefined,
+                email: email || undefined,
+                phoneNumber: phone || undefined,
+            });
             setPersonalSaved(true);
             setTimeout(() => setPersonalSaved(false), 3000);
-        }, 1000);
+        } catch (err) {
+            setPersonalError(err.message || 'Failed to save changes');
+        } finally {
+            setSavingPersonal(false);
+        }
     };
 
-    const handleResetPassword = () => {
+    const [savingPassword, setSavingPassword] = useState(false);
+
+    const handleResetPassword = async () => {
         setPasswordError('');
         if (!currentPassword || !newPassword || !confirmPassword) {
             setPasswordError('All fields are required');
@@ -63,11 +88,19 @@ const Profile = () => {
             setPasswordError('New passwords do not match');
             return;
         }
-        setPasswordSaved(true);
-        setCurrentPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
-        setTimeout(() => setPasswordSaved(false), 3000);
+        setSavingPassword(true);
+        try {
+            await changePassword(session.user.id, currentPassword, newPassword);
+            setPasswordSaved(true);
+            setCurrentPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+            setTimeout(() => setPasswordSaved(false), 3000);
+        } catch (err) {
+            setPasswordError(err.message || 'Failed to update password');
+        } finally {
+            setSavingPassword(false);
+        }
     };
 
     const handleSendContact = () => {
@@ -242,7 +275,18 @@ const Profile = () => {
                                 </div>
                             </div>
 
-                            <button className={styles.saveButton} onClick={handleSavePersonal}>
+                            {personalError && (
+                                <div className={styles.errorMessage}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <line x1="15" y1="9" x2="9" y2="15"/>
+                                        <line x1="9" y1="9" x2="15" y2="15"/>
+                                    </svg>
+                                    {personalError}
+                                </div>
+                            )}
+
+                            <button className={styles.saveButton} onClick={handleSavePersonal} disabled={savingPersonal}>
                                 Save Changes
                             </button>
 
@@ -255,10 +299,12 @@ const Profile = () => {
                                         <line x1="12" y1="8" x2="12" y2="12"/>
                                         <line x1="12" y1="16" x2="12.01" y2="16"/>
                                     </svg>
-                                    <p>This action is <strong>permanent</strong> and cannot be undone. All your data will be erased.</p>
+                                    <p>Your account will be <strong>deactivated immediately</strong> and permanently deleted after 30 days.</p>
                                 </div>
                                 <p className={styles.deleteDescription}>
-                                    To permanently erase your whole Tally account, click the button below. This implies that you won't have access to your data, transactions, or any associated information.
+                                    When you delete your account, you will be logged out and lose access right away.
+                                    You have a <strong>30-day grace period</strong> to contact support and recover your account.
+                                    After 30 days, all your data — transactions, budgets, goals, and any associated information — will be permanently erased.
                                 </p>
                                 {!showDeleteConfirm ? (
                                     <button className={styles.deleteButton} onClick={() => setShowDeleteConfirm(true)}>
@@ -266,9 +312,17 @@ const Profile = () => {
                                     </button>
                                 ) : (
                                     <div className={styles.deleteConfirm}>
-                                        <p className={styles.deleteConfirmText}>Are you sure? This action cannot be undone.</p>
+                                        <p className={styles.deleteConfirmText}>Are you sure? Your account will be deactivated now and permanently deleted in 30 days.</p>
                                         <div className={styles.deleteConfirmButtons}>
-                                            <button className={styles.deleteConfirmYes}>
+                                            <button className={styles.deleteConfirmYes} onClick={async () => {
+                                                try {
+                                                    await deleteuser(session.user.id);
+                                                    signOut({ callbackUrl: '/LoginSignup' });
+                                                } catch (err) {
+                                                    setPersonalError(err.message || 'Failed to delete account');
+                                                    setShowDeleteConfirm(false);
+                                                }
+                                            }}>
                                                 Yes, delete my account
                                             </button>
                                             <button className={styles.deleteConfirmNo} onClick={() => setShowDeleteConfirm(false)}>
@@ -415,8 +469,8 @@ const Profile = () => {
                                     </div>
                                 </div>
 
-                                <button className={styles.saveButton} onClick={handleResetPassword}>
-                                    Update Password
+                                <button className={styles.saveButton} onClick={handleResetPassword} disabled={savingPassword}>
+                                    {savingPassword ? 'Updating...' : 'Update Password'}
                                 </button>
                             </div>
                         </div>

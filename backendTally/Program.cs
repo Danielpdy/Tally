@@ -54,6 +54,8 @@ options.UseNpgsql(Environment.GetEnvironmentVariable("DefaultConnection")
 
 builder.Services.AddScoped<AggregateService>();
 builder.Services.AddScoped<BillPaymentService>();
+builder.Services.AddScoped<EmailService>();
+builder.Services.AddHostedService<AccountCleanupService>();
 
 var app = builder.Build();
 

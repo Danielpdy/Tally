@@ -1,21 +1,40 @@
 "use client"
 
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useRouter } from 'next/navigation';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 export default function Home() {
 
   const {data: session, status } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const errorParam = searchParams.get("error");
 
   return (
     <section className="main">
+      {/* Deactivated Account Banner */}
+      {errorParam === "deactivated" && (
+        <div className="deactivatedBanner">
+          <div className="deactivatedIcon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <div>
+            <h4 className="deactivatedTitle">Account Deactivated</h4>
+            <p className="deactivatedText">This account has been deactivated and is scheduled for deletion. Contact support to reactivate it.</p>
+          </div>
+        </div>
+      )}
+
       <section className="gradient homeSection-main">
         <div className="homeContent">
           <div className="cashflowSpan">
-            <img src="/assets/icons/shineIcon.png" 
+            <img src="/assets/icons/shineIcon.png"
             width={14}
             height={14}
             alt="shine" />
@@ -31,16 +50,16 @@ export default function Home() {
           ) : (
             <div className="googleAndGithub">
               <button className="darkButton alignItems"
-                onClick={() => router.push(`/LoginSignup?callbackUrl=${pathname}`)}>
-                <img src="/assets/icons/googleIcon.svg" 
+                onClick={() => signIn("google", { callbackUrl: "/" })}>
+                <img src="/assets/icons/googleIcon.svg"
                 width={24}
                 height={24}
                 alt="Google" />
                 Sign in with Google
               </button>
               <button className="whiteButton alignItems"
-                onClick={() => router.push(`/LoginSignup?callbackUrl=${pathname}`)}>
-                <img src="/assets/icons/githubIcon.png" 
+                onClick={() => signIn("github", { callbackUrl: "/" })}>
+                <img src="/assets/icons/githubIcon.png"
                 alt="Github"
                 width={24}
                 height={24}/>
