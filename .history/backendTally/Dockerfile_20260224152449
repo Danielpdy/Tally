@@ -1,0 +1,7 @@
+#Stage 1: Build stage
+FROM 
+
+
+# Stage 2: Publish stage
+
+# Stage 3: Run Stage

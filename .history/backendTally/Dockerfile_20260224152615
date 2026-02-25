@@ -1,0 +1,9 @@
+#Stage 1: Build stage
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+
+WORKDIR /
+
+
+# Stage 2: Publish stage
+
+# Stage 3: Run Stage

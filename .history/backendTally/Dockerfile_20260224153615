@@ -1,0 +1,20 @@
+#Stage 1: Build stage
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+
+WORKDIR /backendTally
+
+#restore
+COPY ["backendTally/backendTally.csproj", "backendTally/"]
+RUN dotnet restore 'backendTally/backendTally.csproj'
+
+#build
+COPY ["backendTally", "backendTally/"]
+
+RUN dotnet restore 'backendTally/backendTally.csproj' - c Release -o /app/build
+
+
+
+# Stage 2: Publish stage
+FROM build as publish
+
+# Stage 3: Run Stage

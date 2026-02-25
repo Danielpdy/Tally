@@ -45,7 +45,8 @@ namespace backendTally.Controllers
                 Email = dto.Email,
                 Name = dto.Name,
                 PasswordHash = hash,
-                PhoneNumber = dto.PhoneNumber
+                PhoneNumber = dto.PhoneNumber,
+                TermsAgreedAt = dto.TermsAgreedAt ?? DateTime.UtcNow
             };
 
             _context.Users.Add(user);
@@ -191,6 +192,17 @@ namespace backendTally.Controllers
             return Ok(new { message = "Password has been reset" });
         }
 
+        [HttpGet("oauth/check")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CheckOAuthUser([FromQuery] string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return BadRequest("Email is required.");
+
+            var exists = await _context.Users.AnyAsync(u => u.Email == email && !u.IsDeleted);
+            return Ok(new { exists });
+        }
+
         [HttpPost("oauth")]
         [AllowAnonymous]
         public async Task<IActionResult> OAuthLogin([FromBody] OAuthLoginDto dto)
@@ -209,7 +221,8 @@ namespace backendTally.Controllers
                 {
                     Email = dto.Email,
                     Name = dto.Name,
-                    PasswordHash = ""
+                    PasswordHash = "",
+                    TermsAgreedAt = dto.TermsAgreedAt ?? DateTime.UtcNow
                 };
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();

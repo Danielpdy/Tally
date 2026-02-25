@@ -116,15 +116,27 @@ const Dashboard = () => {
             0
         );
 
-        const unpaidBillsThisMonth = allRecurringBills
+        const unpaidDueBills = billsDueThisWeek
             .filter(bill => !billsPaidThisWeek.includes(bill.id))
             .reduce((sum, bill) => sum + bill.amount, 0);
 
-        const totalSpendings = transactionSpendings + unpaidBillsThisMonth;
+        const overdueIds = billsOverdueThisWeek.map(bill => typeof bill === 'object' ? bill.id : bill);
+        const unpaidOverdueBills = overdueIds
+            .filter(id => !billsPaidThisWeek.includes(id))
+            .map(id => allRecurringBills.find(bill => bill.id === id))
+            .filter(Boolean)
+            .reduce((sum, bill) => sum + bill.amount, 0);
+
+        const totalSpendings = transactionSpendings + unpaidDueBills + unpaidOverdueBills;
         setSpendings(totalSpendings);
 
         return totalEarnings - totalSpendings;
-    }, [transactionsData, allRecurringBills, billsPaidThisWeek]);
+    }, [transactionsData, billsDueThisWeek, billsOverdueThisWeek, billsPaidThisWeek, allRecurringBills]);
+
+    const savingsRate = useMemo(() => {
+        if (earnings === 0) return null;
+        return Math.round((earnings - spendings) / earnings * 100);
+    }, [earnings, spendings]);
   
 
     return (
@@ -161,15 +173,40 @@ const Dashboard = () => {
 
                     <div className={styles.statCard}>
                         <div className={styles.statHeader}>
-                            <span className={styles.statLabel}>Vacation Fund</span>
+                            <span className={styles.statLabel}>Monthly Savings Rate</span>
+                            <div className={styles.statDot}></div>
                         </div>
-                        <div className={styles.goalProgress}>
-                            <span className={styles.goalPercentage}>72%</span>
-                            <div className={styles.progressBarHorizontal}>
-                                <div className={styles.progressFillHorizontal} style={{ width: '72%' }}></div>
+                        {earnings === 0 && spendings === 0 ? (
+                            <div style={{ marginTop: '10px' }}>
+                                <p style={{ fontSize: '14px', fontWeight: '600', color: '#9CA3AF' }}>No activity yet</p>
+                                <p style={{ fontSize: '12px', color: '#C4B5FD', marginTop: '4px' }}>Add income & expenses to see your savings rate</p>
                             </div>
-                        </div>
-                        <p className={styles.goalAmount}>$3,600 / $5,000</p>
+                        ) : savingsRate === null ? (
+                            <div style={{ marginTop: '10px' }}>
+                                <p style={{ fontSize: '14px', fontWeight: '600', color: '#FF8042' }}>No income recorded</p>
+                                <p style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '4px' }}>${spendings.toLocaleString()} spent this month</p>
+                                <p style={{ fontSize: '11px', color: '#C4B5FD', marginTop: '4px' }}>Add income transactions to calculate your rate</p>
+                            </div>
+                        ) : (
+                            <>
+                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', margin: '8px 0 4px' }}>
+                                    <h2 className={styles.statAmount} style={{ color: savingsRate >= 20 ? '#4ADE80' : savingsRate >= 0 ? '#FBBF24' : '#FF8042' }}>
+                                        {savingsRate}%
+                                    </h2>
+                                    <span style={{ fontSize: '12px', color: '#9CA3AF' }}>of income saved</span>
+                                </div>
+                                <div className={styles.progressBarHorizontal} style={{ margin: '6px 0' }}>
+                                    <div className={styles.progressFillHorizontal} style={{
+                                        width: `${Math.max(0, Math.min(100, savingsRate))}%`,
+                                        background: savingsRate >= 20 ? '#4ADE80' : savingsRate >= 0 ? '#FBBF24' : '#FF8042'
+                                    }}></div>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginTop: '6px' }}>
+                                    <span style={{ color: '#4ADE80' }}>↗ ${earnings.toLocaleString()} in</span>
+                                    <span style={{ color: '#FF8042' }}>↙ ${spendings.toLocaleString()} out</span>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
 

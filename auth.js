@@ -82,15 +82,55 @@ export const {
         return baseUrl;
     },
 
-    async jwt({ token, user, account }) {
-      console.log("[JWT] called — account:", account?.provider, "| user:", !!user, "| hasAccessToken:", !!token.accessToken);
+    async jwt({ token, user, account, trigger, session }) {
+      console.log("[JWT] called — account:", account?.provider, "| user:", !!user, "| hasAccessToken:", !!token.accessToken, "| trigger:", trigger);
+
+      // Handle session.update() calls (from accept-terms page after terms agreement)
+      if (trigger === "update" && session) {
+        return {
+          ...token,
+          id: session.id ?? token.id,
+          email: session.email ?? token.email,
+          name: session.name ?? token.name,
+          accessToken: session.accessToken ?? token.accessToken,
+          refreshToken: session.refreshToken ?? token.refreshToken,
+          accessTokenExpires: session.accessTokenExpires ?? token.accessTokenExpires,
+          pendingOAuth: session.pendingOAuth, // null clears the pending flag
+        };
+      }
 
       if (account && account.provider !== "credentials") {
-        try {
-          const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
-          console.log("[OAuth] API base:", apiBase);
-          console.log("[OAuth] Registering with backend:", user.email, user.name, account.provider);
+        const apiBase = process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_BASE_URL;
+        console.log("[OAuth] API base:", apiBase);
 
+        // Check if this is a new or returning user before touching the DB
+        try {
+          const checkRes = await fetch(
+            `${apiBase}/users/oauth/check?email=${encodeURIComponent(user.email)}`
+          );
+          const { exists } = await checkRes.json();
+
+          if (!exists) {
+            // New user — store pending data in JWT, do NOT create in DB yet
+            console.log("[OAuth] New user detected, awaiting terms agreement:", user.email);
+            return {
+              ...token,
+              email: user.email,
+              name: user.name || user.email.split("@")[0],
+              pendingOAuth: {
+                email: user.email,
+                name: user.name || user.email.split("@")[0],
+                provider: account.provider,
+              },
+            };
+          }
+        } catch (error) {
+          console.error("[OAuth] Existence check failed:", error.message);
+        }
+
+        // Returning user — proceed with normal OAuth login
+        try {
+          console.log("[OAuth] Returning user, signing in:", user.email);
           const res = await fetch(`${apiBase}/users/oauth`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -123,6 +163,7 @@ export const {
             accessToken: data.user.token,
             refreshToken: data.refreshToken,
             accessTokenExpires: Date.now() + (data.expiresIn * 1000),
+            pendingOAuth: null,
           };
         } catch (error) {
           console.error("[OAuth] Fetch failed:", error.message);
@@ -140,11 +181,17 @@ export const {
           accessToken: user.accessToken,
           refreshToken: user.refreshToken,
           accessTokenExpires: Date.now() + (user.expiresIn * 1000),
+          pendingOAuth: null,
         }
       }
 
       if (token.error === "AccountDeactivated" || token.error === "OAuthBackendError") {
         return token
+      }
+
+      // Don't try to refresh if still in pending state
+      if (token.pendingOAuth) {
+        return token;
       }
 
       if(Date.now() < token.accessTokenExpires){
@@ -168,12 +215,13 @@ export const {
     },
 
     async session({ session, token }) {
-      console.log("[Session] id:", token.id, "| error:", token.error, "| hasAccessToken:", !!token.accessToken);
+      console.log("[Session] id:", token.id, "| error:", token.error, "| hasAccessToken:", !!token.accessToken, "| pendingOAuth:", !!token.pendingOAuth);
       session.user.id = token.id
       session.user.email = token.email
       session.user.name = token.name
       session.accessToken = token.accessToken
       session.error = token.error
+      session.pendingOAuth = token.pendingOAuth || null
       return session
     },
   },

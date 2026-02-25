@@ -1,6 +1,7 @@
 "use client"
 
 import React from 'react'
+import Link from 'next/link';
 import { usePathname } from "next/navigation";
 
 const Footer = () => {
@@ -12,8 +13,8 @@ const Footer = () => {
   return (
     <footer className='footerBox'>
         <div className='footerLabels'>
-            <p className='footerText'>Privacy</p>
-            <p className='footerText'>Terms</p>
+            <Link href="/privacy" className='footerText' style={{ textDecoration: 'none' }}>Privacy</Link>
+            <Link href="/terms" className='footerText' style={{ textDecoration: 'none' }}>Terms</Link>
             <p className='footerText'>Contact</p>
             <p className='footerText'>v1.0.0</p>
         </div>

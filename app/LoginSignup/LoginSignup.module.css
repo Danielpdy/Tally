@@ -694,6 +694,63 @@
     opacity: 0.8;
 }
 
+/* Terms checkbox row */
+.termsRow {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: -4px;
+}
+
+.termsCheckbox {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: #FF8042;
+}
+
+.termsLabel {
+    font-size: 11.5px;
+    color: #9CA3AF;
+    line-height: 1.45;
+    cursor: pointer;
+    font-weight: 400;
+}
+
+.termsLink {
+    color: #FF8042;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.termsLink:hover {
+    opacity: 0.75;
+    text-decoration: underline;
+}
+
+/* Terms error message */
+.termsErrorMsg {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: #DC2626;
+    font-weight: 500;
+    margin-top: -8px;
+    padding: 0 2px;
+}
+
+/* Disabled submit button */
+.submitButtonDisabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
 
 /* Deactivated Account Banner */
 .deactivatedBanner {

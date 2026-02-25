@@ -69,7 +69,12 @@ const Insights = () => {
     };
 
     // Use the custom hook for monthly data calculation
-    const monthlyData = useMonthlyData(transactions);
+    const monthlyData = useMonthlyData(transactions, {
+        dueThisWeek: billsDueThisWeek,
+        overdue: billsOverdue,
+        paid: billsPaidIds,
+        allBills: recurringBills,
+    });
 
     const { current, previous, savingsChange, incomeChange, expensesChange, currentMonthName, lastMonthName } = monthlyData;
 

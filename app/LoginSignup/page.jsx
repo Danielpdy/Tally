@@ -30,6 +30,8 @@ const [formLogin, setFormLogin] = useState({
 const [isCreated, setIsCreated] = useState(false);
 const [isLoading, setIsLoading] = useState(false);
 const [loginError, setLoginError] = useState(null);
+const [termsAccepted, setTermsAccepted] = useState(false);
+const [termsError, setTermsError] = useState(false);
 const params = useSearchParams();
 const callbackUrl = params.get("callbackUrl") || "/dashboard";
 const errorParam = params.get("error");
@@ -73,8 +75,13 @@ async function handleSubmit(e) {
     setIsLoading(true);
 
     if (toggleForm === false){
+        if (!termsAccepted) {
+            setTermsError(true);
+            setIsLoading(false);
+            return;
+        }
         try{
-            await createUser(formSignup);
+            await createUser({ ...formSignup, termsAgreedAt: new Date().toISOString() });
             setFormSignup({ name: "", email: "", password: "", phonenumber: ""});
             setIsCreated(true);
 
@@ -463,9 +470,41 @@ async function handleSubmit(e) {
                                 </div>
                             </div>
 
+                            <div className={styles.termsRow}>
+                                <input
+                                    type="checkbox"
+                                    id="termsAccepted"
+                                    checked={termsAccepted}
+                                    onChange={(e) => {
+                                        setTermsAccepted(e.target.checked);
+                                        if (e.target.checked) setTermsError(false);
+                                    }}
+                                    className={styles.termsCheckbox}
+                                />
+                                <label htmlFor="termsAccepted" className={styles.termsLabel}>
+                                    I have read and agree to the{' '}
+                                    <Link href="/terms" target="_blank" className={styles.termsLink}>
+                                        Terms of Service
+                                    </Link>
+                                    {' '}and{' '}
+                                    <Link href="/privacy" target="_blank" className={styles.termsLink}>
+                                        Privacy Policy
+                                    </Link>
+                                </label>
+                            </div>
+
+                            {termsError && (
+                                <p className={styles.termsErrorMsg}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                                    </svg>
+                                    Please read and accept the Terms of Service before creating an account.
+                                </p>
+                            )}
+
                             <button type="submit"
-                                className={styles.submitButtonSignup}
-                                disabled={isLoading}
+                                className={`${styles.submitButtonSignup} ${!termsAccepted ? styles.submitButtonDisabled : ''}`}
+                                disabled={isLoading || !termsAccepted}
                                 >
                                 {isLoading ? <span class="svg-spinners--180-ring"></span> : "Create Account"}
                             </button>

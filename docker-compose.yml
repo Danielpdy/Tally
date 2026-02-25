@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: ./backendTally
+      dockerfile: Dockerfile
+    ports:
+      - "5093:8080"
+    environment:
+      - DefaultConnection=${DB_CONNECTION_STRING}
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: http://localhost:5093/api
+    ports:
+      - "3000:3000"
+    environment:
+      - GOOGLE_ID=${GOOGLE_ID}
+      - GOOGLE_SECRET=${GOOGLE_SECRET}
+      - GITHUB_ID=${GITHUB_ID}
+      - GITHUB_SECRET=${GITHUB_SECRET}
+      - AUTH_SECRET=${AUTH_SECRET}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - AUTH_TRUST_HOST=true
+      - INTERNAL_API_URL=http://backend:8080/api
+    depends_on:
+      - backend
+    restart: unless-stopped

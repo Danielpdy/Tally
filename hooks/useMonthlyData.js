@@ -5,7 +5,9 @@ import { useMemo } from 'react';
  * @param {Array} transactions - Array of transaction objects
  * @returns {Object} Monthly data including current, previous, and comparison stats
  */
-export const useMonthlyData = (transactions = []) => {
+export const useMonthlyData = (transactions = [], billsData = {}) => {
+    const { dueThisWeek = [], overdue = [], paid = [], allBills = [] } = billsData;
+
     return useMemo(() => {
         const now = new Date();
         const currentMonth = now.getMonth();
@@ -13,18 +15,32 @@ export const useMonthlyData = (transactions = []) => {
         const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
         const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
+        const unpaidDueBills = dueThisWeek
+            .filter(bill => !paid.includes(bill.id))
+            .reduce((sum, bill) => sum + bill.amount, 0);
+
+        const overdueIds = overdue.map(bill => typeof bill === 'object' ? bill.id : bill);
+        const unpaidOverdueBills = overdueIds
+            .filter(id => !paid.includes(id))
+            .map(id => allBills.find(bill => bill.id === id))
+            .filter(Boolean)
+            .reduce((sum, bill) => sum + bill.amount, 0);
+
+        const billExpenses = unpaidDueBills + unpaidOverdueBills;
+
         const filterByMonth = (month, year) => transactions.filter(t => {
             const date = new Date(t.date);
             return date.getMonth() === month && date.getFullYear() === year;
         });
 
-        const calculateMonthStats = (monthTransactions) => {
+        const calculateMonthStats = (monthTransactions, includeBills = false) => {
             const income = monthTransactions
                 .filter(t => t.type === 'Income')
                 .reduce((sum, t) => sum + t.amount, 0);
-            const expenses = monthTransactions
+            const transactionExpenses = monthTransactions
                 .filter(t => t.type === 'Expense')
                 .reduce((sum, t) => sum + t.amount, 0);
+            const expenses = transactionExpenses + (includeBills ? billExpenses : 0);
             const savings = income - expenses;
             const savingsRate = income > 0 ? ((savings / income) * 100) : 0;
             const transactionCount = monthTransactions.filter(t => t.type === 'Expense').length;
@@ -35,8 +51,8 @@ export const useMonthlyData = (transactions = []) => {
         const currentMonthTransactions = filterByMonth(currentMonth, currentYear);
         const lastMonthTransactions = filterByMonth(lastMonth, lastMonthYear);
 
-        const current = calculateMonthStats(currentMonthTransactions);
-        const previous = calculateMonthStats(lastMonthTransactions);
+        const current = calculateMonthStats(currentMonthTransactions, true);
+        const previous = calculateMonthStats(lastMonthTransactions, false);
 
         const savingsChange = current.savingsRate - previous.savingsRate;
         const incomeChange = previous.income > 0
