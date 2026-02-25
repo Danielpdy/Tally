@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import Image from 'next/image';
 import styles from './accept-terms.module.css';
 
 export default function AcceptTermsPage() {
@@ -64,17 +63,6 @@ export default function AcceptTermsPage() {
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.card}>
-                {/* Logo */}
-                <div className={styles.logoRow}>
-                    <Image
-                        src="/assets/icons/tallyappIcon.svg"
-                        alt="Tally"
-                        width={40}
-                        height={40}
-                    />
-                    <span className={styles.logoText}>Tally</span>
-                </div>
-
                 {/* Header */}
                 <div className={styles.header}>
                     <div className={styles.iconWrap}>

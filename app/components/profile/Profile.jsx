@@ -505,7 +505,7 @@ const Profile = () => {
                                     </div>
                                     <div>
                                         <h4 className={styles.contactCardTitle}>Email</h4>
-                                        <p className={styles.contactCardText}>support@tally.com</p>
+                                        <p className={styles.contactCardText}>tally.helpapp@gmail.com</p>
                                     </div>
                                 </div>
                                 <div className={styles.contactCard}>

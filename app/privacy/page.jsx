@@ -312,7 +312,7 @@ const sections = [
                 lines: [
                     'Tally — Personal Finance Manager',
                     'Developer: Daniel Pinzon',
-                    'Email: danielfpinzonr@gmail.com'
+                    'Email: tally.helpapp@gmail.com'
                 ]
             },
             {

@@ -18,11 +18,13 @@ namespace backendTally.Controllers
         private readonly TallyDbContext _context;
         private readonly JwtService _jwtService;
         private readonly EmailService _emailService;
-        public UsersController(TallyDbContext context, JwtService jwtService, EmailService emailService)
+        private readonly IConfiguration _configuration;
+        public UsersController(TallyDbContext context, JwtService jwtService, EmailService emailService, IConfiguration configuration)
         {
             _context = context;
             _jwtService = jwtService;
             _emailService = emailService;
+            _configuration = configuration;
         }
 
         [HttpPost("signup")]
@@ -159,12 +161,20 @@ namespace backendTally.Controllers
                 });
                 await _context.SaveChangesAsync();
 
-                var resetLink = $"http://localhost:3000/reset-password?token={Uri.EscapeDataString(token)}";
-                await _emailService.SendEmailAsync(
-                    user.Email,
-                    "Reset your Tally password",
-                    $"<p>Click <a href='{resetLink}'>here</a> to reset your password.</p>"
-                );
+                var appBaseUrl = _configuration["AppBaseUrl"] ?? "http://localhost:3000";
+                var resetLink = $"{appBaseUrl}/reset-password?token={Uri.EscapeDataString(token)}";
+                try
+                {
+                    await _emailService.SendEmailAsync(
+                        user.Email,
+                        "Reset your Tally password",
+                        $"<p>Click <a href='{resetLink}'>here</a> to reset your password.</p>"
+                    );
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"[Email] Failed to send reset email: {ex.Message}");
+                }
             }
 
             return Ok(new { message = "If that email exists, a reset link has been sent." });

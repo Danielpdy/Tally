@@ -36,10 +36,15 @@ builder.Services.AddAuthentication(options =>
      };
  });
 
+var allowedOrigins = new List<string> { "http://localhost:3000" };
+var productionUrl = builder.Configuration["AppBaseUrl"];
+if (!string.IsNullOrWhiteSpace(productionUrl) && productionUrl != "http://localhost:3000")
+    allowedOrigins.Add(productionUrl);
+
 builder.Services.AddCors(o =>
 {
     o.AddPolicy("AllowFrontend", p => p
-        .WithOrigins("http://localhost:3000") // Next dev
+        .WithOrigins(allowedOrigins.ToArray())
         .AllowAnyHeader()
         .AllowAnyMethod());
 });
@@ -61,8 +66,8 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
