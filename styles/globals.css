@@ -1826,6 +1826,15 @@ html, body {
 
 /* Small screens (640px and below) - Mobile landscape / large phones */
 @media (max-width: 640px) {
+  .navLink img {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .tallyMainTitle {
+    font-size: 20px;
+  }
+
   .gradient {
     padding-top: 50px;
   }
@@ -2076,6 +2085,15 @@ html, body {
 
 /* Extra small screens (480px and below) - Standard phones */
 @media (max-width: 480px) {
+  .navLink img {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .tallyMainTitle {
+    font-size: 18px;
+  }
+
   .gradient {
     padding-top: 40px;
   }

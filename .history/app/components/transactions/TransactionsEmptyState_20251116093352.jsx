@@ -1,6 +1,0 @@
-
-
-
-const TransactionsEmptyState = ({ onAddClick }) => {
-    
-}

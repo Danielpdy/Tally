@@ -1,19 +1,21 @@
 
-
+import React from 'react';
+import Image from 'next/image';
+import styles from './transactions.module.css';
 
 const TransactionsEmptyState = ({ onAddClick }) => {
-     return(
+    return (
             <>
-            {sidePannelToogle && <div className={styles.overlay}></div>}
+          
             <div className={styles.mainContainer}>
                 <section className={styles.titleContainer}>
                         <div>
                             <h1>Transactions</h1>
-                            <p>Track and manage your financial activity • Press <kbd>N</kbd> to add</p>
+                            <p>Track and manage your financial activity</p>
                         </div>
                         <div>
                             <button
-                             onClick={() => setSidePannelToggle(true)}
+                             onClick={onAddClick}
                             >
                                 <Image 
                                     src='/assets/icons/plusWhite.svg'
@@ -22,15 +24,6 @@ const TransactionsEmptyState = ({ onAddClick }) => {
                                     alt='plus'
                                 />
                                 Add Transaction</button>
-                            <button>
-                                <Image 
-                                    src='/assets/icons/export.svg'
-                                    width={20}
-                                    height={20}
-                                    alt='export'
-                                />
-                                Export
-                            </button>
                         </div>
                 </section>
                 <section className={styles.emptyStats}>
@@ -61,7 +54,7 @@ const TransactionsEmptyState = ({ onAddClick }) => {
                             It only takes a few seconds!</p>
                         </div>
                         <button
-                            onClick={() => setSidePannelToggle(true)}
+                            onClick={onAddClick}
                         >
                             <Image 
                                 src='/assets/icons/plusWhite.svg'
@@ -73,6 +66,8 @@ const TransactionsEmptyState = ({ onAddClick }) => {
                     </section>
                 </section>
             </div>
-            <></>
-            )
+        </>
+    )
 }
+
+export default TransactionsEmptyState

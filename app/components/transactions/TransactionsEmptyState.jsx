@@ -11,7 +11,7 @@ const TransactionsEmptyState = ({ onAddClick }) => {
                 <section className={styles.titleContainer}>
                         <div>
                             <h1>Transactions</h1>
-                            <p>Track and manage your financial activity • Press <kbd>N</kbd> to add</p>
+                            <p>Track and manage your financial activity</p>
                         </div>
                         <div>
                             <button
@@ -24,15 +24,6 @@ const TransactionsEmptyState = ({ onAddClick }) => {
                                     alt='plus'
                                 />
                                 Add Transaction</button>
-                            <button>
-                                <Image 
-                                    src='/assets/icons/export.svg'
-                                    width={20}
-                                    height={20}
-                                    alt='export'
-                                />
-                                Export
-                            </button>
                         </div>
                 </section>
                 <section className={styles.emptyStats}>
