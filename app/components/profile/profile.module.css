@@ -618,37 +618,69 @@
     }
 
     .profileContainer {
-        padding: 20px 16px;
+        padding: 16px 12px;
     }
 
     .profilePage {
         grid-template-columns: 1fr;
+        overflow: hidden;
     }
 
     .sidebar {
         border-right: none;
         border-bottom: 1px solid #F3F4F6;
+        padding: 16px 12px;
+        overflow: hidden;
     }
 
     .sidebarTitle {
-        font-size: 15px;
-        margin-bottom: 16px;
+        font-size: 14px;
+        margin-bottom: 12px;
     }
 
     .sidebarNav {
         flex-direction: row;
-        gap: 8px;
+        gap: 6px;
         overflow-x: auto;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .sidebarNav::-webkit-scrollbar {
+        display: none;
     }
 
     .sidebarItem {
         white-space: nowrap;
+        padding: 7px 9px;
+        font-size: 11.5px;
+        gap: 6px;
+        flex-shrink: 0;
+        width: auto;
+    }
+
+    .sidebarItem:last-child {
+        margin-right: 12px;
+    }
+
+    .sidebarIcon svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .signOutButtonWrapper {
+        margin-top: 12px;
+        padding-top: 12px;
+    }
+
+    .signOutButton {
         padding: 10px 14px;
         font-size: 13px;
     }
 
     .section {
-        padding: 24px 20px;
+        padding: 20px 16px;
     }
 
     .sectionTitle {
@@ -682,11 +714,11 @@
 
 @media (max-width: 480px) {
     .profileContainer {
-        padding: 16px 12px;
+        padding: 12px 8px;
     }
 
     .section {
-        padding: 20px 16px;
+        padding: 16px 14px;
     }
 
     .sectionTitle {
@@ -707,8 +739,16 @@
     }
 
     .sidebarItem {
-        padding: 8px 12px;
+        padding: 8px 10px;
         font-size: 12px;
-        gap: 8px;
+        gap: 6px;
+    }
+
+    .contactCard {
+        padding: 14px 16px;
+    }
+
+    .deleteSection {
+        margin-top: 28px;
     }
 }

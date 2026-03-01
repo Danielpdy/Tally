@@ -256,7 +256,7 @@ const Transactions = () => {
                         <section className={styles.headerSection}>
                             <div>
                                 <h2 className={styles.mainTitle}>Transactions</h2>
-                                <p className={styles.description}>Track and manage your financial activity • Press <kbd>N</kbd> to add</p>
+                                <p className={styles.description}>Track and manage your financial activity</p>
                             </div>
                             <div className={styles.buttonGroup}>
                                 <button

@@ -660,8 +660,127 @@
 }
 
 @media (max-width: 768px) {
+    .dashboardPage {
+        padding: 16px 12px 40px;
+    }
+
+    .pageHeader {
+        margin-bottom: 20px;
+    }
+
+    .pageHeader h1 {
+        font-size: 22px;
+        margin-bottom: 4px;
+    }
+
+    .pageHeader p {
+        font-size: 13px;
+    }
+
     .topStatsRow {
         grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .statCard {
+        padding: 16px;
+    }
+
+    .statLabel {
+        font-size: 12px;
+    }
+
+    .statAmount {
+        font-size: 26px;
+        margin-bottom: 6px;
+    }
+
+    .statSubtext {
+        font-size: 11px;
+    }
+
+    .flowAmount {
+        font-size: 15px;
+    }
+
+    .flowLabel {
+        font-size: 11px;
+    }
+
+    .goalPercentage {
+        font-size: 22px;
+    }
+
+    .mainGrid {
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        padding: 18px 16px;
+    }
+
+    .cardTitle {
+        font-size: 15px;
+        margin-bottom: 14px;
+    }
+
+    .toggleBtn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .debtToggleBtn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .legendText {
+        font-size: 12px;
+    }
+
+    .insightIcon {
+        font-size: 16px;
+    }
+
+    .insightText {
+        font-size: 13px;
+    }
+
+    .sectionTitle {
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
+
+    .achievementCard {
+        padding: 20px 14px;
+    }
+
+    .achievementIcon {
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .achievementTitle {
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+
+    .achievementDesc {
+        font-size: 11px;
+    }
+
+    .goalName {
+        font-size: 13px;
+    }
+
+    .goalAmount {
+        font-size: 12px;
+    }
+
+    .goalDue {
+        font-size: 11px;
     }
 
     .goalsGrid {
@@ -669,7 +788,8 @@
     }
 
     .achievementsGrid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
     .pieChartContainer {

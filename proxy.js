@@ -9,6 +9,10 @@ const PUBLIC_PATHS = [
     "/terms",
     "/forgot-password",
     "/reset-password",
+    "/dashboard",
+    "/transactions",
+    "/budgets",
+    "/insights",
 ];
 
 function isPublicPath(pathname) {

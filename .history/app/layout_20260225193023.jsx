@@ -1,8 +1,10 @@
 
 import "../styles/globals.css";
 import Navbar from "@app/components/Navbar";
-//import Footer from "@app/components/Footer";
+import Footer from "@app/components/Footer";
 import Provider from "@app/components/Provider";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 
 
 export const metadata = {
@@ -20,6 +22,7 @@ export default function RootLayout({ children }) {
           {children}
           <Footer />
         </Provider>
+        
       </body>
     </html>
   );

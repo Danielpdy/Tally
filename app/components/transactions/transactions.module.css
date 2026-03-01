@@ -842,126 +842,65 @@
   }
 
   .titleContainer h1 {
-    font-size: 40px;
-  }
-
-  .emptyStats {
-    gap: 12px;
-  }
-
-  .emptyStats > div {
-    padding: 10px 16px;
+    font-size: 36px;
   }
 }
 
 @media (max-width: 768px) {
   .mainContainer {
-    padding: 24px 20px;
-    min-height: calc(100vh - 80px - 100px);
+    padding: 16px 12px;
+    gap: 16px;
   }
 
   .titleContainer {
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 12px;
-  }
-
-  .titleContainer h1 {
-    font-size: 36px;
+    gap: 12px;
     margin-bottom: 4px;
   }
 
+  .titleContainer h1 {
+    font-size: 22px;
+    margin-bottom: 2px;
+    letter-spacing: -0.01em;
+  }
+
   .titleContainer p {
-    font-size: 15px;
+    font-size: 13px;
   }
 
   .titleContainer > div:last-child {
     width: 100%;
     flex-direction: row;
-    justify-content: flex-start;
+    gap: 8px;
   }
 
   .titleContainer button {
-    padding: 10px 20px;
-    font-size: 14px;
+    padding: 10px 16px;
+    font-size: 13px;
     flex: 1;
+    border-radius: 10px;
   }
 
   .emptyStats {
     flex-direction: column;
     width: 100%;
-    gap: 12px;
+    gap: 8px;
   }
 
   .emptyStats > div {
     width: 100%;
     justify-content: space-between;
-    padding: 12px 18px;
-  }
-
-  .emptyTransMessage {
-    min-height: 400px;
-  }
-
-  .emptyMessage {
-    padding: 40px 24px;
-    gap: 24px;
-  }
-
-  .messageEmpty {
-    gap: 12px;
-  }
-
-  .messageEmpty h2 {
-    font-size: 24px;
-  }
-
-  .messageEmpty p {
-    font-size: 15px;
-    max-width: 100%;
-  }
-
-  .emptyMessage > button {
-    width: 100%;
-    padding: 12px 24px;
-    font-size: 15px;
-  }
-}
-
-@media (max-width: 640px) {
-  .mainContainer {
-    padding: 20px 16px;
-  }
-
-  .titleContainer h1 {
-    font-size: 32px;
-  }
-
-  .titleContainer p {
-    font-size: 14px;
-  }
-
-  .titleContainer > div:last-child {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .titleContainer button {
-    width: 100%;
-  }
-
-  .emptyStats > div {
-    padding: 10px 16px;
+    padding: 10px 14px;
   }
 
   .emptyStats > div p,
   .emptyStats > div span {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .emptyTransMessage {
-    min-height: 350px;
+    min-height: 320px;
     border-radius: 16px;
   }
 
@@ -970,17 +909,248 @@
     gap: 20px;
   }
 
+  .messageEmpty {
+    gap: 10px;
+  }
+
   .messageEmpty h2 {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .messageEmpty p {
-    font-size: 14px;
+    font-size: 13px;
+    max-width: 100%;
   }
 
   .emptyMessage > button {
+    width: 100%;
+    padding: 12px 20px;
     font-size: 14px;
-    padding: 11px 20px;
+  }
+
+  .aside {
+    padding: 20px 16px;
+  }
+
+  .asideHeader {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+  }
+
+  .asideHeaderText h3 {
+    font-size: 18px;
+  }
+
+  .transactionGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .transactionCard {
+    padding: 14px 12px;
+  }
+
+  .transactionCard span {
+    font-size: 13px;
+  }
+
+  .transactionIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .selectCategoryContainer h4,
+  .transactionDetailsContainer h4,
+  .reviewContainer h4 {
+    font-size: 18px;
+  }
+
+  .reviewDetailsBox {
+    padding: 16px;
+  }
+
+  .reviewAmountValue {
+    font-size: 20px;
+  }
+
+  .successContainer h4 {
+    font-size: 22px;
+  }
+
+  .successContainer > p {
+    font-size: 14px;
+  }
+
+  .successIconWrapper {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+@media (max-width: 480px) {
+  .titleContainer h1 {
+    font-size: 20px;
+  }
+
+  .titleContainer > div:last-child {
+    flex-direction: column;
+  }
+
+  .titleContainer button {
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .emptyStats > div p,
+  .emptyStats > div span {
+    font-size: 12px;
+  }
+
+  .messageEmpty h2 {
+    font-size: 18px;
+  }
+
+  .aside {
+    padding: 16px 14px;
+  }
+
+  .transactionCard span {
+    font-size: 12px;
+  }
+
+  .selectCategoryContainer h4,
+  .transactionDetailsContainer h4,
+  .reviewContainer h4 {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 390px) {
+  .mainContainer {
+    padding: 12px 10px;
+    gap: 12px;
+  }
+
+  .titleContainer h1 {
+    font-size: 18px;
+  }
+
+  .titleContainer p {
+    font-size: 12px;
+  }
+
+  .titleContainer button {
+    font-size: 12px;
+    padding: 9px 12px;
+  }
+
+  .emptyStats > div {
+    padding: 8px 12px;
+  }
+
+  .emptyStats > div p,
+  .emptyStats > div span {
+    font-size: 11px;
+  }
+
+  .emptyTransMessage {
+    min-height: 280px;
+  }
+
+  .emptyMessage {
+    padding: 24px 16px;
+    gap: 16px;
+  }
+
+  .messageEmpty h2 {
+    font-size: 16px;
+  }
+
+  .messageEmpty p {
+    font-size: 12px;
+  }
+
+  .emptyMessage > button {
+    font-size: 13px;
+    padding: 10px 16px;
+  }
+
+  .aside {
+    padding: 14px 12px;
+  }
+
+  .asideHeader {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+
+  .asideHeaderText h3 {
+    font-size: 16px;
+  }
+
+  .transactionGrid {
+    gap: 8px;
+  }
+
+  .transactionCard {
+    padding: 12px 8px;
+  }
+
+  .transactionCard span {
+    font-size: 11px;
+  }
+
+  .transactionIcon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .selectCategoryContainer h4,
+  .transactionDetailsContainer h4,
+  .reviewContainer h4 {
+    font-size: 15px;
+  }
+
+  .formInput,
+  .formTextarea,
+  .dropdownButton {
+    font-size: 13px;
+    padding: 11px 12px;
+  }
+
+  .reviewDetailsBox {
+    padding: 12px;
+  }
+
+  .reviewAmountValue {
+    font-size: 18px;
+  }
+
+  .reviewValue {
+    font-size: 13px;
+  }
+
+  .reviewLabel {
+    font-size: 12px;
+  }
+
+  .successContainer h4 {
+    font-size: 18px;
+  }
+
+  .successContainer > p {
+    font-size: 12px;
+  }
+
+  .successIconWrapper {
+    width: 60px;
+    height: 60px;
+  }
+
+  .addAnotherButton,
+  .viewTransactionsButton {
+    font-size: 13px;
+    padding: 11px 16px;
   }
 }
 

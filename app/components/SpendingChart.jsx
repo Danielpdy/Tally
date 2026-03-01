@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import styles from './dashboard/dashboardPreview.module.css';
 import {
     PieChart,
@@ -16,6 +16,14 @@ import { type } from 'os';
 const SpendingChart = ({ preview, content = [], recurringBillsDueThisWeek = [], recurringBillsOverdueThisWeek = [] }) => {
 
     const isPreview = preview;
+
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth <= 640);
+        check();
+        window.addEventListener('resize', check);
+        return () => window.removeEventListener('resize', check);
+    }, []);
 
     const previewData = [
             { type: "Income", amount: 25},
@@ -152,8 +160,8 @@ const SpendingChart = ({ preview, content = [], recurringBillsDueThisWeek = [], 
                         nameKey="type"
                         cx="35%"
                         cy="50%"
-                        innerRadius={70}
-                        outerRadius={100}
+                        innerRadius={isMobile ? "22%" : 70}
+                        outerRadius={isMobile ? "36%" : 100}
                         paddingAngle={5}
                     >
                         {data.map((entry, i) => (

@@ -281,6 +281,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  min-width: 0;
 }
 
 /* Graph Card */
@@ -322,6 +323,7 @@
   gap: 24px;
   position: sticky;
   top: 20px;
+  min-width: 0;
 }
 
 /* Search Bar */
@@ -359,6 +361,8 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .filterHeader {
@@ -1551,6 +1555,8 @@
     overflow-x: auto;
     flex-wrap: nowrap;
     padding-bottom: 8px;
+    max-width: 100%;
+    width: 100%;
   }
 
   .filterButtons::-webkit-scrollbar {
@@ -1647,5 +1653,127 @@
   .rightColumn {
     position: relative;
     top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .filterButtons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    overflow-x: visible;
+  }
+
+  .transactionsContainer {
+    padding: 14px 10px;
+  }
+
+  .transactionsContent {
+    gap: 16px;
+  }
+
+  .graphCard,
+  .balanceCard,
+  .quickActionsCard {
+    padding: 16px;
+  }
+
+  .graphTitle {
+    font-size: 14px;
+  }
+
+  .filterBtn {
+    font-size: 13px;
+    padding: 6px 12px;
+    justify-content: center;
+  }
+
+  .filterLabel {
+    font-size: 13px;
+  }
+
+  .transactionName {
+    font-size: 14px;
+  }
+
+  .transactionAmount {
+    font-size: 14px;
+  }
+
+  .balanceAmount {
+    font-size: 24px;
+  }
+
+  .summaryLabel,
+  .summaryAmount {
+    font-size: 13px;
+  }
+
+  .mainCard {
+    padding: 20px 14px;
+  }
+
+  .summaryBadge {
+    padding: 8px 14px;
+  }
+
+  .totalNumber {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 390px) {
+  .filterButtons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    overflow-x: visible;
+  }
+
+  .transactionsContainer {
+    padding: 10px 8px;
+  }
+
+  .transactionsContent {
+    gap: 12px;
+  }
+
+  .graphCard,
+  .balanceCard,
+  .quickActionsCard {
+    padding: 12px;
+  }
+
+  .filterBtn {
+    font-size: 12px;
+    padding: 5px 10px;
+    justify-content: center;
+  }
+
+  .transactionCard {
+    padding: 12px;
+  }
+
+  .transactionName {
+    font-size: 13px;
+  }
+
+  .transactionAmount {
+    font-size: 13px;
+  }
+
+  .balanceAmount {
+    font-size: 22px;
+  }
+
+  .mainCard {
+    padding: 16px 10px;
+  }
+
+  .summaryBadge {
+    padding: 6px 10px;
+  }
+
+  .transactionDetails,
+  .accountLabel {
+    font-size: 12px;
   }
 }
